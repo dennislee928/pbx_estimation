@@ -27,16 +27,21 @@ def fetch_world_bank_single(
 ) -> pd.DataFrame:
     """Fetch a single World Bank indicator using wbgapi.
 
-    Returns a DataFrame with columns: country, year, value
+    Returns a DataFrame with columns: country, year, value.
+    Returns empty DataFrame on API error.
     """
     import wbgapi as wb
 
-    series = wb.data.DataFrame(
-        indicator,
-        countries,
-        labels=True,
-        time=range(start_year, end_year + 1),
-    )
+    try:
+        series = wb.data.DataFrame(
+            indicator,
+            countries,
+            labels=True,
+            time=range(start_year, end_year + 1),
+        )
+    except Exception:
+        return pd.DataFrame(columns=["country", "year", "value"])
+
     series = series.reset_index()
     series = series.melt(
         id_vars=["economy"],
