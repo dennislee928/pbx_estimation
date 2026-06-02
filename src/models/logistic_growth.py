@@ -19,6 +19,7 @@ def logistic(t: np.ndarray, K: float, r: float, t0: float) -> np.ndarray:
 def fit_country(
     years: np.ndarray,
     penetration: np.ndarray,
+    death_threshold: float = 0.05,
     p0: tuple[float, float, float] = (50.0, 0.3, 2010.0),
     bounds: tuple = (
         (0.0, -1.0, 1960.0),
@@ -30,6 +31,7 @@ def fit_country(
     Args:
         years: Array of year values.
         penetration: Array of penetration values.
+        death_threshold: Fraction of K below which the market is "dead".
         p0: Initial guess (K, r, t0).
         bounds: Parameter bounds.
 
