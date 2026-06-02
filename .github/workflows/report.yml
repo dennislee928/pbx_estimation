@@ -109,7 +109,9 @@ jobs:
         working-directory: frontend
 
       - name: Copy reports into SPA public assets
-        run: cp -r reports frontend/public/reports
+        run: |
+          mkdir -p frontend/public
+          cp -r reports frontend/public/reports
 
       - name: Build React SPA
         run: npm run build
