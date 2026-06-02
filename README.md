@@ -141,7 +141,7 @@ Reports are automatically generated and published via a scheduled GitHub Actions
 
 ### 數學模型
 
-#### 1. S 曲線（邏輯斯諦成長模型）— 趨勢預測
+#### 1. S 曲線（邏輯性成長模型）— 趨勢預測
 
 $$P(t) = \frac{K}{1 + e^{-r(t - t_0)}}$$
 
