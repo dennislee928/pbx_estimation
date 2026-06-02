@@ -110,7 +110,7 @@ def fit_all_countries(
         ctry = panel[panel[country_col] == country].sort_values(year_col)
         years = ctry[year_col].values
         penetration = ctry[penetration_col].values
-        result = fit_country(years, penetration)
+        result = fit_country(years, penetration, death_threshold=death_threshold)
         result["country"] = country
         result["death_threshold"] = death_threshold
         results.append(result)
