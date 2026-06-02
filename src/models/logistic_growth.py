@@ -66,17 +66,19 @@ def fit_country(
             "death_year": np.nan, "r_squared": np.nan,
             "fitted": None, "rmse": np.nan,
             "converged": False,
-            "death_threshold": 0.05,
+            "death_threshold": death_threshold,
         }
 
-    death_threshold = 0.05
     death_year = np.nan
-    if K_fit > 0 and r_fit != 0:
+    # A "death year" only makes sense for a declining market (r < 0): the curve
+    # falls below death_threshold * K at some point in the future. For a growing
+    # market (r >= 0) the curve never declines, so death_year stays NaN instead
+    # of resolving to a nonsensical year in the past.
+    if K_fit > 0 and r_fit < 0 and 0.0 < death_threshold < 1.0:
         death_val = death_threshold * K_fit
-        if death_val < K_fit:
-            t_death = t0_fit - np.log(K_fit / death_val - 1) / r_fit
-            if death_threshold < 1.0 and t0_fit > 1900:
-                death_year = t_death
+        t_death = t0_fit - np.log(K_fit / death_val - 1) / r_fit
+        if t_death > 1900:
+            death_year = t_death
 
     return {
         "K": K_fit,
