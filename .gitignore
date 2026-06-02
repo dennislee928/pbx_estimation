@@ -25,6 +25,10 @@ data/processed/*
 .DS_Store
 Thumbs.db
 
+# Frontend / SPA
+frontend/node_modules/
+frontend/dist/
+
 # IDE
 .vscode/
 .idea/

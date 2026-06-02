@@ -99,11 +99,27 @@ jobs:
           path: reports/
           retention-days: 90
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build React SPA
+        run: npm run build
+        working-directory: frontend
+
+      - name: Copy reports into SPA build
+        run: cp -r reports frontend/dist/reports
+
       - name: Deploy to GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: reports/
-          destination_dir: reports
+          publish_dir: frontend/dist
+          destination_dir: .
           keep_files: false
