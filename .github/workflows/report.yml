@@ -19,7 +19,13 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - name: Checkout repository
@@ -82,14 +88,12 @@ jobs:
             notebooks/04_survival_analysis_output.ipynb \
             --log-output --progress-bar
 
-      - name: Convert notebooks to HTML and PDF
+      - name: Convert notebooks to HTML
         run: |
           mkdir -p reports
           for nb in notebooks/*_output.ipynb; do
             name=$(basename "$nb" _output.ipynb)
             jupyter nbconvert "$nb" --to html --output-dir reports/ --output "${name}.html"
-            jupyter nbconvert "$nb" --to pdf  --output-dir reports/ --output "${name}.pdf" 2>/dev/null || \
-              echo "PDF conversion skipped for ${name} (check pandoc/tex installation)"
           done
 
       - name: Upload reports as artifacts
@@ -105,30 +109,33 @@ jobs:
           node-version: "20"
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: npm install
         working-directory: frontend
 
-      - name: Build React SPA
+      - name: Copy reports into Next.js public directory
+        run: |
+          mkdir -p frontend/public/reports
+          # Only HTML reports; .gitkeep and PDFs are excluded
+          cp reports/*.html frontend/public/reports/
+
+      - name: Build Next.js static site
         run: npm run build
         working-directory: frontend
 
-      - name: Copy reports into SPA build output
-        run: |
-          mkdir -p frontend/dist/reports
-          # Copy only HTML reports; exclude PDF and stray placeholder files
-          cp reports/*.html frontend/dist/reports/
-          # Remove any .gitkeep placeholders that Vite copied from public/
-          find frontend/dist -name ".gitkeep" -delete
-
       - name: Verify build output
-        run: ls -la frontend/dist/ frontend/dist/reports/
+        run: ls -la frontend/out/ frontend/out/reports/ 2>/dev/null || true
+
+      - name: Configure GitHub Pages
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/out
 
       - name: Deploy to GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: frontend/dist
-          # destination_dir omitted → deploys to root of gh-pages branch,
-          # matching the Vite base path /pbx_estimation/ for this project repo
-          keep_files: false
+        id: deploy
+        uses: actions/deploy-pages@v4
