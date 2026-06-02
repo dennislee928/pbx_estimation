@@ -115,7 +115,10 @@ jobs:
       - name: Copy reports into SPA build output
         run: |
           mkdir -p frontend/dist/reports
-          cp -r reports/. frontend/dist/reports/
+          # Copy only HTML reports; exclude PDF and stray placeholder files
+          cp reports/*.html frontend/dist/reports/
+          # Remove any .gitkeep placeholders that Vite copied from public/
+          find frontend/dist -name ".gitkeep" -delete
 
       - name: Verify build output
         run: ls -la frontend/dist/ frontend/dist/reports/
@@ -126,5 +129,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: frontend/dist
-          destination_dir: .
+          # destination_dir omitted → deploys to root of gh-pages branch,
+          # matching the Vite base path /pbx_estimation/ for this project repo
           keep_files: false
