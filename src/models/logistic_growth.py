@@ -48,7 +48,7 @@ def fit_country(
             "death_year": np.nan, "r_squared": np.nan,
             "fitted": None, "rmse": np.nan,
             "converged": False,
-            "death_threshold": 0.05,
+            "death_threshold": death_threshold,
         }
 
     try:
