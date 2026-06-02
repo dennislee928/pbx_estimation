@@ -108,14 +108,17 @@ jobs:
         run: npm ci
         working-directory: frontend
 
-      - name: Copy reports into SPA public assets
-        run: |
-          mkdir -p frontend/public
-          cp -r reports frontend/public/reports
-
       - name: Build React SPA
         run: npm run build
         working-directory: frontend
+
+      - name: Copy reports into SPA build output
+        run: |
+          mkdir -p frontend/dist/reports
+          cp -r reports/. frontend/dist/reports/
+
+      - name: Verify build output
+        run: ls -la frontend/dist/ frontend/dist/reports/
 
       - name: Deploy to GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' }}
