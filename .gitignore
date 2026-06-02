@@ -1,2 +1,32 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*_output.ipynb
+
+# Reports
+reports/
+
+# Data
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# OS
 .DS_Store
-scripts/ignore/auto_commit.sh
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,73 @@
+countries:
+  asia_pacific:
+    - tw: Taiwan
+    - jp: Japan
+    - kr: South Korea
+    - cn: China
+    - in: India
+  europe:
+    - gb: United Kingdom
+    - de: Germany
+    - fr: France
+    - se: Sweden
+    - it: Italy
+  americas:
+    - us: United States
+    - ca: Canada
+    - br: Brazil
+
+model:
+  logistic_growth:
+    death_threshold: 0.05  # Market considered dead when P(t) < 5% of K
+    initial_guess:
+      K: 50
+      r: 0.3
+      t0: 2010
+  survival:
+    duration_col: "market_lifetime"
+    event_col: "product_dead"
+    covariates:
+      - has_pstn_phaseout
+      - broadband_penetration
+      - gdp_per_capita
+      - urbanization
+
+data:
+  world_bank:
+    indicators:
+      fixed_subs: "IT.NET.USER.ZS"           # Fixed telephone subscriptions (per 100 people)
+      broadband: "IT.NET.BBND.P2"             # Fixed broadband subscriptions (per 100 people)
+      gdp_per_capita: "NY.GDP.PCAP.CD"
+      urban_pop: "SP.URB.TOTL.IN.ZS"
+    start_year: 2000
+    end_year: 2025
+  itu:
+    url: "https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx"
+  berec:
+    report_url: "https://www.berec.europa.eu/system/files/2024-12/BoR%20(24)%20181_Draft%20BEREC%20Report%20on%20copper%20switch-off_0.pdf"
+  pstn_switchoff:
+    # Authoritative dates from BEREC (EU) + national regulators
+    # Values: year of complete closure, or null if no announced date
+    nl: 2019    # Netherlands (KPN: Sep 2019)
+    ee: 2017    # Estonia
+    de: 2020    # Germany (99% migrated by 2020)
+    no: 2022    # Norway (Telenor: Dec 2022)
+    ch: 2019    # Switzerland
+    es: 2025    # Spain (CNMC: May 2025)
+    se: 2026    # Sweden
+    mt: 2026    # Malta
+    gb: 2027    # UK (BT/Openreach: Jan 2027)
+    fr: 2030    # France (Orange staged through 2030)
+    dk: 2030    # Denmark
+    lu: 2030    # Luxembourg
+    pt: 2030    # Portugal
+    it: 2028    # Italy (MDFs only, SCs remain)
+    be: 2040    # Belgium
+    tw: ~       # Taiwan: no PSTN phase-out date announced
+    jp: ~       # Japan: no national date
+    kr: ~       # South Korea: no national date
+    cn: ~       # China: no national date
+    in: ~       # India: no national date
+    us: ~       # US: state-level, no federal date
+    ca: ~       # Canada: no national date
+    br: ~       # Brazil: no national date
