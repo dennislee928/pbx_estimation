@@ -57,7 +57,10 @@ def impute_missing(
             series = result.loc[mask, col]
 
             if method in ("ffill", "bfill"):
-                result.loc[mask, col] = series.fillna(method=method)
+                if method == "ffill":
+                    result.loc[mask, col] = series.ffill()
+                elif method == "bfill":
+                    result.loc[mask, col] = series.bfill()
             elif method in ("linear", "cubic"):
                 interpolated = series.interpolate(
                     method=method, limit=max_gap
