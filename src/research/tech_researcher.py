@@ -859,6 +859,49 @@ def enrich_registry(
 # --- Awesome list generation ---
 
 
+def _alternative_device_range(alt: dict) -> str:
+    text = f"{alt.get('name', '')} {alt.get('medium', '')} {alt.get('use_case', '')}".lower()
+    if any(k in text for k in ["satellite", "lorawan", "nb-iot", "lte-m", "private lte", "private 5g", "cellular", "esim"]):
+        return "100-100,000 remote devices"
+    if any(k in text for k in ["scada", "dnp3", "iec 61850", "opc ua", "modbus"]):
+        return "10-10,000 industrial points"
+    if any(k in text for k in ["rs-485", "dry contact", "relay"]):
+        return "1-256 local I/O points"
+    if any(k in text for k in ["zigbee", "z-wave", "thread", "ble", "matter"]):
+        return "10-1,000 building devices"
+    if any(k in text for k in ["api", "webhook", "grpc", "mqtt", "amqp", "nats"]):
+        return "100-1,000,000 endpoints/events"
+    return "5-5,000 devices"
+
+
+def _alternative_industries(alt: dict) -> str:
+    text = f"{alt.get('name', '')} {alt.get('medium', '')} {alt.get('use_case', '')} {alt.get('description', '')}".lower()
+    industries = []
+    if any(k in text for k in ["utility", "scada", "substation", "water", "power", "modbus", "opc"]):
+        industries.extend(["Utilities", "Energy", "Water", "Industrial automation"])
+    if any(k in text for k in ["building", "door", "lock", "lighting", "relay", "thread", "zigbee", "z-wave"]):
+        industries.extend(["Smart building", "Facilities", "Hospitality", "Retail"])
+    if any(k in text for k in ["satellite", "lorawan", "cellular", "nb-iot", "lte-m", "private 5g"]):
+        industries.extend(["Logistics", "Agriculture", "Remote infrastructure", "Public safety"])
+    if any(k in text for k in ["api", "webhook", "grpc", "webrtc", "sip", "dtmf"]):
+        industries.extend(["SaaS", "Contact center", "Professional services", "Systems integration"])
+    if not industries:
+        industries = ["SMB", "Enterprise", "IoT"]
+    return "; ".join(dict.fromkeys(industries))
+
+
+def _alternative_cost_model(alt: dict) -> str:
+    cost = alt.get("cost", "")
+    text = f"{alt.get('name', '')} {alt.get('medium', '')}".lower()
+    if any(k in text for k in ["satellite", "private lte", "private 5g", "scada", "iec 61850"]):
+        return f"{cost}; high engineering/infrastructure"
+    if any(k in text for k in ["sms", "cellular", "nb-iot", "lte-m", "lorawan"]):
+        return f"{cost}; subscription or message/device fees"
+    if any(k in text for k in ["api", "webhook", "grpc", "mqtt", "amqp", "nats"]):
+        return f"{cost}; platform/broker plus usage"
+    return cost
+
+
 def generate_awesome_list(
     output_path: Optional[str] = "data/processed/awesome_list.csv",
 ) -> pd.DataFrame:
@@ -880,6 +923,9 @@ def generate_awesome_list(
                 "security": alt["security"],
                 "complexity": alt["complexity"],
                 "cost": alt["cost"],
+                "cost_model": _alternative_cost_model(alt),
+                "recommended_devices": _alternative_device_range(alt),
+                "industry_fit": _alternative_industries(alt),
                 "use_case": alt["use_case"],
                 "pros": "; ".join(alt["pros"]),
                 "cons": "; ".join(alt["cons"]),

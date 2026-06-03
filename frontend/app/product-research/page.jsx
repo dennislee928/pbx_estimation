@@ -75,7 +75,7 @@ export default function ProductResearchPage() {
       </div>
 
       <div className="research-section">
-        <h3>{L === "en" ? "Sample Solutions by Region" : "按區域的解決方案範例"}</h3>
+        <h3>{L === "en" ? "Solution Catalog with Sizing and Source URLs" : "含規模建議與來源網址的方案目錄"}</h3>
         <table className="registry-table">
           <thead>
             <tr>
@@ -83,6 +83,10 @@ export default function ProductResearchPage() {
               <th>{L === "en" ? "Vendor" : "供應商"}</th>
               <th>{L === "en" ? "Region" : "區域"}</th>
               <th>{L === "en" ? "Category" : "類別"}</th>
+              <th>{L === "en" ? "Terminals" : "建議終端數"}</th>
+              <th>{L === "en" ? "Cost" : "成本"}</th>
+              <th>{L === "en" ? "Industry" : "適用產業"}</th>
+              <th>{L === "en" ? "Source" : "來源"}</th>
             </tr>
           </thead>
           <tbody>
@@ -92,6 +96,10 @@ export default function ProductResearchPage() {
                 <td>{s.vendor}</td>
                 <td>{String(s.country_code).toUpperCase()}</td>
                 <td><span className={`category-badge ${s.lifecycle_assigned}`}>{L === "en" ? CATEGORIES.find(c => c.id === s.lifecycle_assigned)?.labelEn : CATEGORIES.find(c => c.id === s.lifecycle_assigned)?.labelZh}</span></td>
+                <td>{s.recommended_terminals}</td>
+                <td>{s.cost_band}</td>
+                <td>{s.industry_fit}</td>
+                <td>{s.resource_url ? <a href={s.resource_url}>{L === "en" ? "source" : "來源"}</a> : "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -105,6 +113,7 @@ export default function ProductResearchPage() {
           <li><strong>{byCategory.most_used_eol || 0} {L === "en" ? "solutions classified EOL" : "個方案被分類為 EOL"}</strong> — {L === "en" ? "Legacy PBX remains a migration and security risk in installed bases." : "舊式 PBX 仍是既有裝機的遷移與資安風險。"}</li>
           <li><strong>{byCategory.cutting_edge || 0} {L === "en" ? "solutions classified Cutting Edge" : "個方案被分類為前沿技術"}</strong> — {L === "en" ? "Reflects the rapid pace of cloud/API/AI communication platform innovation globally." : "反映全球雲端/API/AI 通訊平台創新的快速步伐。"}</li>
           <li>{L === "en" ? "Taiwan shows a clear bifurcation: EVOX/CHT cloud PBX for new deployments vs huge legacy installed base of Panasonic/Toshiba EOL equipment." : "台灣呈現明顯兩極化：新部署採用 EVOX/CHT 雲端總機，與龐大的 Panasonic/Toshiba EOL 設備既有安裝基礎並存。"}</li>
+          <li>{L === "en" ? "The crawler-enriched catalog now includes CPaaS, open-source PBX, regional telco hosted PBX, and IoT/eSIM connectivity options for edge-device command paths." : "爬蟲增補目錄已納入 CPaaS、開源 PBX、區域電信雲端總機，以及邊緣裝置控制可用的 IoT/eSIM 連線方案。"}</li>
         </ul>
       </div>
     </div>

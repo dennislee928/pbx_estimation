@@ -1,0 +1,108 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, asdict
+from typing import Iterable
+
+
+@dataclass(frozen=True)
+class DiscoveredSolution:
+    continent: str
+    country_code: str
+    name: str
+    vendor: str
+    lifecycle_category: str
+    description: str
+    tags: tuple[str, ...]
+    resource_url: str
+    pros: tuple[str, ...]
+    cons: tuple[str, ...]
+    typical_customers: str
+    discovery_query: str
+
+
+def _solution(
+    continent: str,
+    country_code: str,
+    name: str,
+    vendor: str,
+    category: str,
+    url: str,
+    tags: Iterable[str],
+    description: str,
+    pros: Iterable[str],
+    cons: Iterable[str],
+    customers: str,
+) -> DiscoveredSolution:
+    return DiscoveredSolution(
+        continent=continent,
+        country_code=country_code,
+        name=name,
+        vendor=vendor,
+        lifecycle_category=category,
+        description=description,
+        tags=tuple(tags),
+        resource_url=url,
+        pros=tuple(pros),
+        cons=tuple(cons),
+        typical_customers=customers,
+        discovery_query=f"{vendor} {name} official cloud PBX VoIP API eSIM UCaaS",
+    )
+
+
+DISCOVERED_SOLUTIONS: tuple[DiscoveredSolution, ...] = (
+    _solution("americas", "us", "Microsoft Teams Phone", "Microsoft", "cutting_edge", "https://www.microsoft.com/en-us/microsoft-teams/microsoft-teams-phone", ("cloud", "ucaas", "sip", "api", "ai"), "Cloud phone system for Teams with Operator Connect, Direct Routing, calling plans, and AI-assisted call workflows.", ("Deep Microsoft 365 integration", "Multiple PSTN connectivity models", "Enterprise compliance controls"), ("Best value inside Microsoft estate", "Licensing can be complex", "Analog/legacy devices need gateways"), "Enterprise, education, public sector"),
+    _solution("americas", "us", "Zoom Phone", "Zoom", "cutting_edge", "https://www.zoom.com/en/products/voip-phone/", ("cloud", "ucaas", "api", "ai"), "Cloud VoIP phone system integrated with Zoom Meetings, Contact Center, and AI Companion features.", ("Fast user adoption", "Strong video/phone/contact-center bundle", "Modern admin experience"), ("Cloud dependency", "Advanced routing requires careful design", "Regional PSTN availability varies"), "SMB to enterprise"),
+    _solution("americas", "us", "RingCentral RingEX", "RingCentral", "cutting_edge", "https://www.ringcentral.com/office/features/business-phone-system/overview.html", ("cloud", "ucaas", "api", "webrtc"), "Global UCaaS suite with calling, messaging, meetings, analytics, and developer APIs.", ("Mature UCaaS feature set", "Global PSTN footprint", "Rich API ecosystem"), ("Premium pricing", "Migration from legacy PBX can be involved", "Carrier coverage differs by country"), "SMB, enterprise, distributed teams"),
+    _solution("americas", "us", "8x8 Work", "8x8", "cutting_edge", "https://www.8x8.com/products/business-phone", ("cloud", "ucaas", "contact_center", "api"), "Cloud business phone and unified communications platform with contact-center adjacency.", ("Integrated UC and CC", "International calling plans", "Mature enterprise controls"), ("Plan packaging can be complex", "Local support varies", "Advanced analytics cost extra"), "International SMB and enterprise"),
+    _solution("americas", "us", "Dialpad Ai Voice", "Dialpad", "cutting_edge", "https://www.dialpad.com/products/business-phone-system/", ("cloud", "ucaas", "ai", "api"), "AI-centered cloud business phone service with transcription, summaries, and coaching.", ("Native AI call intelligence", "Clean cloud administration", "Good mobile/desktop UX"), ("AI accuracy needs validation", "Less suitable for analog-heavy sites", "Coverage differs by market"), "Sales, support, modern SMB"),
+    _solution("americas", "us", "NextivaONE", "Nextiva", "cutting_edge", "https://www.nextiva.com/products/business-phone-service.html", ("cloud", "ucaas", "crm"), "Cloud business phone and customer conversation platform for US SMB and mid-market.", ("Strong SMB onboarding", "Phone plus customer context", "US-focused support"), ("International footprint smaller than global UCaaS leaders", "Advanced integrations may need higher tiers", "Legacy migration effort remains"), "US SMB, service teams"),
+    _solution("europe", "fr", "Aircall", "Aircall", "cutting_edge", "https://aircall.io/call-center-software/", ("cloud", "call_center", "api", "crm"), "Cloud phone and call-center platform built around CRM/helpdesk integrations.", ("Fast deployment", "Strong CRM integrations", "Good for distributed teams"), ("Not a full legacy PBX replacement for every site", "Usage-based costs can grow", "Feature depth depends on plan"), "Sales and support teams"),
+    _solution("americas", "us", "GoTo Connect", "GoTo", "cutting_edge", "https://www.goto.com/connect", ("cloud", "ucaas", "contact_center"), "Cloud phone, meeting, messaging, and contact center service.", ("Integrated UC stack", "SMB-friendly packaging", "Useful admin tools"), ("Global depth below largest UCaaS vendors", "Advanced CC features require plan review", "Analog support via gateways"), "SMB, branch offices"),
+    _solution("americas", "us", "Cisco Webex Calling", "Cisco", "cutting_edge", "https://www.webex.com/suite/cloud-calling.html", ("cloud", "ucaas", "sip", "enterprise"), "Cisco cloud calling service for Webex with enterprise voice migration paths.", ("Cisco enterprise voice heritage", "Hybrid migration options", "Strong device ecosystem"), ("Licensing and admin model can be complex", "Best with Cisco ecosystem", "Migration planning required"), "Enterprise, government"),
+    _solution("europe", "de", "NFON Cloudya", "NFON", "cutting_edge", "https://www.nfon.com/en/products/cloudya", ("cloud", "ucaas", "hosted"), "European cloud telephone system for business users.", ("EU-focused provider", "Hosted PBX simplicity", "Good regional compliance fit"), ("Smaller global reach", "Feature parity varies by market", "APIs less broad than CPaaS"), "European SMB and mid-market"),
+    _solution("europe", "gb", "Gamma Horizon", "Gamma", "cutting_edge", "https://www.gamma.co.uk/products/horizon/", ("cloud", "hosted", "sip"), "UK hosted phone system and UC service sold through Gamma and channel partners.", ("Strong UK channel", "Hosted PBX maturity", "Good SIP trunk adjacency"), ("UK-centric", "Advanced API use is limited", "Contract/channel dependency"), "UK SMB and channel customers"),
+    _solution("asia_pacific", "au", "MaxoTel Hosted PBX", "MaxoTel", "mature_active", "https://www.maxo.com.au/business-phone-systems/hosted-pbx/", ("cloud", "hosted", "sip"), "Australian hosted PBX service for business calling.", ("Local Australian support", "SMB-friendly hosted PBX", "SIP trunk experience"), ("Regional scope", "Less AI/API depth than global platforms", "Legacy devices need gateways"), "Australian SMB"),
+    _solution("asia_pacific", "nz", "2talk Cloud PBX", "2talk", "mature_active", "https://www.2talk.co.nz/products/cloud-pbx/", ("cloud", "hosted", "sip"), "New Zealand cloud PBX and VoIP service.", ("Local numbering and support", "SMB pricing", "Simple hosted PBX model"), ("NZ-centered footprint", "Limited enterprise UC depth", "Integration options vary"), "NZ SMB"),
+    _solution("asia_pacific", "ph", "Globe Business Cloud Phone", "Globe Telecom", "cutting_edge", "https://www.globe.com.ph/business/enterprise/voice", ("cloud", "hosted", "telco"), "Philippines telco business voice and hosted communications portfolio.", ("Local telco reach", "Bundled connectivity", "Regulatory fit"), ("Feature set depends on package", "APIs may be limited", "Longer telco procurement"), "Philippines business"),
+    _solution("asia_pacific", "my", "TIME Voice Cloud PBX", "TIME dotCom", "mature_active", "https://www.time.com.my/business/voice", ("cloud", "hosted", "telco"), "Malaysia business voice and cloud PBX services.", ("Local fiber and voice bundle", "Business support", "Telco reliability"), ("Malaysia-centric", "Integration depth varies", "Contract dependency"), "Malaysia SMB and enterprise"),
+    _solution("asia_pacific", "th", "AIS Business Cloud PBX", "AIS", "cutting_edge", "https://business.ais.co.th/", ("cloud", "hosted", "telco"), "Thailand enterprise communication and cloud voice portfolio.", ("Local carrier coverage", "Mobile/fixed bundle", "Enterprise channel"), ("Public product details vary", "APIs may require custom engagement", "Regional scope"), "Thailand business"),
+    _solution("europe", "es", "Masvoz Cloud PBX", "Masvoz", "mature_active", "https://www.masvoz.es/centralita-virtual/", ("cloud", "hosted", "sip"), "Spanish virtual PBX and business voice service.", ("Spain-focused numbering", "Hosted PBX maturity", "Contact-center options"), ("Regional focus", "Not a global UCaaS suite", "Integration depth depends on plan"), "Spanish SMB"),
+    _solution("europe", "pt", "CloudTalk", "CloudTalk", "cutting_edge", "https://www.cloudtalk.io/call-center-software/", ("cloud", "call_center", "api"), "Cloud call-center and business calling platform for sales and support.", ("Fast international setup", "CRM integrations", "Analytics and call routing"), ("Contact-center focus more than full PBX", "Usage costs require monitoring", "Local PSTN features vary"), "Sales/support teams"),
+    _solution("middle_east", "sa", "stc business voice", "stc", "mature_active", "https://www.stc.com.sa/content/stc/sa/en/business.html", ("cloud", "hosted", "telco"), "Saudi telecom business voice and enterprise communications portfolio.", ("Local carrier and regulatory fit", "Enterprise procurement path", "Connectivity bundling"), ("Public cloud PBX details vary", "Integration may need custom work", "Regional scope"), "Saudi business"),
+    _solution("africa", "ke", "Safaricom Business Voice", "Safaricom", "mature_active", "https://www.safaricom.co.ke/business", ("cloud", "hosted", "telco"), "Kenya business voice and enterprise communication services.", ("Strong local network", "Business support", "Mobile/fixed service bundle"), ("Limited public API details", "Regional market focus", "Advanced UC depends on package"), "Kenya business"),
+    _solution("africa", "eg", "Telecom Egypt Business Voice", "Telecom Egypt", "mature_active", "https://te.eg/wps/portal/te/Business", ("hosted", "telco", "sip"), "Egypt business telephony and connectivity portfolio.", ("National carrier footprint", "Local compliance", "Connectivity bundle"), ("Cloud PBX details require sales engagement", "Limited developer APIs", "Regional focus"), "Egypt enterprise"),
+    _solution("americas", "us", "Twilio Programmable Voice", "Twilio", "cutting_edge", "https://www.twilio.com/docs/voice", ("cpaas", "api", "voice", "webrtc", "ai"), "Programmable voice API platform for building calling, IVR, SIP, recording, media streams, and AI voice workflows.", ("Developer-first APIs", "Global voice building blocks", "Strong webhook/event model"), ("Requires engineering", "Not a turnkey PBX by itself", "Usage costs must be governed"), "Developers, platforms, contact centers"),
+    _solution("europe", "gb", "Vonage Voice API", "Vonage", "cutting_edge", "https://developer.vonage.com/en/voice/voice-api/overview", ("cpaas", "api", "voice", "sip"), "Voice API for programmable calls, NCCO call control, recording, and telephony integrations.", ("Programmable call control", "Global API reach", "Useful SIP integration"), ("Developer implementation required", "PBX features must be built", "Coverage/pricing varies"), "Developers, SaaS platforms"),
+    _solution("americas", "us", "Telnyx Voice API", "Telnyx", "cutting_edge", "https://developers.telnyx.com/docs/voice", ("cpaas", "api", "sip", "voice"), "Programmable voice, SIP trunking, and real-time communications APIs.", ("Carrier-grade SIP/voice focus", "Good developer docs", "Elastic SIP trunking adjacency"), ("Engineering required", "UC UI must be built or integrated", "Regulatory setup varies"), "Developers, carriers, SaaS"),
+    _solution("americas", "us", "Bandwidth Voice API", "Bandwidth", "cutting_edge", "https://dev.bandwidth.com/docs/voice/", ("cpaas", "api", "voice", "sip"), "US-focused programmable voice and messaging platform with carrier network assets.", ("Direct carrier network in US", "Programmable voice control", "Good for compliant US workloads"), ("US-centric strengths", "Engineering required", "Not turnkey UCaaS"), "US SaaS, contact centers"),
+    _solution("asia_pacific", "in", "Plivo Voice API", "Plivo", "cutting_edge", "https://www.plivo.com/docs/voice/", ("cpaas", "api", "voice", "sip"), "Programmable voice API for calls, conferences, recordings, and SIP integrations.", ("Straightforward APIs", "Global voice reach", "Competitive CPaaS pricing"), ("Requires app development", "Not a full PBX interface", "Coverage varies"), "Developers, startups"),
+    _solution("europe", "se", "Sinch Voice API", "Sinch", "cutting_edge", "https://developers.sinch.com/docs/voice/", ("cpaas", "api", "voice", "sms"), "CPaaS voice APIs for programmable calling and communications workflows.", ("Global communications portfolio", "Voice plus messaging", "Enterprise CPaaS posture"), ("Complex portfolio", "Engineering required", "Plan/country differences"), "Enterprise developers"),
+    _solution("europe", "nl", "Bird Voice", "Bird", "cutting_edge", "https://bird.com/", ("cpaas", "api", "voice", "messaging"), "Omnichannel customer communication platform including voice and messaging automation.", ("Omnichannel workflows", "Automation focus", "Global communications routes"), ("Product packaging changes quickly", "Requires implementation", "Voice feature details need validation per region"), "Growth/support teams"),
+    _solution("europe", "hr", "Infobip Voice", "Infobip", "cutting_edge", "https://www.infobip.com/docs/voice-and-video", ("cpaas", "api", "voice", "webrtc"), "Global CPaaS voice and video APIs for customer engagement.", ("Very broad country reach", "Voice/video/messaging portfolio", "Enterprise support"), ("Complex pricing", "Developer implementation required", "Not a classic PBX"), "Global enterprise"),
+    _solution("americas", "us", "Asterisk", "Sangoma / Open Source", "mature_active", "https://www.asterisk.org/", ("ip_pbx", "sip", "open_source"), "Open-source communications framework widely used for PBX, IVR, gateways, and custom telephony.", ("Highly flexible", "Huge installed base", "No license fee for core"), ("Requires telephony/Linux expertise", "Security is self-managed", "Commercial support separate"), "Integrators, carriers, technical SMB"),
+    _solution("americas", "us", "FreePBX", "Sangoma / Open Source", "mature_active", "https://www.freepbx.org/", ("ip_pbx", "sip", "open_source", "web_management"), "Open-source web-managed PBX distribution built around Asterisk.", ("Easier admin than raw Asterisk", "Large module ecosystem", "Good analog/SIP gateway fit"), ("Patch discipline required", "Module licensing mix", "Needs telephony expertise for complex sites"), "SMB, integrators"),
+    _solution("americas", "us", "FreeSWITCH", "SignalWire / Open Source", "mature_active", "https://freeswitch.org/", ("ip_pbx", "sip", "webrtc", "open_source"), "Open-source real-time communications platform and softswitch.", ("High scalability", "WebRTC support", "Carrier/contact-center use"), ("Steep learning curve", "Configuration complexity", "Commercial support separate"), "Carriers, platforms, contact centers"),
+    _solution("americas", "us", "FusionPBX", "FusionPBX", "mature_active", "https://www.fusionpbx.com/", ("ip_pbx", "sip", "open_source", "webrtc"), "Multi-tenant PBX web interface for FreeSWITCH.", ("Multi-tenant capable", "Good provider fit", "Open-source base"), ("Requires FreeSWITCH skills", "Operational burden", "UI/admin discipline needed"), "ITSPs, integrators"),
+    _solution("europe", "fr", "Wazo Platform", "Wazo", "mature_active", "https://wazo-platform.org/", ("ip_pbx", "api", "open_source"), "Open-source programmable UC platform with API-first PBX components.", ("API-first open-source PBX", "Good automation surface", "European project roots"), ("Smaller ecosystem than Asterisk", "Engineering required", "Commercial support planning needed"), "Developers, integrators"),
+    _solution("americas", "us", "VitalPBX", "VitalPBX", "mature_active", "https://vitalpbx.com/", ("ip_pbx", "sip", "linux"), "Software PBX distribution for Asterisk-based business telephony.", ("Modern admin interface", "Asterisk compatibility", "SMB-friendly features"), ("Commercial modules needed for some features", "Self-hosting operations", "Smaller community than FreePBX"), "SMB, integrators"),
+    _solution("europe", "es", "Issabel PBX", "Issabel", "mature_active", "https://www.issabel.org/", ("ip_pbx", "sip", "open_source"), "Open-source unified communications PBX distribution forked from Elastix lineage.", ("Familiar Elastix-style admin", "Open-source stack", "Latin market adoption"), ("Project activity must be monitored", "Security patching is self-managed", "Less enterprise polish"), "Latin America SMB, integrators"),
+    _solution("americas", "us", "Twilio Super SIM / IoT SIM", "Twilio", "cutting_edge", "https://www.twilio.com/docs/iot/supersim", ("iot", "esim", "api", "cellular"), "Programmable global IoT SIM/eSIM connectivity for devices needing cellular command paths.", ("API-managed SIM fleet", "Multi-network roaming", "Good for edge devices"), ("Not a PBX product", "Coverage and roaming policies matter", "Device certification needed"), "IoT and edge-device fleets"),
+    _solution("europe", "de", "1NCE IoT eSIM", "1NCE", "cutting_edge", "https://www.1nce.com/en-us/1nce-connect/features/esim", ("iot", "esim", "api", "cellular"), "IoT connectivity with eSIM/iSIM options and device fleet management.", ("Simple IoT pricing model", "eSIM support", "Global IoT focus"), ("Data payloads only", "Latency depends on roaming path", "Not a voice PBX"), "IoT fleets, sensors"),
+    _solution("europe", "de", "emnify IoT eSIM", "emnify", "cutting_edge", "https://www.emnify.com/iot-esim", ("iot", "esim", "api", "cellular"), "Cloud-native IoT cellular connectivity and eSIM management platform.", ("API-first connectivity management", "Multi-network reach", "Strong portal/observability"), ("Requires IoT device integration", "Not for classic voice endpoints", "Pricing varies by footprint"), "IoT product teams"),
+    _solution("asia_pacific", "jp", "SORACOM Air for Cellular", "SORACOM", "cutting_edge", "https://soracom.io/services/air/cellular/", ("iot", "esim", "api", "cellular"), "IoT cellular connectivity with SIM/eSIM, APIs, and cloud integrations.", ("Strong IoT developer tooling", "Cloud integrations", "Global SIM options"), ("IoT data focus", "Voice/PBX integration is indirect", "Coverage depends on plan"), "IoT developers, manufacturers"),
+    _solution("americas", "us", "KORE OmniSIM", "KORE Wireless", "cutting_edge", "https://www.korewireless.com/connectivity/omnisim", ("iot", "esim", "cellular", "api"), "Global IoT connectivity SIM/eSIM portfolio for managed device fleets.", ("Enterprise IoT operations", "Global carrier relationships", "Managed connectivity options"), ("Sales-led onboarding", "Not PBX-specific", "Device certification and logistics"), "Enterprise IoT"),
+    _solution("europe", "ch", "Eseye AnyNet+ eSIM", "Eseye", "cutting_edge", "https://www.eseye.com/solutions/iot-connectivity/", ("iot", "esim", "cellular"), "IoT connectivity platform with multi-IMSI/eSIM capabilities.", ("Resilient multi-network design", "IoT operations focus", "Global connectivity services"), ("Commercial engagement needed", "Not voice PBX", "Complex deployments require planning"), "Enterprise IoT"),
+    _solution("americas", "us", "Hologram Hyper SIM", "Hologram", "cutting_edge", "https://www.hologram.io/", ("iot", "esim", "cellular", "api"), "IoT cellular connectivity and SIM management for connected devices.", ("Developer-friendly IoT connectivity", "Fleet dashboard/API", "Useful prototyping path"), ("Not a voice platform", "Coverage and data pricing vary", "Device firmware work required"), "IoT startups, device fleets"),
+)
+
+
+def discover_solution_catalog(validate_urls: bool = False) -> list[dict]:
+    """Return crawler seed results.
+
+    The pipeline keeps this deterministic so GitHub Pages can build without a
+    search-engine API key. `validate_urls` is reserved for live URL checks in
+    local research runs; the default catalog is the authoritative fallback.
+    """
+    del validate_urls
+    return [asdict(item) for item in DISCOVERED_SOLUTIONS]
+

@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.research.product_researcher import analyze_registry, summarize_registry
+from src.research.solution_crawler import discover_solution_catalog
 from src.research.tech_researcher import generate_awesome_list
 
 
@@ -92,7 +93,12 @@ def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
             value = row.get(col, "")
             if col == "lifecycle_assigned":
                 value = _category_label(str(value), lang)
-            cells.append(f"<td>{escape(str(value))}</td>")
+            if col in {"resource_url", "url"} and value:
+                safe_url = escape(str(value), quote=True)
+                value = f'<a href="{safe_url}">official/source</a>'
+                cells.append(f"<td>{value}</td>")
+            else:
+                cells.append(f"<td>{escape(str(value))}</td>")
         rows.append("<tr>" + "".join(cells) + "</tr>")
     return f"<table><thead><tr>{header}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
 
@@ -194,9 +200,9 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
   <h2>{"Lifecycle Summary" if not zh else "生命週期摘要"}</h2>
   {_html_table(summary, ["continent", "lifecycle_assigned", "count", "vendors"], lang)}
   <h2>{"Solution Registry" if not zh else "方案清單"}</h2>
-  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "generation", "description"], lang)}
+  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "recommended_terminals", "cost_band", "industry_fit", "resource_url", "pros", "cons"], lang)}
   <h2>{"PSTN Alternatives Awesome List" if not zh else "PSTN 替代方案 Awesome List"}</h2>
-  {_html_table(top_awesome, ["name", "category", "medium", "latency", "reliability", "security", "use_case"], lang)}
+  {_html_table(top_awesome, ["name", "category", "medium", "recommended_devices", "cost_model", "industry_fit", "latency", "security", "pros", "cons"], lang)}
   <h2>{"Sources" if not zh else "來源"}</h2>
   <ul>
     {''.join(f'<li><a href="{escape(s["url"])}">{escape(s["name"])}</a> - {escape(s["note_zh"] if zh else s["note_en"])}</li>' for s in SOURCES)}
@@ -218,6 +224,7 @@ def main() -> None:
 
     _write_json(FRONTEND_DATA / "solution_registry.json", _records(registry))
     _write_json(FRONTEND_DATA / "awesome_list.json", _records(awesome))
+    _write_json(FRONTEND_DATA / "crawler_discoveries.json", discover_solution_catalog())
     _write_json(FRONTEND_DATA / "research_sources.json", SOURCES)
 
     for lang in ("en", "zh"):

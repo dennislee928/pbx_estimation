@@ -4,6 +4,8 @@ import yaml
 from pathlib import Path
 from typing import Optional
 
+from src.research.solution_crawler import discover_solution_catalog
+
 # --- Lifecycle classification logic ---
 
 SOLUTION_GENERATIONS = {
@@ -15,9 +17,102 @@ SOLUTION_GENERATIONS = {
 
 CATEGORY_ORDER = ["cutting_edge", "mature_active", "most_used_current", "most_used_eol"]
 
+VENDOR_RESOURCE_URLS = {
+    "3cx": "https://www.3cx.com/",
+    "8x8": "https://www.8x8.com/products/business-phone",
+    "aircall": "https://aircall.io/",
+    "alibaba cloud": "https://www.alibabacloud.com/product/cloud-call-center",
+    "asterisk": "https://www.asterisk.org/",
+    "avaya": "https://www.avaya.com/",
+    "bandwidth": "https://dev.bandwidth.com/docs/voice/",
+    "cisco": "https://www.webex.com/suite/cloud-calling.html",
+    "dialpad": "https://www.dialpad.com/products/business-phone-system/",
+    "emnify": "https://www.emnify.com/iot-esim",
+    "evox": "https://www.evoxglobal.com/",
+    "freeswitch": "https://freeswitch.org/",
+    "google": "https://voice.google.com/",
+    "infobip": "https://www.infobip.com/docs/voice-and-video",
+    "kore": "https://www.korewireless.com/connectivity/omnisim",
+    "microsoft": "https://www.microsoft.com/en-us/microsoft-teams/microsoft-teams-phone",
+    "nextiva": "https://www.nextiva.com/products/business-phone-service.html",
+    "nfon": "https://www.nfon.com/en/products/cloudya",
+    "panasonic": "https://connect.panasonic.com/",
+    "plivo": "https://www.plivo.com/docs/voice/",
+    "ringcentral": "https://www.ringcentral.com/office/features/business-phone-system/overview.html",
+    "sangoma": "https://www.sangoma.com/",
+    "sinch": "https://developers.sinch.com/docs/voice/",
+    "soracom": "https://soracom.io/services/air/cellular/",
+    "telnyx": "https://developers.telnyx.com/docs/voice",
+    "twilio": "https://www.twilio.com/docs/voice",
+    "vonage": "https://developer.vonage.com/en/voice/voice-api/overview",
+    "zoom": "https://www.zoom.com/en/products/voip-phone/",
+}
+
 
 def _normalize_tag(tag: str) -> str:
     return tag.strip().lower().replace(" ", "_").replace("-", "_")
+
+
+def _resource_url(name: str, vendor: str, explicit: str | None = None) -> str:
+    if explicit:
+        return explicit
+    haystack = f"{vendor} {name}".lower()
+    for key, url in VENDOR_RESOURCE_URLS.items():
+        if key in haystack:
+            return url
+    return ""
+
+
+def _recommended_terminals(tags: list[str], customers: str, lifecycle: str) -> str:
+    text = " ".join(tags + [customers, lifecycle]).lower()
+    if any(k in text for k in ["cpaas", "api", "iot", "esim"]):
+        return "100-100,000+ API endpoints/devices"
+    if any(k in text for k in ["enterprise", "government", "carrier"]):
+        return "500-50,000 seats/devices"
+    if any(k in text for k in ["contact_center", "call_center"]):
+        return "25-5,000 agents"
+    if any(k in text for k in ["cloud", "ucaas", "hosted"]):
+        return "10-2,000 seats"
+    if any(k in text for k in ["tdm", "analog", "hybrid"]):
+        return "8-300 legacy extensions"
+    return "5-500 seats"
+
+
+def _cost_band(tags: list[str], lifecycle: str) -> str:
+    text = " ".join(tags + [lifecycle]).lower()
+    if "eol" in lifecycle or any(k in text for k in ["tdm", "analog"]):
+        return "Low capex sunk cost; high maintenance/migration risk"
+    if any(k in text for k in ["iot", "esim"]):
+        return "Low-Medium: per SIM/device subscription"
+    if any(k in text for k in ["cpaas", "api"]):
+        return "Usage-based: per minute/API event"
+    if any(k in text for k in ["enterprise", "contact_center", "call_center"]):
+        return "Medium-High: per seat plus add-ons"
+    if any(k in text for k in ["open_source"]):
+        return "Low license cost; medium engineering/ops cost"
+    return "Medium: monthly per-seat subscription"
+
+
+def _industry_fit(tags: list[str], description: str, customers: str) -> str:
+    text = " ".join(tags + [description, customers]).lower()
+    industries = []
+    if any(k in text for k in ["iot", "esim", "device", "sensor", "fleet"]):
+        industries.extend(["IoT", "Utilities", "Logistics", "Manufacturing"])
+    if any(k in text for k in ["health", "hospital", "clinic"]):
+        industries.append("Healthcare")
+    if any(k in text for k in ["government", "public sector", "education"]):
+        industries.extend(["Government", "Education"])
+    if any(k in text for k in ["contact", "call_center", "sales", "support", "crm"]):
+        industries.extend(["Contact center", "Retail", "Financial services"])
+    if any(k in text for k in ["hotel", "hospitality"]):
+        industries.append("Hospitality")
+    if any(k in text for k in ["cloud", "ucaas", "hosted", "enterprise"]):
+        industries.extend(["Professional services", "Distributed offices"])
+    if any(k in text for k in ["tdm", "analog", "legacy", "hybrid"]):
+        industries.extend(["SMB retrofit", "Retail branches", "Legacy facilities"])
+    if not industries:
+        industries = ["SMB", "Enterprise", "Systems integrators"]
+    return "; ".join(dict.fromkeys(industries))
 
 
 def _generation(tags: list[str], vendor: str) -> str:
@@ -103,7 +198,10 @@ def classify_solution(
 
 # --- Registry loader ---
 
-def load_registry(path: str = "data/solutions_registry.yaml") -> list[dict]:
+def load_registry(
+    path: str = "data/solutions_registry.yaml",
+    include_discovered: bool = True,
+) -> list[dict]:
     p = Path(path)
     if not p.exists():
         return []
@@ -119,6 +217,8 @@ def load_registry(path: str = "data/solutions_registry.yaml") -> list[dict]:
                     sol["country_code"] = country_code
                     sol["lifecycle_category"] = cat
                     solutions.append(sol)
+    if include_discovered:
+        solutions.extend(discover_solution_catalog())
     return solutions
 
 
@@ -128,8 +228,9 @@ def load_registry(path: str = "data/solutions_registry.yaml") -> list[dict]:
 def analyze_registry(
     registry_path: str = "data/solutions_registry.yaml",
     output_path: Optional[str] = "data/processed/solution_registry.csv",
+    include_discovered: bool = True,
 ) -> pd.DataFrame:
-    solutions = load_registry(registry_path)
+    solutions = load_registry(registry_path, include_discovered=include_discovered)
     rows = []
     for sol in solutions:
         tags = sol.get("tags", [])
@@ -156,6 +257,26 @@ def analyze_registry(
                 "pros": "; ".join(sol.get("pros", [])),
                 "cons": "; ".join(sol.get("cons", [])),
                 "typical_customers": sol.get("typical_customers", ""),
+                "resource_url": _resource_url(
+                    sol.get("name", ""),
+                    sol.get("vendor", ""),
+                    sol.get("resource_url") or sol.get("source_url"),
+                ),
+                "discovery_query": sol.get("discovery_query", ""),
+                "recommended_terminals": sol.get("recommended_terminals")
+                or _recommended_terminals(
+                    [_normalize_tag(t) for t in tags],
+                    sol.get("typical_customers", ""),
+                    predicted,
+                ),
+                "cost_band": sol.get("cost_band")
+                or _cost_band([_normalize_tag(t) for t in tags], predicted),
+                "industry_fit": sol.get("industry_fit")
+                or _industry_fit(
+                    [_normalize_tag(t) for t in tags],
+                    sol.get("description", ""),
+                    sol.get("typical_customers", ""),
+                ),
             }
         )
     df = pd.DataFrame(rows)
