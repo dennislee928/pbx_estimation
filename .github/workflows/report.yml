@@ -131,6 +131,7 @@ jobs:
           cp -R reports/. site/zh/reports/
           cp -R reports/. site/en/reports/
           cp reports/index.html site/index.html
+          touch site/.nojekyll
 
       - name: Upload reports as workflow artifacts
         uses: actions/upload-artifact@v4

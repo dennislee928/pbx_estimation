@@ -278,7 +278,47 @@ def main() -> None:
         (REPORTS / f"global_research_report_{lang}.md").write_text(md)
         (REPORTS / f"global_research_report_{lang}.html").write_text(html)
 
-    index = """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PBX Estimation Reports</title></head><body><h1>PBX Estimation Reports</h1><ul><li><a href="zh/">中文網站</a></li><li><a href="en/">English site</a></li><li><a href="reports/global_research_report_zh.html">中文研究報告</a></li><li><a href="reports/global_research_report_en.html">English research report</a></li></ul></body></html>"""
+    index = f"""<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PBX Estimation</title>
+  <style>
+    body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; background: #f4f6f8; color: #172033; }}
+    main {{ min-height: 100vh; display: grid; place-items: center; padding: 24px; }}
+    section {{ width: min(920px, 100%); background: white; border: 1px solid #dbe3ea; border-radius: 8px; padding: 34px; }}
+    h1 {{ margin: 0 0 12px; font-size: 2rem; }}
+    p {{ color: #52606d; line-height: 1.6; max-width: 760px; }}
+    .metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 22px 0; }}
+    .metric {{ border: 1px solid #e4e9ef; border-radius: 8px; padding: 14px; }}
+    .metric strong {{ display: block; font-size: 1.7rem; color: #0f766e; }}
+    .actions {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+    a {{ color: #0f766e; font-weight: 700; text-decoration: none; border: 1px solid #b8c7d3; border-radius: 6px; padding: 10px 12px; }}
+    a.primary {{ background: #0f766e; color: white; border-color: #0f766e; }}
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>PBX Estimation</h1>
+    <p>Global PBX, UCaaS, CPaaS, eSIM/IoT, and non-PSTN trigger alternatives. 全球 PBX、UCaaS、CPaaS、eSIM/IoT 與非 PSTN 觸發替代方案研究。</p>
+    <div class="metrics">
+      <div class="metric"><strong>{len(registry)}</strong><span>Solutions / 解決方案</span></div>
+      <div class="metric"><strong>{registry['country_code'].nunique()}</strong><span>Countries / 國家地區</span></div>
+      <div class="metric"><strong>{len(awesome)}</strong><span>Alternatives / 替代技術</span></div>
+      <div class="metric"><strong>{registry['vendor'].nunique()}</strong><span>Vendors / 供應商</span></div>
+    </div>
+    <div class="actions">
+      <a class="primary" href="zh/">繁體中文網站</a>
+      <a href="en/">English Site</a>
+      <a href="reports/global_research_report_zh.html">中文研究報告</a>
+      <a href="reports/global_research_report_en.html">English Report</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>"""
     (REPORTS / "index.html").write_text(index)
 
 
