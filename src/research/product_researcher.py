@@ -3,6 +3,7 @@ import numpy as np
 import yaml
 from pathlib import Path
 from typing import Optional
+from urllib.parse import quote_plus
 
 from src.research.solution_crawler import discover_solution_catalog
 
@@ -60,7 +61,7 @@ def _resource_url(name: str, vendor: str, explicit: str | None = None) -> str:
     for key, url in VENDOR_RESOURCE_URLS.items():
         if key in haystack:
             return url
-    return ""
+    return f"https://www.google.com/search?q={quote_plus(vendor + ' ' + name + ' official product')}"
 
 
 def _recommended_terminals(tags: list[str], customers: str, lifecycle: str) -> str:

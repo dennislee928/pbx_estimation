@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - deploy/pages-clean
+      - deploy/pages-ui-crawler
+      - deploy/pages-ui-crawler-clean
   schedule:
     - cron: "0 0 1 * *"
   workflow_dispatch:
@@ -148,5 +150,5 @@ jobs:
           path: site
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deploy
         uses: actions/deploy-pages@v4

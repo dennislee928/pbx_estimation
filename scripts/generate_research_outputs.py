@@ -53,6 +53,18 @@ SOURCES = [
     },
 ]
 
+CRAWLER_TAXONOMY = [
+    "UCaaS / cloud PBX",
+    "CCaaS / contact-center voice",
+    "CPaaS / programmable voice API",
+    "Open-source and self-hosted PBX",
+    "Regional telco hosted PBX and SIP voice",
+    "IoT SIM, eSIM, cellular connectivity",
+    "Industrial SCADA/PLC/building control",
+    "Wireless/radio/satellite alternatives",
+    "Serial, wired, relay, and dry-contact triggers",
+]
+
 
 def _records(df: pd.DataFrame) -> list[dict]:
     return json.loads(df.fillna("").to_json(orient="records"))
@@ -166,9 +178,16 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
             else "- 新部署方向明顯轉向雲端/API/AI 語音，但混合式 PBX 與 TDM 平台仍是既有裝機的主要遷移風險。"
         ),
         "",
-        "## Lifecycle Counts" if not zh else "## 生命週期統計",
+        "## Crawler Coverage" if not zh else "## 爬蟲覆蓋分類",
         "",
     ]
+    for item in CRAWLER_TAXONOMY:
+        md.append(f"- {item}")
+    md.extend([
+        "",
+        "## Lifecycle Counts" if not zh else "## 生命週期統計",
+        "",
+    ])
     for category, count in lifecycle.items():
         md.append(f"- {_category_label(category, lang)}: {int(count)}")
     md.extend(["", "## Continent Coverage" if not zh else "## 洲別覆蓋", ""])
@@ -219,6 +238,10 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
     <div class="card"><div class="metric">{len(awesome)}</div><div>{"PSTN alternatives" if not zh else "PSTN 替代方案"}</div></div>
     <div class="card"><div class="metric">{registry['vendor'].nunique()}</div><div>{"Vendors" if not zh else "供應商"}</div></div>
   </section>
+  <h2>{"Crawler Coverage" if not zh else "爬蟲覆蓋分類"}</h2>
+  <ul>
+    {''.join(f'<li>{escape(item)}</li>' for item in CRAWLER_TAXONOMY)}
+  </ul>
   <h2>{"Lifecycle Summary" if not zh else "生命週期摘要"}</h2>
   {_html_table(summary, ["continent", "lifecycle_assigned", "count", "vendors"], lang)}
   <h2>{"Solution Registry" if not zh else "方案清單"}</h2>
@@ -247,6 +270,7 @@ def main() -> None:
     _write_json(FRONTEND_DATA / "solution_registry.json", _records(registry))
     _write_json(FRONTEND_DATA / "awesome_list.json", _records(awesome))
     _write_json(FRONTEND_DATA / "crawler_discoveries.json", discover_solution_catalog())
+    _write_json(FRONTEND_DATA / "crawler_taxonomy.json", CRAWLER_TAXONOMY)
     _write_json(FRONTEND_DATA / "research_sources.json", SOURCES)
 
     for lang in ("en", "zh"):

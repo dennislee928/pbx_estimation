@@ -2,15 +2,15 @@
   "version": 3,
   "pages404": true,
   "caseSensitive": false,
-  "basePath": "/pbx_estimation",
+  "basePath": "/pbx_estimation/zh",
   "redirects": [
     {
-      "source": "/pbx_estimation",
-      "destination": "/pbx_estimation/",
+      "source": "/pbx_estimation/zh",
+      "destination": "/pbx_estimation/zh/",
       "basePath": false,
       "internal": true,
       "statusCode": 308,
-      "regex": "^/pbx_estimation$"
+      "regex": "^/pbx_estimation/zh$"
     },
     {
       "source": "/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/",
@@ -52,6 +52,24 @@
       "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/market-brief",
+      "regex": "^/market\\-brief(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/market\\-brief(?:/)?$"
+    },
+    {
+      "page": "/product-research",
+      "regex": "^/product\\-research(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/product\\-research(?:/)?$"
+    },
+    {
+      "page": "/tech-alternatives",
+      "regex": "^/tech\\-alternatives(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tech\\-alternatives(?:/)?$"
     }
   ],
   "dataRoutes": [],

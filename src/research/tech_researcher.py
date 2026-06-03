@@ -607,6 +607,32 @@ PSTN_ALTERNATIVES_WIRELESS = [
         "standards": ["3GPP LTE Cat-M1", "3GPP NB-IoT", "LwM2M"],
     },
     {
+        "name": "eSIM / Remote SIM Provisioning for IoT",
+        "category": "non_web",
+        "medium": "cellular_esim",
+        "description": "Use eSIM/eUICC profiles and remote SIM provisioning platforms to keep edge devices connected across carriers without physical SIM swaps.",
+        "protocols": ["eSIM", "eUICC", "SGP.02", "SGP.22", "SGP.32", "HTTPS APIs"],
+        "latency": "Carrier/data-path dependent",
+        "bandwidth": "Cellular plan dependent",
+        "range": "Multi-carrier national or global footprint",
+        "reliability": "High with multi-IMSI/multi-carrier failover",
+        "security": "eUICC profile security, carrier authentication, TLS API control plane",
+        "complexity": "Medium-High",
+        "cost": "Low-Medium per active profile/device",
+        "use_case": "Cellular command path for remote PBX gateways, alarms, meters, kiosks, fleet equipment, and industrial edge controllers",
+        "pros": [
+            "No truck roll for physical SIM swaps",
+            "Supports carrier failover and regional profile changes",
+            "API-managed fleet lifecycle",
+        ],
+        "cons": [
+            "Device modem/eUICC compatibility must be verified",
+            "Carrier roaming and permanent-roaming rules vary by country",
+            "Voice/SMS support differs from data-only IoT plans",
+        ],
+        "standards": ["GSMA SGP.02", "GSMA SGP.22", "GSMA SGP.32"],
+    },
+    {
         "name": "Private LTE / Private 5G",
         "category": "non_web",
         "medium": "private_cellular",
@@ -858,6 +884,39 @@ def enrich_registry(
 
 # --- Awesome list generation ---
 
+ALT_RESOURCE_URLS = {
+    "SIP INFO / REFER": "https://www.rfc-editor.org/rfc/rfc2976",
+    "REST API (HTTP/HTTPS)": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+    "WebSocket (wss://)": "https://www.rfc-editor.org/rfc/rfc6455",
+    "MQTT (MQTT-SN)": "https://mqtt.org/",
+    "WebRTC Data Channel": "https://www.w3.org/TR/webrtc/",
+    "gRPC (HTTP/2)": "https://grpc.io/docs/",
+    "CoAP (Constrained Application Protocol)": "https://www.rfc-editor.org/rfc/rfc7252",
+    "GraphQL API / Subscriptions": "https://graphql.org/",
+    "Webhook Callback": "https://github.com/standard-webhooks/standard-webhooks",
+    "AMQP / RabbitMQ": "https://www.rabbitmq.com/tutorials/amqp-concepts",
+    "NATS / JetStream": "https://docs.nats.io/",
+    "OPC UA": "https://opcfoundation.org/about/opc-technologies/opc-ua/",
+    "Modbus TCP": "https://modbus.org/specs.php",
+    "LoRaWAN": "https://lora-alliance.org/about-lorawan/",
+    "SMS / GSM AT Commands": "https://www.3gpp.org/",
+    "Z-Wave / Zigbee": "https://csa-iot.org/all-solutions/zigbee/",
+    "Radio Broadcast (FSK / DTMF over RF)": "https://www.itu.int/rec/R-REC-SM.328/",
+    "Satellite IoT (Iridium SBD, Globalstar, Starlink Direct-to-Cell)": "https://www.iridium.com/services/iridium-sbd/",
+    "Ethernet P2P (Broadcast / UDP Multicast)": "https://www.rfc-editor.org/rfc/rfc768",
+    "DTMF over VoIP (RFC 4733)": "https://www.rfc-editor.org/rfc/rfc4733",
+    "DNP3 / IEC 61850 (for utility/SCADA)": "https://www.dnp.org/About/Overview-of-DNP3-Protocol",
+    "NB-IoT / LTE-M": "https://www.gsma.com/solutions-and-impact/technologies/internet-of-things/narrow-band-internet-of-things-nb-iot/",
+    "eSIM / Remote SIM Provisioning for IoT": "https://www.gsma.com/solutions-and-impact/technologies/esim/",
+    "Private LTE / Private 5G": "https://www.3gpp.org/technologies/private-networks",
+    "Matter over Thread": "https://csa-iot.org/all-solutions/matter/",
+    "Bluetooth LE / BLE Mesh": "https://www.bluetooth.com/learn-about-bluetooth/feature-enhancements/mesh/",
+    "Wi-Fi HaLow (802.11ah)": "https://www.wi-fi.org/discover-wi-fi/wi-fi-halow",
+    "RS-485 / Modbus RTU": "https://modbus.org/specs.php",
+    "Dry Contact / Relay Closure": "https://en.wikipedia.org/wiki/Dry_contact",
+    "Power Line Communication (PLC)": "https://www.itu.int/en/ITU-T/studygroups/2017-2020/15/Pages/g.hn.aspx",
+}
+
 
 def _alternative_device_range(alt: dict) -> str:
     text = f"{alt.get('name', '')} {alt.get('medium', '')} {alt.get('use_case', '')}".lower()
@@ -930,6 +989,7 @@ def generate_awesome_list(
                 "pros": "; ".join(alt["pros"]),
                 "cons": "; ".join(alt["cons"]),
                 "standards": "; ".join(alt["standards"]),
+                "resource_url": ALT_RESOURCE_URLS.get(alt["name"], ""),
             }
         )
     df = pd.DataFrame(rows)

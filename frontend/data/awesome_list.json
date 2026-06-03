@@ -12,10 +12,14 @@
     "security": "TLS 1.2/1.3, SRTP, mutual authentication",
     "complexity": "Medium",
     "cost": "Low (uses existing SIP trunk)",
+    "cost_model": "Low (uses existing SIP trunk)",
+    "recommended_devices": "5-5,000 devices",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail; SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Trigger paging, door open, alarm via PBX extension dialing",
     "pros": "Leverages existing VoIP/PBX infrastructure already deployed; Standards-based (RFC 3261, RFC 2976); Low latency on managed networks; Works through SBCs and firewalls with proper SIP ALG",
     "cons": "Requires SIP stack on edge device; Network QoS essential for reliability; SIP ALG/firewall traversal can be brittle; Limited data payload per message",
-    "standards": "RFC 3261; RFC 2976; RFC 3515"
+    "standards": "RFC 3261; RFC 2976; RFC 3515",
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc2976"
   },
   {
     "name": "REST API (HTTP/HTTPS)",
@@ -30,10 +34,14 @@
     "security": "TLS 1.3, API keys, OAuth 2.0, mTLS, IP allowlisting",
     "complexity": "Low",
     "cost": "Very Low (standard TCP/IP networking)",
+    "cost_model": "Very Low (standard TCP/IP networking); platform/broker plus usage",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail; SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Trigger relay, GPIO, read sensor, set parameter on edge device from any HTTP-capable system",
     "pros": "Ubiquitous protocol, any modern device supports HTTP; Simple to implement and debug (curl, Postman); Secure with HTTPS + API keys; Language-agnostic: any PBX or automation platform can call REST endpoints",
     "cons": "Edge device must be IP-reachable; HTTP overhead for very constrained devices; Stateless; requires polling or webhook pattern for events; Not real-time for <10ms requirements",
-    "standards": "RFC 7230; RFC 8446"
+    "standards": "RFC 7230; RFC 8446",
+    "resource_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
   },
   {
     "name": "WebSocket (wss://)",
@@ -48,10 +56,14 @@
     "security": "WSS (TLS 1.3), origin validation, token auth",
     "complexity": "Medium",
     "cost": "Low",
+    "cost_model": "Low",
+    "recommended_devices": "5-5,000 devices",
+    "industry_fit": "SMB; Enterprise; IoT",
     "use_case": "Real-time push of commands to edge devices, live status monitoring, streaming telemetry",
     "pros": "Full-duplex persistent connection; Low latency, suitable for real-time control; Supports binary and text payloads; Widely supported in modern edge computing platforms",
     "cons": "Requires persistent TCP connection; Edge device must support WebSocket stack; Proxy/firewall may block WebSocket upgrade; Connection state management complexity at scale",
-    "standards": "RFC 6455; RFC 7692"
+    "standards": "RFC 6455; RFC 7692",
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc6455"
   },
   {
     "name": "MQTT (MQTT-SN)",
@@ -66,10 +78,14 @@
     "security": "TLS 1.2/1.3, username/password, X.509 certs, OAuth",
     "complexity": "Low",
     "cost": "Very Low",
+    "cost_model": "Very Low; platform/broker plus usage",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail",
     "use_case": "IoT edge device command/control, sensor telemetry, distributed relay triggering across many devices",
     "pros": "Extremely lightweight; designed for IoT/edge; Pub/sub decouples sender and receiver; Three QoS levels (at most once, at least once, exactly once); Last Will & Testament for device failure detection; Very mature ecosystem (AWS IoT, Azure IoT Hub, EMQX, Mosquitto)",
     "cons": "Requires MQTT broker (single point of failure without clustering); Not real-time enough for sub-10ms control loops; TCP-based; MQTT-SN adds non-IP support but less mature; Broker discovery and topic governance needed at scale",
-    "standards": "OASIS MQTT 3.1.1; OASIS MQTT 5.0; ISO/IEC 20922"
+    "standards": "OASIS MQTT 3.1.1; OASIS MQTT 5.0; ISO/IEC 20922",
+    "resource_url": "https://mqtt.org/"
   },
   {
     "name": "WebRTC Data Channel",
@@ -84,10 +100,14 @@
     "security": "DTLS 1.3, mandatory encryption, ICE consent freshness",
     "complexity": "High",
     "cost": "Low (no infrastructure needed for P2P)",
+    "cost_model": "Low (no infrastructure needed for P2P)",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail; SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Browser-based control panels for edge devices, peer-to-peer device management without cloud relay",
     "pros": "Mandatory encryption (no option for plaintext); Built-in NAT traversal via ICE/STUN/TURN; Low latency, suitable for real-time control; Can operate peer-to-peer without intermediate server",
     "cons": "High complexity to implement; TURN server needed for symmetric NAT scenarios; Not all embedded platforms have WebRTC stack; Overkill for simple trigger/command use cases",
-    "standards": "W3C WebRTC; RFC 8831; RFC 8832"
+    "standards": "W3C WebRTC; RFC 8831; RFC 8832",
+    "resource_url": "https://www.w3.org/TR/webrtc/"
   },
   {
     "name": "gRPC (HTTP/2)",
@@ -102,10 +122,14 @@
     "security": "TLS 1.3, mTLS, OAuth, JWT",
     "complexity": "Medium-High",
     "cost": "Low",
+    "cost_model": "Low; platform/broker plus usage",
+    "recommended_devices": "100-1,000,000 endpoints/events",
+    "industry_fit": "SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Structured command/control between microservices and edge devices, streaming telemetry, bidirectional RPC",
     "pros": "Binary encoding (Protocol Buffers) is efficient; Strong typing with .proto schema; Bidirectional streaming built-in; Excellent performance and tooling (protoc, code generation)",
     "cons": "HTTP/2 requirement may not suit very constrained MCUs; gRPC-Web has limitations vs native gRPC; Protocol Buffers schema management overhead; Steeper learning curve than REST",
-    "standards": "gRPC 1.x; HTTP/2 (RFC 7540); Protocol Buffers"
+    "standards": "gRPC 1.x; HTTP/2 (RFC 7540); Protocol Buffers",
+    "resource_url": "https://grpc.io/docs/"
   },
   {
     "name": "CoAP (Constrained Application Protocol)",
@@ -120,10 +144,14 @@
     "security": "DTLS 1.2/1.3, OSCORE, RawPublicKey",
     "complexity": "Low-Medium",
     "cost": "Very Low",
+    "cost_model": "Very Low",
+    "recommended_devices": "5-5,000 devices",
+    "industry_fit": "SMB; Enterprise; IoT",
     "use_case": "Constrained edge devices (MCU, 8-bit) that need simple REST-like command/control over UDP",
     "pros": "UDP-based, no TCP overhead; Very small header (4 bytes); Built-in resource discovery; Observations (pub/sub over UDP)",
     "cons": "UDP may be blocked in some networks; Less mature ecosystem than MQTT; Reliability is best-effort without CON mode; Not suitable for large payloads",
-    "standards": "RFC 7252; RFC 7641; RFC 8613"
+    "standards": "RFC 7252; RFC 7641; RFC 8613",
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc7252"
   },
   {
     "name": "GraphQL API / Subscriptions",
@@ -138,10 +166,14 @@
     "security": "TLS 1.3, OAuth 2.0, mTLS, field-level authorization",
     "complexity": "Medium-High",
     "cost": "Low-Medium",
+    "cost_model": "Low-Medium; platform/broker plus usage",
+    "recommended_devices": "100-1,000,000 endpoints/events",
+    "industry_fit": "SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Unified API facade for mixed PBX, CRM, alarm, and edge-device control surfaces",
     "pros": "Strong schema contracts for frontend and backend teams; Subscriptions support live state updates; Good aggregation layer when multiple device APIs differ",
     "cons": "Adds an API gateway layer; Resolver authorization must be designed carefully; Less suitable for tiny microcontrollers than REST or CoAP",
-    "standards": "GraphQL Specification; RFC 8446"
+    "standards": "GraphQL Specification; RFC 8446",
+    "resource_url": "https://graphql.org/"
   },
   {
     "name": "Webhook Callback",
@@ -156,10 +188,14 @@
     "security": "TLS 1.3, HMAC signatures, replay protection, IP allowlisting",
     "complexity": "Low-Medium",
     "cost": "Very Low",
+    "cost_model": "Very Low; platform/broker plus usage",
+    "recommended_devices": "100-1,000,000 endpoints/events",
+    "industry_fit": "SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Cloud PBX call event triggers, alarm notification fanout, CRM-to-device workflows",
     "pros": "Simple cloud integration pattern; No polling when source system supports events; Works well with serverless queues and audit logs",
     "cons": "Receiver must be internet reachable; Retries can duplicate actions unless idempotency is implemented; Vendor webhook schemas vary",
-    "standards": "HTTP; JSON Web Signature patterns; RFC 8446"
+    "standards": "HTTP; JSON Web Signature patterns; RFC 8446",
+    "resource_url": "https://github.com/standard-webhooks/standard-webhooks"
   },
   {
     "name": "AMQP / RabbitMQ",
@@ -174,10 +210,14 @@
     "security": "TLS, SASL, vhost permissions, mTLS",
     "complexity": "Medium",
     "cost": "Low-Medium",
+    "cost_model": "Low-Medium; platform/broker plus usage",
+    "recommended_devices": "10-1,000 building devices",
+    "industry_fit": "SMB; Enterprise; IoT",
     "use_case": "Reliable command dispatch where every action must be auditable and retried",
     "pros": "Durable queues and acknowledgements; Dead-letter queues expose failed device commands; Mature operations model",
     "cons": "Broker infrastructure required; Not ideal for battery-powered devices; Queue design affects ordering and fanout",
-    "standards": "AMQP 0-9-1; AMQP 1.0"
+    "standards": "AMQP 0-9-1; AMQP 1.0",
+    "resource_url": "https://www.rabbitmq.com/tutorials/amqp-concepts"
   },
   {
     "name": "NATS / JetStream",
@@ -192,10 +232,14 @@
     "security": "TLS, nkeys, JWT account authorization",
     "complexity": "Medium",
     "cost": "Low",
+    "cost_model": "Low; platform/broker plus usage",
+    "recommended_devices": "100-1,000,000 endpoints/events",
+    "industry_fit": "SMB; Enterprise; IoT",
     "use_case": "Edge fleets, microservices, low-latency pub/sub command buses",
     "pros": "Very low latency and simple clients; Request/reply and pub/sub in one protocol; Persistence available when needed",
     "cons": "Smaller enterprise PBX ecosystem than MQTT or AMQP; Requires subject naming discipline; Native clients may be unavailable on constrained legacy devices",
-    "standards": "NATS Protocol"
+    "standards": "NATS Protocol",
+    "resource_url": "https://docs.nats.io/"
   },
   {
     "name": "OPC UA",
@@ -210,10 +254,14 @@
     "security": "X.509 certificates, signing, encryption, user tokens",
     "complexity": "High",
     "cost": "Medium-High",
+    "cost_model": "Medium-High",
+    "recommended_devices": "10-10,000 industrial points",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "Factory, building automation, and industrial facilities integrating telephony events with PLC/SCADA assets",
     "pros": "Vendor-neutral industrial data model; Strong built-in security model; Widely supported by automation vendors",
     "cons": "Overkill for simple office relay control; Certificate lifecycle adds operational work; Industrial expertise needed",
-    "standards": "IEC 62541"
+    "standards": "IEC 62541",
+    "resource_url": "https://opcfoundation.org/about/opc-technologies/opc-ua/"
   },
   {
     "name": "Modbus TCP",
@@ -228,10 +276,14 @@
     "security": "None natively; isolate with VPN, firewall, or TLS gateway",
     "complexity": "Low",
     "cost": "Low",
+    "cost_model": "Low",
+    "recommended_devices": "10-10,000 industrial points",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "PBX-triggered relay outputs in industrial or building-control panels",
     "pros": "Extremely common in PLC and I/O devices; Simple register model; Low-cost hardware modules are widely available",
     "cons": "No native authentication or encryption; Flat register maps can be error-prone; Needs network isolation",
-    "standards": "Modbus Application Protocol"
+    "standards": "Modbus Application Protocol",
+    "resource_url": "https://modbus.org/specs.php"
   },
   {
     "name": "LoRaWAN",
@@ -246,10 +298,14 @@
     "security": "AES-128 CTR + CMAC (end-to-end), FRM payload encryption, JoinEUI/DevEUI",
     "complexity": "Medium",
     "cost": "Low (module $5-15, network server open-source or cloud)",
+    "cost_model": "Low (module $5-15, network server open-source or cloud); subscription or message/device fees",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Remote trigger of edge devices where no IP connectivity exists (agriculture, rural infrastructure, pipelines)",
     "pros": "Exceptional range (kilometers) with very low power; No cellular subscription needed (ISM band); Excellent building penetration; Bi-directional downlink for command/control; Open standard, multi-vendor ecosystem (TTN, Helium, AWS IoT)",
     "cons": "Very low data rate (not for large payloads); Duty-cycle restrictions in EU (868 MHz); Class A devices cannot receive downlink until they send uplink; Latency too high for real-time control",
-    "standards": "LoRaWAN L2 1.0.4; ETSI EN 300 220; FCC Part 15"
+    "standards": "LoRaWAN L2 1.0.4; ETSI EN 300 220; FCC Part 15",
+    "resource_url": "https://lora-alliance.org/about-lorawan/"
   },
   {
     "name": "SMS / GSM AT Commands",
@@ -264,10 +320,14 @@
     "security": "SMS is encrypted over-the-air (A5/3) but not end-to-end; SS7 vulnerabilities known",
     "complexity": "Low",
     "cost": "Low-Medium ($0.01-0.10 per SMS, GSM module $10-30)",
+    "cost_model": "Low-Medium ($0.01-0.10 per SMS, GSM module $10-30); subscription or message/device fees",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Remote sites with only cellular coverage, backup trigger path, offline command delivery",
     "pros": "Works anywhere there is cellular coverage; GSM modules are cheap and widely available; Simple AT command interface; SMS is store-and-forward (device can receive when offline); Bidirectional (2-way SMS)",
     "cons": "SMS latency varies (1-30s typical, can be hours); SMS is not end-to-end encrypted by default; SS7 vulnerabilities allow SMS interception; Per-message cost at scale; 2G/3G sunsetting reduces GSM availability in some regions",
-    "standards": "GSM 03.38; GSM 07.07; 3GPP TS 23.040"
+    "standards": "GSM 03.38; GSM 07.07; 3GPP TS 23.040",
+    "resource_url": "https://www.3gpp.org/"
   },
   {
     "name": "Z-Wave / Zigbee",
@@ -282,10 +342,14 @@
     "security": "Z-Wave S2 (mandatory), Zigbee APS encryption (AES-128-CCM*)",
     "complexity": "Low-Medium",
     "cost": "Low (Z-Wave/Zigbee modules $3-10, controllers $30-100)",
+    "cost_model": "Low (Z-Wave/Zigbee modules $3-10, controllers $30-100)",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail",
     "use_case": "In-building edge device control (lighting, door lock, relay) via office PBX/automation integration",
     "pros": "Mature ecosystem with thousands of interoperable devices; Mesh topology extends range across buildings; Low power (battery for sensors); Z-Wave S2 has strong security (mandatory since 2017); Direct integration with home/office automation hubs",
     "cons": "Short range per node without mesh; Z-Wave and Zigbee are different ecosystems (no interoperability); Requires hub/controller for PBX integration; Limited to building-scale; not for outdoor/long-range; Z-Wave chips supply constraints historically",
-    "standards": "Z-Wave (ITU-T G.9959); Zigbee 3.0 (IEEE 802.15.4); Matter (as converged transport)"
+    "standards": "Z-Wave (ITU-T G.9959); Zigbee 3.0 (IEEE 802.15.4); Matter (as converged transport)",
+    "resource_url": "https://csa-iot.org/all-solutions/zigbee/"
   },
   {
     "name": "Radio Broadcast (FSK / DTMF over RF)",
@@ -300,10 +364,14 @@
     "security": "None inherently; add AES via encryption radios (Motorola AES-256, etc.)",
     "complexity": "High",
     "cost": "Medium-High (licensed radio $1000-5000, license fees, antenna infrastructure)",
+    "cost_model": "Medium-High (licensed radio $1000-5000, license fees, antenna infrastructure)",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Logistics; Agriculture; Remote infrastructure; Public safety; SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Pipeline valve control, electrical substation switching, water system actuation where IP/cellular unavailable",
     "pros": "Works where no IP or cellular exists; Proven in industrial SCADA for decades; Licensed spectrum provides interference protection; Range up to 50km line-of-sight",
     "cons": "Requires radio license in most countries; License spectrum costs and regulatory paperwork; No inherent security; encryption adds cost and complexity; Susceptible to interference, weather, multi-path; Low data rate (voice-band FSK)",
-    "standards": "ETSI EN 300 113; FCC Part 90; ITU-R SM.328"
+    "standards": "ETSI EN 300 113; FCC Part 90; ITU-R SM.328",
+    "resource_url": "https://www.itu.int/rec/R-REC-SM.328/"
   },
   {
     "name": "Satellite IoT (Iridium SBD, Globalstar, Starlink Direct-to-Cell)",
@@ -318,10 +386,14 @@
     "security": "AES-256 (Iridium), end-to-end encryption supported",
     "complexity": "Medium-High",
     "cost": "Medium-High ($0.05-1.00 per message, module $100-500)",
+    "cost_model": "Medium-High ($0.05-1.00 per message, module $100-500); high engineering/infrastructure",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Edge devices in polar regions, oceans, deserts, or anywhere with zero terrestrial connectivity",
     "pros": "True global coverage (Iridium covers poles); No terrestrial infrastructure needed; Ideal for remote monitoring and command; New LEO services (Starlink D2C) will reduce latency and cost",
     "cons": "High per-message cost for traditional satellite IoT; Iridium SBD has 10-60 second latency; Requires clear sky view (not for indoor); Module cost higher than cellular/LoRaWAN; Bandwidth extremely limited",
-    "standards": "Iridium SBD (9602/9603); 3GPP Rel-17 NTN; ITU-R M.1850"
+    "standards": "Iridium SBD (9602/9603); 3GPP Rel-17 NTN; ITU-R M.1850",
+    "resource_url": "https://www.iridium.com/services/iridium-sbd/"
   },
   {
     "name": "Ethernet P2P (Broadcast / UDP Multicast)",
@@ -336,10 +408,14 @@
     "security": "None at link layer; VLAN ACLs, MAC filtering optional",
     "complexity": "Low",
     "cost": "Very Low",
+    "cost_model": "Very Low",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail",
     "use_case": "Sub-millisecond relay triggering on local LAN, broadcast paging, synchronized actuation across multiple edge devices",
     "pros": "Lowest possible latency on Ethernet (<1ms); Broadcast reaches all devices on subnet simultaneously; No IP configuration needed (raw Ethernet frames); Works on the most basic microcontrollers with Ethernet PHY",
     "cons": "No delivery guarantee (UDP best-effort); Broadcast storms can impact network performance; No security or authentication by default; Does not route across subnets; Very implementation-specific; no standard API",
-    "standards": "IEEE 802.3; RFC 768 (UDP)"
+    "standards": "IEEE 802.3; RFC 768 (UDP)",
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc768"
   },
   {
     "name": "DTMF over VoIP (RFC 4733)",
@@ -354,10 +430,14 @@
     "security": "Same as SIP/RTP call (TLS + SRTP)",
     "complexity": "Medium",
     "cost": "Very Low (piggybacks on existing VoIP call)",
+    "cost_model": "Very Low (piggybacks on existing VoIP call)",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail; SaaS; Contact center; Professional services; Systems integration",
     "use_case": "Legacy IVR/auto-attendant style control over VoIP: press 1=relay on, press 2=relay off, press 3=query status",
     "pros": "Piggybacks on existing SIP/VoIP infrastructure; Industry standard for DTMF transport over IP; Backward compatible with older PSTN DTMF patterns; Out-of-band avoids voice codec distortion",
     "cons": "Edge device must be an RTP endpoint or media proxy; Requires active SIP call/session to send DTMF; Limited command vocabulary (0-9, *, #); Not for high-frequency commands (single DTMF per packet)",
-    "standards": "RFC 4733; RFC 2833"
+    "standards": "RFC 4733; RFC 2833",
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc4733"
   },
   {
     "name": "DNP3 / IEC 61850 (for utility/SCADA)",
@@ -372,10 +452,14 @@
     "security": "DNP3 Secure Authentication (SAv5), IEC 62351",
     "complexity": "Very High",
     "cost": "High (SCADA master license, RTU, engineering)",
+    "cost_model": "High (SCADA master license, RTU, engineering); high engineering/infrastructure",
+    "recommended_devices": "10-10,000 industrial points",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "Utility substation, electrical grid, water treatment plant edge device command/control (relay, breaker, valve)",
     "pros": "Industrial-grade reliability and determinism; Time-stamped events for post-incident analysis; Standard in utility industry worldwide; Secure authentication profiles available (SAv5)",
     "cons": "Very high complexity and engineering cost; Not designed for commercial/office environment; Overkill for simple relay/command use cases; Requires trained SCADA engineers; IEC 61850 requires specific Ethernet switches (GOOSE messaging)",
-    "standards": "IEEE 1815 (DNP3); IEC 61850; IEC 62351; IEEE C37.118"
+    "standards": "IEEE 1815 (DNP3); IEC 61850; IEC 62351; IEEE C37.118",
+    "resource_url": "https://www.dnp.org/About/Overview-of-DNP3-Protocol"
   },
   {
     "name": "NB-IoT / LTE-M",
@@ -390,10 +474,36 @@
     "security": "3GPP SIM authentication, LTE encryption, TLS at application layer",
     "complexity": "Medium",
     "cost": "Low-Medium subscription",
+    "cost_model": "Low-Medium subscription; subscription or message/device fees",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail; Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Remote alarms, utility meters, building edge controllers with small data payloads",
     "pros": "Carrier-managed licensed spectrum; Better building penetration than classic LTE; Lower power than full cellular modems",
     "cons": "Coverage varies by country and operator; Downlink latency can be variable; Requires SIM/eSIM lifecycle management",
-    "standards": "3GPP LTE Cat-M1; 3GPP NB-IoT; LwM2M"
+    "standards": "3GPP LTE Cat-M1; 3GPP NB-IoT; LwM2M",
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/internet-of-things/narrow-band-internet-of-things-nb-iot/"
+  },
+  {
+    "name": "eSIM / Remote SIM Provisioning for IoT",
+    "category": "non_web",
+    "medium": "cellular_esim",
+    "description": "Use eSIM/eUICC profiles and remote SIM provisioning platforms to keep edge devices connected across carriers without physical SIM swaps.",
+    "protocols": "eSIM; eUICC; SGP.02; SGP.22; SGP.32; HTTPS APIs",
+    "latency": "Carrier/data-path dependent",
+    "bandwidth": "Cellular plan dependent",
+    "range": "Multi-carrier national or global footprint",
+    "reliability": "High with multi-IMSI/multi-carrier failover",
+    "security": "eUICC profile security, carrier authentication, TLS API control plane",
+    "complexity": "Medium-High",
+    "cost": "Low-Medium per active profile/device",
+    "cost_model": "Low-Medium per active profile/device; subscription or message/device fees",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Logistics; Agriculture; Remote infrastructure; Public safety",
+    "use_case": "Cellular command path for remote PBX gateways, alarms, meters, kiosks, fleet equipment, and industrial edge controllers",
+    "pros": "No truck roll for physical SIM swaps; Supports carrier failover and regional profile changes; API-managed fleet lifecycle",
+    "cons": "Device modem/eUICC compatibility must be verified; Carrier roaming and permanent-roaming rules vary by country; Voice/SMS support differs from data-only IoT plans",
+    "standards": "GSMA SGP.02; GSMA SGP.22; GSMA SGP.32",
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/esim/"
   },
   {
     "name": "Private LTE / Private 5G",
@@ -408,10 +518,14 @@
     "security": "SIM/eSIM authentication, 5G AKA, network slicing, private core policy",
     "complexity": "Very High",
     "cost": "High",
+    "cost_model": "High; high engineering/infrastructure",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Hospitals, ports, factories, airports, mines, and public safety campuses",
     "pros": "Controlled RF and QoS; Mobility support beyond Wi-Fi; Can carry voice, video, and control traffic",
     "cons": "Spectrum and core-network expertise required; High deployment cost; Regulatory model differs by country",
-    "standards": "3GPP 4G LTE; 3GPP 5G NR"
+    "standards": "3GPP 4G LTE; 3GPP 5G NR",
+    "resource_url": "https://www.3gpp.org/technologies/private-networks"
   },
   {
     "name": "Matter over Thread",
@@ -426,10 +540,14 @@
     "security": "Matter device attestation, CASE, AES-CCM",
     "complexity": "Medium",
     "cost": "Low-Medium",
+    "cost_model": "Low-Medium",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "PBX-triggered building devices such as locks, lights, relays, and sensors",
     "pros": "Modern multi-vendor smart-building standard; IP-based, unlike many older home automation stacks; Strong onboarding and attestation model",
     "cons": "Still maturing in commercial deployments; Needs border routers; Device-class coverage is not universal",
-    "standards": "Matter 1.x; Thread 1.3; IEEE 802.15.4"
+    "standards": "Matter 1.x; Thread 1.3; IEEE 802.15.4",
+    "resource_url": "https://csa-iot.org/all-solutions/matter/"
   },
   {
     "name": "Bluetooth LE / BLE Mesh",
@@ -444,10 +562,14 @@
     "security": "LE Secure Connections, AES-CCM, provisioning keys",
     "complexity": "Medium",
     "cost": "Very Low",
+    "cost_model": "Very Low",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail",
     "use_case": "Phone-proximate setup, room devices, badges, small relays, and sensors",
     "pros": "Available in phones and low-cost microcontrollers; Good for provisioning and local control; BLE Mesh supports managed building-scale networks",
     "cons": "2.4GHz interference; Range is limited without mesh; Gateway needed for remote PBX integration",
-    "standards": "Bluetooth Core; Bluetooth Mesh Profile"
+    "standards": "Bluetooth Core; Bluetooth Mesh Profile",
+    "resource_url": "https://www.bluetooth.com/learn-about-bluetooth/feature-enhancements/mesh/"
   },
   {
     "name": "Wi-Fi HaLow (802.11ah)",
@@ -462,10 +584,14 @@
     "security": "WPA3 where supported, TLS at application layer",
     "complexity": "Medium",
     "cost": "Medium",
+    "cost_model": "Medium",
+    "recommended_devices": "100-100,000 remote devices",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Logistics; Agriculture; Remote infrastructure; Public safety",
     "use_case": "Large campuses, warehouses, agriculture, and parking facilities needing IP without cellular",
     "pros": "Native IP model like Wi-Fi; Better range and wall penetration than 2.4GHz Wi-Fi; Supports many IoT devices per access point",
     "cons": "Ecosystem is younger than Wi-Fi 6/7 or LoRaWAN; Regional sub-GHz spectrum differs; Client hardware choices are narrower",
-    "standards": "IEEE 802.11ah"
+    "standards": "IEEE 802.11ah",
+    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-halow"
   },
   {
     "name": "RS-485 / Modbus RTU",
@@ -480,10 +606,14 @@
     "security": "None natively; physical security and gateway isolation",
     "complexity": "Low-Medium",
     "cost": "Very Low",
+    "cost_model": "Very Low",
+    "recommended_devices": "10-10,000 industrial points",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "PBX-to-gateway command of industrial relay boards and legacy building devices",
     "pros": "Very cheap and rugged; Long cable runs; Huge ecosystem of relay and sensor modules",
     "cons": "No native encryption or authentication; Bus termination and addressing must be correct; Gateway needed for IP/cloud integration",
-    "standards": "TIA/EIA-485; Modbus RTU"
+    "standards": "TIA/EIA-485; Modbus RTU",
+    "resource_url": "https://modbus.org/specs.php"
   },
   {
     "name": "Dry Contact / Relay Closure",
@@ -498,10 +628,14 @@
     "security": "Physical security only",
     "complexity": "Very Low",
     "cost": "Very Low",
+    "cost_model": "Very Low",
+    "recommended_devices": "1-256 local I/O points",
+    "industry_fit": "Smart building; Facilities; Hospitality; Retail",
     "use_case": "Door release, paging amplifier trigger, siren activation, elevator/fire-panel interface",
     "pros": "Universally understood by legacy equipment; No protocol compatibility issue; Fails visibly and is easy to test with a meter",
     "cons": "No identity, encryption, or audit trail by itself; Only carries simple binary state; Requires local wiring and electrical protection",
-    "standards": "IEC relay practice; GPIO vendor specs"
+    "standards": "IEC relay practice; GPIO vendor specs",
+    "resource_url": "https://en.wikipedia.org/wiki/Dry_contact"
   },
   {
     "name": "Power Line Communication (PLC)",
@@ -516,9 +650,13 @@
     "security": "AES profiles vary by standard",
     "complexity": "High",
     "cost": "Medium",
+    "cost_model": "Medium",
+    "recommended_devices": "5-5,000 devices",
+    "industry_fit": "Utilities; Energy; Water; Industrial automation; Smart building; Facilities; Hospitality; Retail",
     "use_case": "Utility meters, building devices, and retrofit sites where new signal cabling is hard",
     "pros": "Uses existing power wiring; Useful in dense retrofit environments; Mature in smart-meter deployments",
     "cons": "Noise and phase coupling affect reliability; Installation rules vary by electrical system; Not a good fit for life-safety triggers without engineering",
-    "standards": "G3-PLC; PRIME; HomePlug Green PHY"
+    "standards": "G3-PLC; PRIME; HomePlug Green PHY",
+    "resource_url": "https://www.itu.int/en/ITU-T/studygroups/2017-2020/15/Pages/g.hn.aspx"
   }
 ]
