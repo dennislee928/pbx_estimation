@@ -961,11 +961,132 @@ def _alternative_cost_model(alt: dict) -> str:
     return cost
 
 
+EXPANDED_ALTERNATIVE_SPECS = [
+    ("SIP NOTIFY / SUBSCRIBE events", "web", "ethernet_ip", ["SIP", "SUBSCRIBE", "NOTIFY"], "https://www.rfc-editor.org/rfc/rfc6665", "Voice platform events trigger subscribed device actions.", "SaaS; Contact center; Systems integration"),
+    ("SIP MESSAGE instant command", "web", "ethernet_ip", ["SIP MESSAGE", "CPIM"], "https://www.rfc-editor.org/rfc/rfc3428", "Short SIP text payloads carry commands to SIP-aware gateways.", "Facilities; Hospitality; Systems integration"),
+    ("SIP KPML digit events", "web", "ethernet_ip", ["SIP", "KPML", "XML"], "https://www.rfc-editor.org/rfc/rfc4730", "Keypad markup events map phone digits to edge commands.", "Contact center; Hospitality; Legacy facilities"),
+    ("RTP audio tone detection", "web", "ethernet_ip", ["RTP", "DSP", "Goertzel"], "https://www.rfc-editor.org/rfc/rfc3550", "Gateway detects tones or audio cues in a voice stream.", "Legacy facilities; Paging; Hospitality"),
+    ("SRTP-secured media command channel", "web", "ethernet_ip", ["SRTP", "RTP", "SIP"], "https://www.rfc-editor.org/rfc/rfc3711", "Encrypted RTP session carries command tones or metadata.", "Enterprise; Government; Healthcare"),
+    ("XMPP PubSub", "web", "ethernet_ip", ["XMPP", "PubSub", "TLS"], "https://xmpp.org/extensions/xep-0060.html", "Federated publish/subscribe events dispatch device commands.", "Enterprise; Messaging; Systems integration"),
+    ("Redis Streams", "web", "ethernet_ip", ["Redis", "Streams", "TLS"], "https://redis.io/docs/latest/develop/data-types/streams/", "Append-only event stream with consumer groups for command workers.", "SaaS; Retail; IoT"),
+    ("Apache Kafka", "web", "ethernet_ip", ["Kafka", "TLS", "SASL"], "https://kafka.apache.org/documentation/", "High-scale event log for auditable command workflows.", "Enterprise; Logistics; Financial services"),
+    ("Pulsar topics", "web", "ethernet_ip", ["Apache Pulsar", "TLS"], "https://pulsar.apache.org/docs/", "Multi-tenant topic bus for command and telemetry streams.", "SaaS; IoT; Enterprise"),
+    ("ZeroMQ command sockets", "web", "ethernet_ip", ["ZeroMQ", "TCP", "CurveZMQ"], "https://zeromq.org/", "Lightweight socket patterns connect local command agents.", "Industrial automation; Systems integration; Labs"),
+    ("DDS / RTPS", "web", "ethernet_ip", ["DDS", "RTPS"], "https://www.omg.org/spec/DDS/", "Real-time pub/sub middleware for deterministic edge control.", "Robotics; Aerospace; Industrial automation"),
+    ("LwM2M device management", "web", "ethernet_ip", ["LwM2M", "CoAP", "DTLS"], "https://omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/", "Device-management objects expose execute commands and telemetry.", "Utilities; IoT; Remote infrastructure"),
+    ("OMA DM legacy device management", "web", "cellular_ip", ["OMA DM", "HTTPS"], "https://omaspecworks.org/what-is-oma-specworks/device-management/", "Legacy mobile-device management channel for remote configuration.", "Telecom; Field devices; Legacy fleets"),
+    ("SNMP SET command", "web", "ethernet_ip", ["SNMPv3", "UDP"], "https://www.rfc-editor.org/rfc/rfc3411", "Management station writes OIDs to trigger networked equipment.", "Telecom; Network operations; Facilities"),
+    ("NETCONF over SSH", "web", "ethernet_ip", ["NETCONF", "SSH", "YANG"], "https://www.rfc-editor.org/rfc/rfc6241", "Structured network configuration RPCs operate routers and gateways.", "Telecom; Data centers; Enterprise networks"),
+    ("RESTCONF", "web", "ethernet_ip", ["RESTCONF", "YANG", "HTTPS"], "https://www.rfc-editor.org/rfc/rfc8040", "HTTP-based YANG control for network and gateway devices.", "Telecom; Enterprise networks; Data centers"),
+    ("OpenFlow SDN control", "web", "ethernet_ip", ["OpenFlow", "TLS"], "https://opennetworking.org/sdn-resources/openflow/", "SDN controller changes paths or port state after voice events.", "Data centers; Telecom; Campus networks"),
+    ("BACnet/IP", "web", "ethernet_ip", ["BACnet/IP", "UDP"], "https://bacnet.org/", "Building automation objects control HVAC, access, and alarms.", "Smart building; Facilities; Healthcare"),
+    ("KNXnet/IP", "web", "ethernet_ip", ["KNX", "KNXnet/IP"], "https://www.knx.org/knx-en/for-professionals/What-is-KNX/", "Building bus integration over IP for lighting and relay actions.", "Smart building; Hospitality; Facilities"),
+    ("DALI-2 lighting control", "non_web", "building_bus", ["DALI-2", "IEC 62386"], "https://www.dali-alliance.org/dali/", "Dedicated lighting bus receives commands through a gateway.", "Smart building; Retail; Hospitality"),
+    ("DMX512 / RDM", "non_web", "serial_wire", ["DMX512", "RDM", "RS-485"], "https://tsp.esta.org/tsp/documents/published_docs.php", "Lighting and stage-control bus triggers scenes and relays.", "Venues; Hospitality; Retail"),
+    ("CAN bus / CANopen", "non_web", "fieldbus", ["CAN", "CANopen"], "https://www.can-cia.org/can-knowledge/canopen", "Robust fieldbus commands controllers and mobile equipment.", "Industrial automation; Vehicles; Robotics"),
+    ("J1939 vehicle bus", "non_web", "fieldbus", ["SAE J1939", "CAN"], "https://www.sae.org/standards/content/j1939_202208/", "Heavy-vehicle network commands and reads equipment state.", "Fleet; Logistics; Agriculture"),
+    ("PROFINET IO", "web", "ethernet_ip", ["PROFINET", "Industrial Ethernet"], "https://www.profibus.com/technology/profinet", "Industrial Ethernet I/O commands PLC devices in factories.", "Manufacturing; Industrial automation; Utilities"),
+    ("PROFIBUS DP", "non_web", "fieldbus", ["PROFIBUS DP", "RS-485"], "https://www.profibus.com/technology/profibus", "Legacy factory fieldbus controls distributed I/O and drives.", "Manufacturing; Legacy factories; Utilities"),
+    ("EtherNet/IP CIP", "web", "ethernet_ip", ["EtherNet/IP", "CIP"], "https://www.odva.org/technology-standards/key-technologies/ethernet-ip/", "CIP messages control PLCs, drives, and industrial I/O.", "Manufacturing; Warehousing; Industrial automation"),
+    ("EtherCAT", "web", "ethernet_wire", ["EtherCAT"], "https://www.ethercat.org/en/technology.html", "Deterministic Ethernet fieldbus for fast machine control.", "Robotics; Manufacturing; Motion control"),
+    ("SERCOS III", "web", "ethernet_wire", ["SERCOS III"], "https://www.sercos.org/technology/sercos-iii/", "Industrial real-time Ethernet for motion and machine commands.", "Motion control; Manufacturing; Robotics"),
+    ("IO-Link", "non_web", "sensor_bus", ["IO-Link", "IEC 61131-9"], "https://io-link.com/en/Technology/what_is_IO-Link.php", "Point-to-point sensor/actuator commands through IO-Link masters.", "Manufacturing; Packaging; Machine builders"),
+    ("1-Wire control bus", "non_web", "serial_wire", ["1-Wire"], "https://www.analog.com/en/resources/technical-articles/guide-to-1wire-communication.html", "Very low-cost single-wire sensor and switch control.", "Facilities; Labs; Low-cost monitoring"),
+    ("I2C local device bus", "non_web", "board_bus", ["I2C"], "https://www.nxp.com/docs/en/user-guide/UM10204.pdf", "Local microcontroller bus controls nearby I/O expanders.", "Embedded systems; Kiosks; Edge gateways"),
+    ("SPI local device bus", "non_web", "board_bus", ["SPI"], "https://developer.arm.com/documentation/102159/0100/Serial-Peripheral-Interface--SPI-", "Fast board-level bus controls local peripherals and relays.", "Embedded systems; Industrial gateways; Hardware products"),
+    ("GPIO direct digital output", "non_web", "electrical_contact", ["GPIO"], "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html", "Controller toggles a digital pin wired to an opto-isolated input.", "Facilities; Kiosks; Industrial gateways"),
+    ("Open collector / open drain output", "non_web", "electrical_contact", ["Open collector", "Open drain"], "https://en.wikipedia.org/wiki/Open_collector", "Sink-output interface triggers alarms, buzzers, and relay boards.", "Security; Alarms; Legacy equipment"),
+    ("Wiegand access-control interface", "non_web", "access_control", ["Wiegand"], "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/", "Access-control gateway bridges PBX events to door controllers.", "Access control; Facilities; Healthcare"),
+    ("OSDP secure access control", "non_web", "access_control", ["OSDP", "RS-485", "AES"], "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/", "Supervised encrypted RS-485 protocol for readers and doors.", "Access control; Government; Enterprise"),
+    ("Alarm Contact ID over IP gateway", "web", "ethernet_ip", ["SIA DC-09", "Contact ID"], "https://www.siaonline.org/what-we-do/standards/", "Alarm events are translated into IP receiver messages.", "Security; Monitoring centers; Facilities"),
+    ("SIA DC-09 alarm signaling", "web", "ethernet_ip", ["SIA DC-09", "TCP", "UDP"], "https://www.siaonline.org/what-we-do/standards/", "Standardized alarm-over-IP path replaces dial-up alarm lines.", "Security; Insurance; Monitoring centers"),
+    ("CAP common alerting protocol", "web", "ethernet_ip", ["CAP", "XML", "HTTPS"], "https://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html", "Emergency alerts fan out to sirens, paging, and displays.", "Public safety; Government; Campuses"),
+    ("EAS / SAME alert relay", "non_web", "radio_broadcast", ["SAME", "EAS"], "https://www.weather.gov/nwr/same", "Broadcast alert codes trigger local warning equipment.", "Public safety; Broadcast; Campuses"),
+    ("POCSAG paging", "non_web", "radio_paging", ["POCSAG"], "https://www.etsi.org/deliver/etsi_en/300200_300299/300224/", "One-way paging messages activate staff or device workflows.", "Healthcare; Public safety; Hospitality"),
+    ("FLEX paging", "non_web", "radio_paging", ["FLEX"], "https://www.etsi.org/", "High-capacity paging protocol for one-way alert command paths.", "Healthcare; Public safety; Industrial sites"),
+    ("TETRA SDS messaging", "non_web", "licensed_radio", ["TETRA", "SDS"], "https://www.etsi.org/technologies/tetra", "Mission-critical radio short data service sends commands.", "Public safety; Utilities; Transportation"),
+    ("DMR data / text messaging", "non_web", "licensed_radio", ["DMR", "ETSI TS 102 361"], "https://www.etsi.org/technologies/digital-mobile-radio", "Digital mobile radio data packets command remote units.", "Security; Facilities; Utilities"),
+    ("P25 data messaging", "non_web", "licensed_radio", ["Project 25", "P25"], "https://www.apcointl.org/spectrum-management/p25/", "Public-safety radio data path for critical control messages.", "Public safety; Government; Utilities"),
+    ("Wi-SUN FAN", "non_web", "radio_subghz_mesh", ["Wi-SUN", "IPv6", "6LoWPAN"], "https://wi-sun.org/technology/", "Utility-grade sub-GHz IPv6 mesh for field devices.", "Utilities; Smart city; Street lighting"),
+    ("6LoWPAN mesh", "non_web", "radio_802_15_4", ["6LoWPAN", "IPv6"], "https://www.rfc-editor.org/rfc/rfc4944", "IPv6 packets run over low-power IEEE 802.15.4 mesh.", "IoT; Smart building; Agriculture"),
+    ("Wireless M-Bus", "non_web", "radio_subghz", ["Wireless M-Bus", "EN 13757"], "https://www.oms-group.org/en/about-oms/technology/", "Metering radio protocol for utility and building telemetry.", "Utilities; Smart metering; Facilities"),
+    ("Sigfox / ultra-narrowband IoT", "non_web", "radio_unb", ["Sigfox", "UNB"], "https://build.sigfox.com/", "Ultra-narrowband low-power messages for simple remote triggers.", "Logistics; Agriculture; Asset tracking"),
+    ("Mioty telegram splitting", "non_web", "radio_lpwans", ["mioty", "TS-UNB"], "https://mioty-alliance.com/technology/", "Robust LPWAN telegram splitting for dense industrial sensing.", "Industrial IoT; Utilities; Smart city"),
+    ("DECT-ULE", "non_web", "radio_dect", ["DECT-ULE"], "https://www.ulealliance.org/", "Low-power DECT-based building device control.", "Smart building; Healthcare; Hospitality"),
+    ("Wi-Fi Aware / NAN", "non_web", "wifi_direct", ["Wi-Fi Aware", "NAN"], "https://www.wi-fi.org/discover-wi-fi/wi-fi-aware", "Nearby devices discover and command each other without AP setup.", "Retail; Facilities; Mobile workflows"),
+    ("Wi-Fi Direct", "non_web", "wifi_direct", ["Wi-Fi Direct"], "https://www.wi-fi.org/discover-wi-fi/wi-fi-direct", "Peer-to-peer Wi-Fi link for local command panels.", "Kiosks; Field service; Facilities"),
+    ("NFC tap trigger", "non_web", "near_field", ["NFC", "ISO 14443"], "https://nfc-forum.org/learn/specifications/", "Phone or tag tap starts authenticated local command workflow.", "Access control; Retail; Field service"),
+    ("RFID reader event trigger", "non_web", "near_field", ["RFID", "EPC Gen2"], "https://www.gs1.org/standards/epc-rfid", "Reader events trigger doors, conveyors, or call workflows.", "Logistics; Warehousing; Retail"),
+    ("UWB ranging trigger", "non_web", "radio_uwb", ["UWB", "IEEE 802.15.4z"], "https://www.firaconsortium.org/discover/specifications", "Precise location/ranging events trigger local actions.", "Healthcare; Warehousing; Secure access"),
+    ("GNSS geofence trigger", "non_web", "satellite_navigation", ["GNSS", "GPS"], "https://www.gps.gov/systems/gps/", "Device position crossing a geofence initiates command workflows.", "Fleet; Logistics; Field service"),
+    ("Cell broadcast command alert", "non_web", "cellular_broadcast", ["Cell Broadcast", "3GPP"], "https://www.3gpp.org/specifications-technologies/specifications-by-series", "One-to-many cellular broadcast reaches many devices in an area.", "Public safety; Telecom; Critical alerts"),
+    ("USSD session command", "non_web", "cellular", ["USSD", "GSM"], "https://www.3gpp.org/", "Interactive carrier session carries short command choices.", "Telecom; Field operations; Emerging markets"),
+    ("IMS data channel", "web", "cellular_ip", ["IMS", "RCS", "SIP"], "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/", "Carrier IMS/RCS channel carries rich command interactions.", "Telecom; Contact center; Consumer services"),
+    ("RCS business messaging trigger", "web", "cellular_ip", ["RCS", "RBM"], "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/", "Verified business messages trigger workflows via rich actions.", "Retail; Contact center; Field service"),
+    ("Email-to-command parser", "web", "internet_mail", ["SMTP", "IMAP", "DKIM"], "https://www.rfc-editor.org/rfc/rfc5321", "Signed email messages are parsed into low-urgency commands.", "SMB; Facilities; Maintenance"),
+    ("SFTP drop-file command", "web", "ethernet_ip", ["SFTP", "SSH"], "https://www.openssh.com/manual.html", "A watched secure file drop converts batch files into commands.", "Manufacturing; Finance; Legacy integration"),
+    ("MQTT over WebSocket", "web", "ethernet_ip", ["MQTT", "WebSocket"], "https://mqtt.org/", "Browser/cloud friendly MQTT transport over standard web ports.", "IoT; SaaS; Smart building"),
+    ("OPC UA PubSub over MQTT", "web", "ethernet_ip", ["OPC UA PubSub", "MQTT"], "https://opcfoundation.org/about/opc-technologies/opc-ua/", "Industrial semantic messages ride MQTT brokers.", "Manufacturing; Industrial IoT; Utilities"),
+    ("Digital input over IP I/O module", "web", "ethernet_ip", ["HTTP", "Modbus TCP", "SNMP"], "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os", "Network I/O module maps IP commands to relay outputs.", "Facilities; Industrial automation; Retail"),
+    ("USB HID control relay", "non_web", "usb", ["USB HID"], "https://www.usb.org/hid", "Host toggles USB relay as a local device command.", "Kiosks; Labs; Prototyping"),
+    ("Serial RS-232 command", "non_web", "serial_wire", ["RS-232"], "https://tiaonline.org/what-we-do/standards/", "Legacy equipment receives ASCII commands over serial.", "Hospitality; AV; Legacy facilities"),
+    ("HDMI-CEC device command", "non_web", "av_bus", ["HDMI-CEC"], "https://hdmi.org/spec/index", "Telephony events control displays and AV equipment.", "Hospitality; Meeting rooms; Digital signage"),
+    ("Infrared blaster", "non_web", "infrared", ["IR", "NEC", "RC-5"], "https://en.wikipedia.org/wiki/Consumer_IR", "Gateway emits remote-control IR codes to legacy devices.", "Hospitality; AV; Retail"),
+    ("Visible/audible tone sensor", "non_web", "sensor_trigger", ["Audio", "Optical"], "https://www.iso.org/standard/72361.html", "Sensor detects buzzer/light state and triggers integration.", "Legacy facilities; Safety retrofits; Maintenance"),
+    ("Computer vision event trigger", "web", "edge_ai", ["RTSP", "ONVIF", "AI inference"], "https://www.onvif.org/profiles/profile-t/", "Camera analytics convert visual events into commands.", "Security; Retail; Manufacturing"),
+    ("ONVIF event service", "web", "ethernet_ip", ["ONVIF", "SOAP", "WS-Eventing"], "https://www.onvif.org/profiles/profile-t/", "Video/security device events trigger PBX or edge actions.", "Security; Facilities; Retail"),
+    ("PTP time-synchronized command", "web", "ethernet_wire", ["IEEE 1588 PTP"], "https://standards.ieee.org/ieee/1588/6825/", "Time-aligned command execution across many local devices.", "Industrial automation; Broadcast; Energy"),
+    ("TSN scheduled Ethernet control", "web", "ethernet_wire", ["TSN", "IEEE 802.1Qbv"], "https://1.ieee802.org/tsn/", "Deterministic Ethernet schedules critical control traffic.", "Manufacturing; Automotive; Robotics"),
+    ("Edge rules engine", "web", "edge_compute", ["Node-RED", "Rules engine", "HTTPS"], "https://nodered.org/", "Local rules transform PBX/webhook events into device commands.", "SMB; Facilities; Systems integration"),
+]
+
+
+def _expanded_alternatives() -> list[dict]:
+    rows = []
+    for name, category, medium, protocols, url, use_case, industries in EXPANDED_ALTERNATIVE_SPECS:
+        is_web = category == "web"
+        latency = "<50ms on LAN, WAN dependent" if is_web else "Sub-ms to seconds, medium dependent"
+        reliability = "High with retries and monitoring" if is_web else "Medium-High with engineered installation"
+        security = "TLS/mTLS, signed payloads, RBAC, network segmentation" if is_web else "Physical security, link-layer security where supported, gateway authentication"
+        cost = "Low-Medium" if is_web else "Low-Medium hardware plus installation"
+        rows.append(
+            {
+                "name": name,
+                "category": category,
+                "medium": medium,
+                "description": f"{name} as an alternative trigger or command path when PSTN line signaling is unavailable, expensive, or too limited.",
+                "protocols": protocols,
+                "latency": latency,
+                "bandwidth": "Small command/event payloads",
+                "range": "IP routed" if is_web else "Local, campus, regional, or carrier/radio footprint",
+                "reliability": reliability,
+                "security": security,
+                "complexity": "Medium",
+                "cost": cost,
+                "use_case": use_case,
+                "pros": [
+                    "Broadens migration options beyond PSTN and classic PBX lines",
+                    "Can be selected by site constraints, latency, and available infrastructure",
+                    "Integrates with gateways, edge controllers, or automation middleware",
+                ],
+                "cons": [
+                    "Requires validation against local device support and regulations",
+                    "Operational tooling and monitoring differ by protocol",
+                    "May need a gateway layer to connect with PBX or UCaaS events",
+                ],
+                "standards": protocols,
+                "resource_url": url,
+                "industry_fit_override": industries,
+            }
+        )
+    return rows
+
+
 def generate_awesome_list(
     output_path: Optional[str] = "data/processed/awesome_list.csv",
 ) -> pd.DataFrame:
     """Generate the comprehensive PSTN-alternatives awesome list."""
-    all_alts = PSTN_ALTERNATIVES_CABLE + PSTN_ALTERNATIVES_WIRELESS
+    all_alts = PSTN_ALTERNATIVES_CABLE + PSTN_ALTERNATIVES_WIRELESS + _expanded_alternatives()
     rows = []
     for alt in all_alts:
         rows.append(
@@ -984,12 +1105,12 @@ def generate_awesome_list(
                 "cost": alt["cost"],
                 "cost_model": _alternative_cost_model(alt),
                 "recommended_devices": _alternative_device_range(alt),
-                "industry_fit": _alternative_industries(alt),
+                "industry_fit": alt.get("industry_fit_override") or _alternative_industries(alt),
                 "use_case": alt["use_case"],
                 "pros": "; ".join(alt["pros"]),
                 "cons": "; ".join(alt["cons"]),
                 "standards": "; ".join(alt["standards"]),
-                "resource_url": ALT_RESOURCE_URLS.get(alt["name"], ""),
+                "resource_url": alt.get("resource_url") or ALT_RESOURCE_URLS.get(alt["name"], ""),
             }
         )
     df = pd.DataFrame(rows)
@@ -1001,4 +1122,4 @@ def generate_awesome_list(
 
 def get_awesome_list_json() -> list[dict]:
     """Return the raw awesome list as Python dicts for SPA consumption."""
-    return PSTN_ALTERNATIVES_CABLE + PSTN_ALTERNATIVES_WIRELESS
+    return PSTN_ALTERNATIVES_CABLE + PSTN_ALTERNATIVES_WIRELESS + _expanded_alternatives()

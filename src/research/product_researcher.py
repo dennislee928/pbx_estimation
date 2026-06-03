@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
-import yaml
 from pathlib import Path
 from typing import Optional
-from urllib.parse import quote_plus
 
 from src.research.solution_crawler import discover_solution_catalog
 
@@ -22,31 +20,80 @@ VENDOR_RESOURCE_URLS = {
     "3cx": "https://www.3cx.com/",
     "8x8": "https://www.8x8.com/products/business-phone",
     "aircall": "https://aircall.io/",
+    "alcatel-lucent": "https://www.al-enterprise.com/",
     "alibaba cloud": "https://www.alibabacloud.com/product/cloud-call-center",
     "asterisk": "https://www.asterisk.org/",
+    "audiocodes": "https://www.audiocodes.com/",
+    "auerswald": "https://www.auerswald.de/en/",
     "avaya": "https://www.avaya.com/",
     "bandwidth": "https://dev.bandwidth.com/docs/voice/",
+    "bell canada": "https://business.bell.ca/",
+    "bt": "https://business.bt.com/products/voice/cloud-voice/",
+    "chunghwa telecom": "https://www.cht.com.tw/home/cht/business",
     "cisco": "https://www.webex.com/suite/cloud-calling.html",
+    "clouditalia": "https://www.fastweb.it/business/",
+    "comcast": "https://business.comcast.com/learn/voice/business-voiceedge",
+    "deutsche telekom": "https://geschaeftskunden.telekom.de/internet-dsl/tarife/companyflex",
     "dialpad": "https://www.dialpad.com/products/business-phone-system/",
+    "du": "https://www.du.ae/business",
+    "e&": "https://www.etisalat.ae/en/business/",
     "emnify": "https://www.emnify.com/iot-esim",
+    "ericsson": "https://www.ericssonlg-enterprise.com/",
+    "ericsson-lg": "https://www.ericssonlg-enterprise.com/",
     "evox": "https://www.evoxglobal.com/",
+    "exotel": "https://exotel.com/",
+    "five9": "https://www.five9.com/products/call-center-software",
     "freeswitch": "https://freeswitch.org/",
+    "gamma": "https://www.gamma.co.uk/products/horizon/",
     "google": "https://voice.google.com/",
+    "huawei": "https://e.huawei.com/en/products/enterprise-networking/collaboration",
+    "ihs": "https://www.ihstowers.com/",
     "infobip": "https://www.infobip.com/docs/voice-and-video",
+    "intelbras": "https://www.intelbras.com/",
+    "issabel": "https://www.issabel.org/",
+    "kakao": "https://www.kakaowork.com/",
+    "knowlarity": "https://www.knowlarity.com/",
     "kore": "https://www.korewireless.com/connectivity/omnisim",
+    "kpn": "https://www.kpn.com/zakelijk.htm",
+    "masmovil": "https://www.masmovil.es/empresas/",
+    "matrix": "https://www.matrixcomsec.com/",
     "microsoft": "https://www.microsoft.com/en-us/microsoft-teams/microsoft-teams-phone",
+    "mitel": "https://www.mitel.com/products/cloud-business-phone-systems",
+    "mtn": "https://www.mtn.com/business/",
+    "nec": "https://www.nec.com/en/global/solutions/enterprise-communication/",
     "nextiva": "https://www.nextiva.com/products/business-phone-service.html",
     "nfon": "https://www.nfon.com/en/products/cloudya",
+    "ntt communications": "https://www.ntt.com/business/services/voice.html",
+    "orange": "https://www.orange-business.com/en/solutions/communication-and-collaboration",
     "panasonic": "https://connect.panasonic.com/",
     "plivo": "https://www.plivo.com/docs/voice/",
+    "poly": "https://www.hp.com/us-en/poly.html",
     "ringcentral": "https://www.ringcentral.com/office/features/business-phone-system/overview.html",
+    "samsung": "https://www.samsung.com/business/",
     "sangoma": "https://www.sangoma.com/",
+    "siemens": "https://unify.com/en/solutions",
+    "singtel": "https://www.singtel.com/business",
     "sinch": "https://developers.sinch.com/docs/voice/",
     "soracom": "https://soracom.io/services/air/cellular/",
+    "spark": "https://www.vox.co.za/",
+    "starface": "https://www.starface.com/en/",
+    "swisscom": "https://www.swisscom.ch/en/business.html",
+    "telefonica": "https://www.telefonica.com/en/business-solutions/",
+    "telavox": "https://telavox.com/",
+    "telia": "https://www.telia.se/foretag",
+    "telmex": "https://telmex.com/web/empresas",
+    "telstra": "https://www.telstra.com.au/business-enterprise/products/voice-collaboration",
     "telnyx": "https://developers.telnyx.com/docs/voice",
+    "telenor": "https://www.telenor.com/business/",
+    "toshiba": "https://business.toshiba.com/",
     "twilio": "https://www.twilio.com/docs/voice",
+    "voiceworks": "https://www.voiceworks.com/",
     "vonage": "https://developer.vonage.com/en/voice/voice-api/overview",
+    "vonix": "https://www.vonix.com.br/",
+    "vox telecom": "https://www.vox.co.za/",
+    "whispir": "https://www.whispir.com/",
     "zoom": "https://www.zoom.com/en/products/voip-phone/",
+    "zte": "https://www.zte.com.cn/global/",
 }
 
 
@@ -61,7 +108,7 @@ def _resource_url(name: str, vendor: str, explicit: str | None = None) -> str:
     for key, url in VENDOR_RESOURCE_URLS.items():
         if key in haystack:
             return url
-    return f"https://www.google.com/search?q={quote_plus(vendor + ' ' + name + ' official product')}"
+    return "https://www.g2.com/categories/voip"
 
 
 def _recommended_terminals(tags: list[str], customers: str, lifecycle: str) -> str:
