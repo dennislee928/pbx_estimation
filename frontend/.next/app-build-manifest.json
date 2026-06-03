@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/_not-found/page-3d4d80e828381da1.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/css/e6438dbde615389a.css",
+      "static/chunks/app/layout-fa2fde46aef04ad8.js"
+    ],
+    "/market-brief/page": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/market-brief/page-a4c189883ab2cfc7.js"
+    ],
+    "/tech-alternatives/page": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/434-18b734923b7e9a7e.js",
+      "static/chunks/app/tech-alternatives/page-f0497acf5db049fb.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/711-45c28a11c6bcdc04.js",
+      "static/chunks/434-18b734923b7e9a7e.js",
+      "static/chunks/app/page-310de9c9a2306aac.js"
+    ],
+    "/product-research/page": [
+      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/711-45c28a11c6bcdc04.js",
+      "static/chunks/app/product-research/page-8ee2ff0f97f84e6c.js"
+    ]
+  }
+}
