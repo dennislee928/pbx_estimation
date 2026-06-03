@@ -3,7 +3,10 @@ name: Report Generation and Pages Deploy
 on:
   push:
     branches:
+      - main
       - deploy/pages-clean
+      - deploy/pages-ui-crawler
+      - deploy/pages-ui-crawler-clean
   schedule:
     - cron: "0 0 1 * *"
   workflow_dispatch:
@@ -129,6 +132,7 @@ jobs:
           cp -R reports/. site/zh/reports/
           cp -R reports/. site/en/reports/
           cp reports/index.html site/index.html
+          touch site/.nojekyll
 
       - name: Upload reports as workflow artifacts
         uses: actions/upload-artifact@v4
@@ -148,5 +152,5 @@ jobs:
           path: site
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deploy
         uses: actions/deploy-pages@v4

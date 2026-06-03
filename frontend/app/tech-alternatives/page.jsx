@@ -86,6 +86,9 @@ export default function TechAlternativesPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: "0.8rem", marginBottom: 8 }}>
                   <div><strong>{L === "en" ? "Reliability:" : "可靠性:"}</strong> {alt.reliability}</div>
                   <div><strong>{L === "en" ? "Security:" : "安全性:"}</strong> {alt.security}</div>
+                  <div><strong>{L === "en" ? "Recommended scale:" : "建議規模:"}</strong> {alt.recommended_devices}</div>
+                  <div><strong>{L === "en" ? "Cost model:" : "成本模式:"}</strong> {alt.cost_model}</div>
+                  <div style={{ gridColumn: "1 / -1" }}><strong>{L === "en" ? "Industries:" : "適用產業:"}</strong> {alt.industry_fit}</div>
                 </div>
                 <div style={{ marginBottom: 8, fontSize: "0.8rem" }}>
                   <strong style={{ color: "#065f46" }}>{L === "en" ? "✓ Pros:" : "✓ 優點:"}</strong>

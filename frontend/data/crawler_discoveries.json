@@ -1,0 +1,1911 @@
+[
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Microsoft Teams Phone",
+    "vendor": "Microsoft",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud phone system for Teams with Operator Connect, Direct Routing, calling plans, and AI-assisted call workflows.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "sip",
+      "api",
+      "ai"
+    ],
+    "resource_url": "https://www.microsoft.com/en-us/microsoft-teams/microsoft-teams-phone",
+    "pros": [
+      "Deep Microsoft 365 integration",
+      "Multiple PSTN connectivity models",
+      "Enterprise compliance controls"
+    ],
+    "cons": [
+      "Best value inside Microsoft estate",
+      "Licensing can be complex",
+      "Analog/legacy devices need gateways"
+    ],
+    "typical_customers": "Enterprise, education, public sector",
+    "discovery_query": "Microsoft Microsoft Teams Phone official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Zoom Phone",
+    "vendor": "Zoom",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud VoIP phone system integrated with Zoom Meetings, Contact Center, and AI Companion features.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "api",
+      "ai"
+    ],
+    "resource_url": "https://www.zoom.com/en/products/voip-phone/",
+    "pros": [
+      "Fast user adoption",
+      "Strong video/phone/contact-center bundle",
+      "Modern admin experience"
+    ],
+    "cons": [
+      "Cloud dependency",
+      "Advanced routing requires careful design",
+      "Regional PSTN availability varies"
+    ],
+    "typical_customers": "SMB to enterprise",
+    "discovery_query": "Zoom Zoom Phone official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "RingCentral RingEX",
+    "vendor": "RingCentral",
+    "lifecycle_category": "cutting_edge",
+    "description": "Global UCaaS suite with calling, messaging, meetings, analytics, and developer APIs.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "api",
+      "webrtc"
+    ],
+    "resource_url": "https://www.ringcentral.com/office/features/business-phone-system/overview.html",
+    "pros": [
+      "Mature UCaaS feature set",
+      "Global PSTN footprint",
+      "Rich API ecosystem"
+    ],
+    "cons": [
+      "Premium pricing",
+      "Migration from legacy PBX can be involved",
+      "Carrier coverage differs by country"
+    ],
+    "typical_customers": "SMB, enterprise, distributed teams",
+    "discovery_query": "RingCentral RingCentral RingEX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "8x8 Work",
+    "vendor": "8x8",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud business phone and unified communications platform with contact-center adjacency.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "contact_center",
+      "api"
+    ],
+    "resource_url": "https://www.8x8.com/products/business-phone",
+    "pros": [
+      "Integrated UC and CC",
+      "International calling plans",
+      "Mature enterprise controls"
+    ],
+    "cons": [
+      "Plan packaging can be complex",
+      "Local support varies",
+      "Advanced analytics cost extra"
+    ],
+    "typical_customers": "International SMB and enterprise",
+    "discovery_query": "8x8 8x8 Work official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Dialpad Ai Voice",
+    "vendor": "Dialpad",
+    "lifecycle_category": "cutting_edge",
+    "description": "AI-centered cloud business phone service with transcription, summaries, and coaching.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "ai",
+      "api"
+    ],
+    "resource_url": "https://www.dialpad.com/products/business-phone-system/",
+    "pros": [
+      "Native AI call intelligence",
+      "Clean cloud administration",
+      "Good mobile/desktop UX"
+    ],
+    "cons": [
+      "AI accuracy needs validation",
+      "Less suitable for analog-heavy sites",
+      "Coverage differs by market"
+    ],
+    "typical_customers": "Sales, support, modern SMB",
+    "discovery_query": "Dialpad Dialpad Ai Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "NextivaONE",
+    "vendor": "Nextiva",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud business phone and customer conversation platform for US SMB and mid-market.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "crm"
+    ],
+    "resource_url": "https://www.nextiva.com/products/business-phone-service.html",
+    "pros": [
+      "Strong SMB onboarding",
+      "Phone plus customer context",
+      "US-focused support"
+    ],
+    "cons": [
+      "International footprint smaller than global UCaaS leaders",
+      "Advanced integrations may need higher tiers",
+      "Legacy migration effort remains"
+    ],
+    "typical_customers": "US SMB, service teams",
+    "discovery_query": "Nextiva NextivaONE official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "fr",
+    "name": "Aircall",
+    "vendor": "Aircall",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud phone and call-center platform built around CRM/helpdesk integrations.",
+    "tags": [
+      "cloud",
+      "call_center",
+      "api",
+      "crm"
+    ],
+    "resource_url": "https://aircall.io/call-center-software/",
+    "pros": [
+      "Fast deployment",
+      "Strong CRM integrations",
+      "Good for distributed teams"
+    ],
+    "cons": [
+      "Not a full legacy PBX replacement for every site",
+      "Usage-based costs can grow",
+      "Feature depth depends on plan"
+    ],
+    "typical_customers": "Sales and support teams",
+    "discovery_query": "Aircall Aircall official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "GoTo Connect",
+    "vendor": "GoTo",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud phone, meeting, messaging, and contact center service.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "contact_center"
+    ],
+    "resource_url": "https://www.goto.com/connect",
+    "pros": [
+      "Integrated UC stack",
+      "SMB-friendly packaging",
+      "Useful admin tools"
+    ],
+    "cons": [
+      "Global depth below largest UCaaS vendors",
+      "Advanced CC features require plan review",
+      "Analog support via gateways"
+    ],
+    "typical_customers": "SMB, branch offices",
+    "discovery_query": "GoTo GoTo Connect official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Cisco Webex Calling",
+    "vendor": "Cisco",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cisco cloud calling service for Webex with enterprise voice migration paths.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "sip",
+      "enterprise"
+    ],
+    "resource_url": "https://www.webex.com/suite/cloud-calling.html",
+    "pros": [
+      "Cisco enterprise voice heritage",
+      "Hybrid migration options",
+      "Strong device ecosystem"
+    ],
+    "cons": [
+      "Licensing and admin model can be complex",
+      "Best with Cisco ecosystem",
+      "Migration planning required"
+    ],
+    "typical_customers": "Enterprise, government",
+    "discovery_query": "Cisco Cisco Webex Calling official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "de",
+    "name": "NFON Cloudya",
+    "vendor": "NFON",
+    "lifecycle_category": "cutting_edge",
+    "description": "European cloud telephone system for business users.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "hosted"
+    ],
+    "resource_url": "https://www.nfon.com/en/products/cloudya",
+    "pros": [
+      "EU-focused provider",
+      "Hosted PBX simplicity",
+      "Good regional compliance fit"
+    ],
+    "cons": [
+      "Smaller global reach",
+      "Feature parity varies by market",
+      "APIs less broad than CPaaS"
+    ],
+    "typical_customers": "European SMB and mid-market",
+    "discovery_query": "NFON NFON Cloudya official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "gb",
+    "name": "Gamma Horizon",
+    "vendor": "Gamma",
+    "lifecycle_category": "cutting_edge",
+    "description": "UK hosted phone system and UC service sold through Gamma and channel partners.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "sip"
+    ],
+    "resource_url": "https://www.gamma.co.uk/products/horizon/",
+    "pros": [
+      "Strong UK channel",
+      "Hosted PBX maturity",
+      "Good SIP trunk adjacency"
+    ],
+    "cons": [
+      "UK-centric",
+      "Advanced API use is limited",
+      "Contract/channel dependency"
+    ],
+    "typical_customers": "UK SMB and channel customers",
+    "discovery_query": "Gamma Gamma Horizon official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "au",
+    "name": "MaxoTel Hosted PBX",
+    "vendor": "MaxoTel",
+    "lifecycle_category": "mature_active",
+    "description": "Australian hosted PBX service for business calling.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "sip"
+    ],
+    "resource_url": "https://www.maxo.com.au/business-phone-systems/hosted-pbx/",
+    "pros": [
+      "Local Australian support",
+      "SMB-friendly hosted PBX",
+      "SIP trunk experience"
+    ],
+    "cons": [
+      "Regional scope",
+      "Less AI/API depth than global platforms",
+      "Legacy devices need gateways"
+    ],
+    "typical_customers": "Australian SMB",
+    "discovery_query": "MaxoTel MaxoTel Hosted PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "nz",
+    "name": "2talk Cloud PBX",
+    "vendor": "2talk",
+    "lifecycle_category": "mature_active",
+    "description": "New Zealand cloud PBX and VoIP service.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "sip"
+    ],
+    "resource_url": "https://www.2talk.co.nz/products/cloud-pbx/",
+    "pros": [
+      "Local numbering and support",
+      "SMB pricing",
+      "Simple hosted PBX model"
+    ],
+    "cons": [
+      "NZ-centered footprint",
+      "Limited enterprise UC depth",
+      "Integration options vary"
+    ],
+    "typical_customers": "NZ SMB",
+    "discovery_query": "2talk 2talk Cloud PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "ph",
+    "name": "Globe Business Cloud Phone",
+    "vendor": "Globe Telecom",
+    "lifecycle_category": "cutting_edge",
+    "description": "Philippines telco business voice and hosted communications portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.globe.com.ph/business/enterprise/voice",
+    "pros": [
+      "Local telco reach",
+      "Bundled connectivity",
+      "Regulatory fit"
+    ],
+    "cons": [
+      "Feature set depends on package",
+      "APIs may be limited",
+      "Longer telco procurement"
+    ],
+    "typical_customers": "Philippines business",
+    "discovery_query": "Globe Telecom Globe Business Cloud Phone official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "my",
+    "name": "TIME Voice Cloud PBX",
+    "vendor": "TIME dotCom",
+    "lifecycle_category": "mature_active",
+    "description": "Malaysia business voice and cloud PBX services.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.time.com.my/business/voice",
+    "pros": [
+      "Local fiber and voice bundle",
+      "Business support",
+      "Telco reliability"
+    ],
+    "cons": [
+      "Malaysia-centric",
+      "Integration depth varies",
+      "Contract dependency"
+    ],
+    "typical_customers": "Malaysia SMB and enterprise",
+    "discovery_query": "TIME dotCom TIME Voice Cloud PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "th",
+    "name": "AIS Business Cloud PBX",
+    "vendor": "AIS",
+    "lifecycle_category": "cutting_edge",
+    "description": "Thailand enterprise communication and cloud voice portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://business.ais.co.th/",
+    "pros": [
+      "Local carrier coverage",
+      "Mobile/fixed bundle",
+      "Enterprise channel"
+    ],
+    "cons": [
+      "Public product details vary",
+      "APIs may require custom engagement",
+      "Regional scope"
+    ],
+    "typical_customers": "Thailand business",
+    "discovery_query": "AIS AIS Business Cloud PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "es",
+    "name": "Masvoz Cloud PBX",
+    "vendor": "Masvoz",
+    "lifecycle_category": "mature_active",
+    "description": "Spanish virtual PBX and business voice service.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "sip"
+    ],
+    "resource_url": "https://www.masvoz.es/centralita-virtual/",
+    "pros": [
+      "Spain-focused numbering",
+      "Hosted PBX maturity",
+      "Contact-center options"
+    ],
+    "cons": [
+      "Regional focus",
+      "Not a global UCaaS suite",
+      "Integration depth depends on plan"
+    ],
+    "typical_customers": "Spanish SMB",
+    "discovery_query": "Masvoz Masvoz Cloud PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "pt",
+    "name": "CloudTalk",
+    "vendor": "CloudTalk",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud call-center and business calling platform for sales and support.",
+    "tags": [
+      "cloud",
+      "call_center",
+      "api"
+    ],
+    "resource_url": "https://www.cloudtalk.io/call-center-software/",
+    "pros": [
+      "Fast international setup",
+      "CRM integrations",
+      "Analytics and call routing"
+    ],
+    "cons": [
+      "Contact-center focus more than full PBX",
+      "Usage costs require monitoring",
+      "Local PSTN features vary"
+    ],
+    "typical_customers": "Sales/support teams",
+    "discovery_query": "CloudTalk CloudTalk official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "middle_east",
+    "country_code": "sa",
+    "name": "stc business voice",
+    "vendor": "stc",
+    "lifecycle_category": "mature_active",
+    "description": "Saudi telecom business voice and enterprise communications portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.stc.com.sa/content/stc/sa/en/business.html",
+    "pros": [
+      "Local carrier and regulatory fit",
+      "Enterprise procurement path",
+      "Connectivity bundling"
+    ],
+    "cons": [
+      "Public cloud PBX details vary",
+      "Integration may need custom work",
+      "Regional scope"
+    ],
+    "typical_customers": "Saudi business",
+    "discovery_query": "stc stc business voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "africa",
+    "country_code": "ke",
+    "name": "Safaricom Business Voice",
+    "vendor": "Safaricom",
+    "lifecycle_category": "mature_active",
+    "description": "Kenya business voice and enterprise communication services.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.safaricom.co.ke/business",
+    "pros": [
+      "Strong local network",
+      "Business support",
+      "Mobile/fixed service bundle"
+    ],
+    "cons": [
+      "Limited public API details",
+      "Regional market focus",
+      "Advanced UC depends on package"
+    ],
+    "typical_customers": "Kenya business",
+    "discovery_query": "Safaricom Safaricom Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "africa",
+    "country_code": "eg",
+    "name": "Telecom Egypt Business Voice",
+    "vendor": "Telecom Egypt",
+    "lifecycle_category": "mature_active",
+    "description": "Egypt business telephony and connectivity portfolio.",
+    "tags": [
+      "hosted",
+      "telco",
+      "sip"
+    ],
+    "resource_url": "https://te.eg/wps/portal/te/Business",
+    "pros": [
+      "National carrier footprint",
+      "Local compliance",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "Cloud PBX details require sales engagement",
+      "Limited developer APIs",
+      "Regional focus"
+    ],
+    "typical_customers": "Egypt enterprise",
+    "discovery_query": "Telecom Egypt Telecom Egypt Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Twilio Programmable Voice",
+    "vendor": "Twilio",
+    "lifecycle_category": "cutting_edge",
+    "description": "Programmable voice API platform for building calling, IVR, SIP, recording, media streams, and AI voice workflows.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "webrtc",
+      "ai"
+    ],
+    "resource_url": "https://www.twilio.com/docs/voice",
+    "pros": [
+      "Developer-first APIs",
+      "Global voice building blocks",
+      "Strong webhook/event model"
+    ],
+    "cons": [
+      "Requires engineering",
+      "Not a turnkey PBX by itself",
+      "Usage costs must be governed"
+    ],
+    "typical_customers": "Developers, platforms, contact centers",
+    "discovery_query": "Twilio Twilio Programmable Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "gb",
+    "name": "Vonage Voice API",
+    "vendor": "Vonage",
+    "lifecycle_category": "cutting_edge",
+    "description": "Voice API for programmable calls, NCCO call control, recording, and telephony integrations.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "sip"
+    ],
+    "resource_url": "https://developer.vonage.com/en/voice/voice-api/overview",
+    "pros": [
+      "Programmable call control",
+      "Global API reach",
+      "Useful SIP integration"
+    ],
+    "cons": [
+      "Developer implementation required",
+      "PBX features must be built",
+      "Coverage/pricing varies"
+    ],
+    "typical_customers": "Developers, SaaS platforms",
+    "discovery_query": "Vonage Vonage Voice API official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Telnyx Voice API",
+    "vendor": "Telnyx",
+    "lifecycle_category": "cutting_edge",
+    "description": "Programmable voice, SIP trunking, and real-time communications APIs.",
+    "tags": [
+      "cpaas",
+      "api",
+      "sip",
+      "voice"
+    ],
+    "resource_url": "https://developers.telnyx.com/docs/voice",
+    "pros": [
+      "Carrier-grade SIP/voice focus",
+      "Good developer docs",
+      "Elastic SIP trunking adjacency"
+    ],
+    "cons": [
+      "Engineering required",
+      "UC UI must be built or integrated",
+      "Regulatory setup varies"
+    ],
+    "typical_customers": "Developers, carriers, SaaS",
+    "discovery_query": "Telnyx Telnyx Voice API official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Bandwidth Voice API",
+    "vendor": "Bandwidth",
+    "lifecycle_category": "cutting_edge",
+    "description": "US-focused programmable voice and messaging platform with carrier network assets.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "sip"
+    ],
+    "resource_url": "https://dev.bandwidth.com/docs/voice/",
+    "pros": [
+      "Direct carrier network in US",
+      "Programmable voice control",
+      "Good for compliant US workloads"
+    ],
+    "cons": [
+      "US-centric strengths",
+      "Engineering required",
+      "Not turnkey UCaaS"
+    ],
+    "typical_customers": "US SaaS, contact centers",
+    "discovery_query": "Bandwidth Bandwidth Voice API official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "in",
+    "name": "Plivo Voice API",
+    "vendor": "Plivo",
+    "lifecycle_category": "cutting_edge",
+    "description": "Programmable voice API for calls, conferences, recordings, and SIP integrations.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "sip"
+    ],
+    "resource_url": "https://www.plivo.com/docs/voice/",
+    "pros": [
+      "Straightforward APIs",
+      "Global voice reach",
+      "Competitive CPaaS pricing"
+    ],
+    "cons": [
+      "Requires app development",
+      "Not a full PBX interface",
+      "Coverage varies"
+    ],
+    "typical_customers": "Developers, startups",
+    "discovery_query": "Plivo Plivo Voice API official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "se",
+    "name": "Sinch Voice API",
+    "vendor": "Sinch",
+    "lifecycle_category": "cutting_edge",
+    "description": "CPaaS voice APIs for programmable calling and communications workflows.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "sms"
+    ],
+    "resource_url": "https://developers.sinch.com/docs/voice/",
+    "pros": [
+      "Global communications portfolio",
+      "Voice plus messaging",
+      "Enterprise CPaaS posture"
+    ],
+    "cons": [
+      "Complex portfolio",
+      "Engineering required",
+      "Plan/country differences"
+    ],
+    "typical_customers": "Enterprise developers",
+    "discovery_query": "Sinch Sinch Voice API official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "nl",
+    "name": "Bird Voice",
+    "vendor": "Bird",
+    "lifecycle_category": "cutting_edge",
+    "description": "Omnichannel customer communication platform including voice and messaging automation.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "messaging"
+    ],
+    "resource_url": "https://bird.com/",
+    "pros": [
+      "Omnichannel workflows",
+      "Automation focus",
+      "Global communications routes"
+    ],
+    "cons": [
+      "Product packaging changes quickly",
+      "Requires implementation",
+      "Voice feature details need validation per region"
+    ],
+    "typical_customers": "Growth/support teams",
+    "discovery_query": "Bird Bird Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "hr",
+    "name": "Infobip Voice",
+    "vendor": "Infobip",
+    "lifecycle_category": "cutting_edge",
+    "description": "Global CPaaS voice and video APIs for customer engagement.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "webrtc"
+    ],
+    "resource_url": "https://www.infobip.com/docs/voice-and-video",
+    "pros": [
+      "Very broad country reach",
+      "Voice/video/messaging portfolio",
+      "Enterprise support"
+    ],
+    "cons": [
+      "Complex pricing",
+      "Developer implementation required",
+      "Not a classic PBX"
+    ],
+    "typical_customers": "Global enterprise",
+    "discovery_query": "Infobip Infobip Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Asterisk",
+    "vendor": "Sangoma / Open Source",
+    "lifecycle_category": "mature_active",
+    "description": "Open-source communications framework widely used for PBX, IVR, gateways, and custom telephony.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "open_source"
+    ],
+    "resource_url": "https://www.asterisk.org/",
+    "pros": [
+      "Highly flexible",
+      "Huge installed base",
+      "No license fee for core"
+    ],
+    "cons": [
+      "Requires telephony/Linux expertise",
+      "Security is self-managed",
+      "Commercial support separate"
+    ],
+    "typical_customers": "Integrators, carriers, technical SMB",
+    "discovery_query": "Sangoma / Open Source Asterisk official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "FreePBX",
+    "vendor": "Sangoma / Open Source",
+    "lifecycle_category": "mature_active",
+    "description": "Open-source web-managed PBX distribution built around Asterisk.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "open_source",
+      "web_management"
+    ],
+    "resource_url": "https://www.freepbx.org/",
+    "pros": [
+      "Easier admin than raw Asterisk",
+      "Large module ecosystem",
+      "Good analog/SIP gateway fit"
+    ],
+    "cons": [
+      "Patch discipline required",
+      "Module licensing mix",
+      "Needs telephony expertise for complex sites"
+    ],
+    "typical_customers": "SMB, integrators",
+    "discovery_query": "Sangoma / Open Source FreePBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "FreeSWITCH",
+    "vendor": "SignalWire / Open Source",
+    "lifecycle_category": "mature_active",
+    "description": "Open-source real-time communications platform and softswitch.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "webrtc",
+      "open_source"
+    ],
+    "resource_url": "https://freeswitch.org/",
+    "pros": [
+      "High scalability",
+      "WebRTC support",
+      "Carrier/contact-center use"
+    ],
+    "cons": [
+      "Steep learning curve",
+      "Configuration complexity",
+      "Commercial support separate"
+    ],
+    "typical_customers": "Carriers, platforms, contact centers",
+    "discovery_query": "SignalWire / Open Source FreeSWITCH official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "FusionPBX",
+    "vendor": "FusionPBX",
+    "lifecycle_category": "mature_active",
+    "description": "Multi-tenant PBX web interface for FreeSWITCH.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "open_source",
+      "webrtc"
+    ],
+    "resource_url": "https://www.fusionpbx.com/",
+    "pros": [
+      "Multi-tenant capable",
+      "Good provider fit",
+      "Open-source base"
+    ],
+    "cons": [
+      "Requires FreeSWITCH skills",
+      "Operational burden",
+      "UI/admin discipline needed"
+    ],
+    "typical_customers": "ITSPs, integrators",
+    "discovery_query": "FusionPBX FusionPBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "fr",
+    "name": "Wazo Platform",
+    "vendor": "Wazo",
+    "lifecycle_category": "mature_active",
+    "description": "Open-source programmable UC platform with API-first PBX components.",
+    "tags": [
+      "ip_pbx",
+      "api",
+      "open_source"
+    ],
+    "resource_url": "https://wazo-platform.org/",
+    "pros": [
+      "API-first open-source PBX",
+      "Good automation surface",
+      "European project roots"
+    ],
+    "cons": [
+      "Smaller ecosystem than Asterisk",
+      "Engineering required",
+      "Commercial support planning needed"
+    ],
+    "typical_customers": "Developers, integrators",
+    "discovery_query": "Wazo Wazo Platform official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "VitalPBX",
+    "vendor": "VitalPBX",
+    "lifecycle_category": "mature_active",
+    "description": "Software PBX distribution for Asterisk-based business telephony.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "linux"
+    ],
+    "resource_url": "https://vitalpbx.com/",
+    "pros": [
+      "Modern admin interface",
+      "Asterisk compatibility",
+      "SMB-friendly features"
+    ],
+    "cons": [
+      "Commercial modules needed for some features",
+      "Self-hosting operations",
+      "Smaller community than FreePBX"
+    ],
+    "typical_customers": "SMB, integrators",
+    "discovery_query": "VitalPBX VitalPBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "es",
+    "name": "Issabel PBX",
+    "vendor": "Issabel",
+    "lifecycle_category": "mature_active",
+    "description": "Open-source unified communications PBX distribution forked from Elastix lineage.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "open_source"
+    ],
+    "resource_url": "https://www.issabel.org/",
+    "pros": [
+      "Familiar Elastix-style admin",
+      "Open-source stack",
+      "Latin market adoption"
+    ],
+    "cons": [
+      "Project activity must be monitored",
+      "Security patching is self-managed",
+      "Less enterprise polish"
+    ],
+    "typical_customers": "Latin America SMB, integrators",
+    "discovery_query": "Issabel Issabel PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Twilio Super SIM / IoT SIM",
+    "vendor": "Twilio",
+    "lifecycle_category": "cutting_edge",
+    "description": "Programmable global IoT SIM/eSIM connectivity for devices needing cellular command paths.",
+    "tags": [
+      "iot",
+      "esim",
+      "api",
+      "cellular"
+    ],
+    "resource_url": "https://www.twilio.com/docs/iot/supersim",
+    "pros": [
+      "API-managed SIM fleet",
+      "Multi-network roaming",
+      "Good for edge devices"
+    ],
+    "cons": [
+      "Not a PBX product",
+      "Coverage and roaming policies matter",
+      "Device certification needed"
+    ],
+    "typical_customers": "IoT and edge-device fleets",
+    "discovery_query": "Twilio Twilio Super SIM / IoT SIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "de",
+    "name": "1NCE IoT eSIM",
+    "vendor": "1NCE",
+    "lifecycle_category": "cutting_edge",
+    "description": "IoT connectivity with eSIM/iSIM options and device fleet management.",
+    "tags": [
+      "iot",
+      "esim",
+      "api",
+      "cellular"
+    ],
+    "resource_url": "https://www.1nce.com/en-us/1nce-connect/features/esim",
+    "pros": [
+      "Simple IoT pricing model",
+      "eSIM support",
+      "Global IoT focus"
+    ],
+    "cons": [
+      "Data payloads only",
+      "Latency depends on roaming path",
+      "Not a voice PBX"
+    ],
+    "typical_customers": "IoT fleets, sensors",
+    "discovery_query": "1NCE 1NCE IoT eSIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "de",
+    "name": "emnify IoT eSIM",
+    "vendor": "emnify",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud-native IoT cellular connectivity and eSIM management platform.",
+    "tags": [
+      "iot",
+      "esim",
+      "api",
+      "cellular"
+    ],
+    "resource_url": "https://www.emnify.com/iot-esim",
+    "pros": [
+      "API-first connectivity management",
+      "Multi-network reach",
+      "Strong portal/observability"
+    ],
+    "cons": [
+      "Requires IoT device integration",
+      "Not for classic voice endpoints",
+      "Pricing varies by footprint"
+    ],
+    "typical_customers": "IoT product teams",
+    "discovery_query": "emnify emnify IoT eSIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "jp",
+    "name": "SORACOM Air for Cellular",
+    "vendor": "SORACOM",
+    "lifecycle_category": "cutting_edge",
+    "description": "IoT cellular connectivity with SIM/eSIM, APIs, and cloud integrations.",
+    "tags": [
+      "iot",
+      "esim",
+      "api",
+      "cellular"
+    ],
+    "resource_url": "https://soracom.io/services/air/cellular/",
+    "pros": [
+      "Strong IoT developer tooling",
+      "Cloud integrations",
+      "Global SIM options"
+    ],
+    "cons": [
+      "IoT data focus",
+      "Voice/PBX integration is indirect",
+      "Coverage depends on plan"
+    ],
+    "typical_customers": "IoT developers, manufacturers",
+    "discovery_query": "SORACOM SORACOM Air for Cellular official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "KORE OmniSIM",
+    "vendor": "KORE Wireless",
+    "lifecycle_category": "cutting_edge",
+    "description": "Global IoT connectivity SIM/eSIM portfolio for managed device fleets.",
+    "tags": [
+      "iot",
+      "esim",
+      "cellular",
+      "api"
+    ],
+    "resource_url": "https://www.korewireless.com/connectivity/omnisim",
+    "pros": [
+      "Enterprise IoT operations",
+      "Global carrier relationships",
+      "Managed connectivity options"
+    ],
+    "cons": [
+      "Sales-led onboarding",
+      "Not PBX-specific",
+      "Device certification and logistics"
+    ],
+    "typical_customers": "Enterprise IoT",
+    "discovery_query": "KORE Wireless KORE OmniSIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "ch",
+    "name": "Eseye AnyNet+ eSIM",
+    "vendor": "Eseye",
+    "lifecycle_category": "cutting_edge",
+    "description": "IoT connectivity platform with multi-IMSI/eSIM capabilities.",
+    "tags": [
+      "iot",
+      "esim",
+      "cellular"
+    ],
+    "resource_url": "https://www.eseye.com/solutions/iot-connectivity/",
+    "pros": [
+      "Resilient multi-network design",
+      "IoT operations focus",
+      "Global connectivity services"
+    ],
+    "cons": [
+      "Commercial engagement needed",
+      "Not voice PBX",
+      "Complex deployments require planning"
+    ],
+    "typical_customers": "Enterprise IoT",
+    "discovery_query": "Eseye Eseye AnyNet+ eSIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Hologram Hyper SIM",
+    "vendor": "Hologram",
+    "lifecycle_category": "cutting_edge",
+    "description": "IoT cellular connectivity and SIM management for connected devices.",
+    "tags": [
+      "iot",
+      "esim",
+      "cellular",
+      "api"
+    ],
+    "resource_url": "https://www.hologram.io/",
+    "pros": [
+      "Developer-friendly IoT connectivity",
+      "Fleet dashboard/API",
+      "Useful prototyping path"
+    ],
+    "cons": [
+      "Not a voice platform",
+      "Coverage and data pricing vary",
+      "Device firmware work required"
+    ],
+    "typical_customers": "IoT startups, device fleets",
+    "discovery_query": "Hologram Hologram Hyper SIM official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Ooma Office",
+    "vendor": "Ooma",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud business phone system focused on small businesses and branch offices.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "hosted"
+    ],
+    "resource_url": "https://www.ooma.com/small-business-phone-systems/",
+    "pros": [
+      "SMB-friendly setup",
+      "Good entry-level pricing",
+      "Hardware and cloud options"
+    ],
+    "cons": [
+      "Less suited to very complex enterprises",
+      "International depth varies",
+      "Advanced integrations require plan review"
+    ],
+    "typical_customers": "Small business, retail branches",
+    "discovery_query": "Ooma Ooma Office official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Intermedia Unite",
+    "vendor": "Intermedia",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud communications suite with phone, video, chat, file sharing, and contact-center options.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "contact_center"
+    ],
+    "resource_url": "https://www.intermedia.com/products/unite",
+    "pros": [
+      "Channel-friendly UCaaS",
+      "Integrated collaboration",
+      "Good SMB/mid-market fit"
+    ],
+    "cons": [
+      "Feature bundles can be complex",
+      "Global reach below hyperscale UCaaS",
+      "Legacy analog needs gateways"
+    ],
+    "typical_customers": "SMB, MSP channel, mid-market",
+    "discovery_query": "Intermedia Intermedia Unite official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "ca",
+    "name": "Mitel MiCloud Connect / Business Voice",
+    "vendor": "Mitel",
+    "lifecycle_category": "mature_active",
+    "description": "Mitel cloud and hybrid business communications portfolio.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "ip_pbx"
+    ],
+    "resource_url": "https://www.mitel.com/products/cloud-business-phone-systems",
+    "pros": [
+      "Strong PBX heritage",
+      "Hybrid migration path",
+      "Enterprise telephony features"
+    ],
+    "cons": [
+      "Portfolio transitions require validation",
+      "Licensing can be complex",
+      "Cloud availability varies"
+    ],
+    "typical_customers": "Enterprise, hospitality, healthcare",
+    "discovery_query": "Mitel Mitel MiCloud Connect / Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "fr",
+    "name": "Alcatel-Lucent Rainbow Office",
+    "vendor": "Alcatel-Lucent Enterprise",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud collaboration and communications platform from Alcatel-Lucent Enterprise.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "enterprise"
+    ],
+    "resource_url": "https://www.al-enterprise.com/en/rainbow",
+    "pros": [
+      "Enterprise communications heritage",
+      "European channel",
+      "Hybrid customer base"
+    ],
+    "cons": [
+      "Regional/channel dependency",
+      "Portfolio fit needs validation",
+      "APIs less broad than CPaaS"
+    ],
+    "typical_customers": "Enterprise, government, education",
+    "discovery_query": "Alcatel-Lucent Enterprise Alcatel-Lucent Rainbow Office official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "it",
+    "name": "Wildix UCaaS",
+    "vendor": "Wildix",
+    "lifecycle_category": "cutting_edge",
+    "description": "Browser-based UCaaS and collaboration platform with WebRTC emphasis.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "webrtc"
+    ],
+    "resource_url": "https://www.wildix.com/",
+    "pros": [
+      "WebRTC-native workflow",
+      "Channel-focused deployment",
+      "Good sales collaboration tools"
+    ],
+    "cons": [
+      "Partner model dependency",
+      "Enterprise depth varies",
+      "Regional availability differs"
+    ],
+    "typical_customers": "SMB, sales teams, channel customers",
+    "discovery_query": "Wildix Wildix UCaaS official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "cn",
+    "name": "Yeastar P-Series PBX",
+    "vendor": "Yeastar",
+    "lifecycle_category": "mature_active",
+    "description": "Software, appliance, and cloud PBX family for SMB communications.",
+    "tags": [
+      "ip_pbx",
+      "cloud",
+      "hybrid",
+      "sip"
+    ],
+    "resource_url": "https://www.yeastar.com/p-series-pbx-system/",
+    "pros": [
+      "Flexible appliance/cloud choices",
+      "SMB-friendly admin",
+      "Good gateway ecosystem"
+    ],
+    "cons": [
+      "Advanced enterprise features limited",
+      "Partner support quality varies",
+      "Cloud availability depends on region"
+    ],
+    "typical_customers": "SMB, hospitality, retail",
+    "discovery_query": "Yeastar Yeastar P-Series PBX official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "cn",
+    "name": "Grandstream UCM Series",
+    "vendor": "Grandstream",
+    "lifecycle_category": "mature_active",
+    "description": "IP PBX appliance line for SMB voice, video, and facility deployments.",
+    "tags": [
+      "ip_pbx",
+      "appliance",
+      "sip",
+      "fxs"
+    ],
+    "resource_url": "https://www.grandstream.com/products/ucm-series-ip-pbxs",
+    "pros": [
+      "Low-cost appliance model",
+      "Strong endpoint/gateway ecosystem",
+      "Good analog bridge options"
+    ],
+    "cons": [
+      "Appliance lifecycle management",
+      "Less cloud-native",
+      "Security updates require discipline"
+    ],
+    "typical_customers": "SMB, hotels, schools",
+    "discovery_query": "Grandstream Grandstream UCM Series official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Sangoma PBXact",
+    "vendor": "Sangoma",
+    "lifecycle_category": "mature_active",
+    "description": "Commercially supported PBX based on FreePBX/Asterisk ecosystem.",
+    "tags": [
+      "ip_pbx",
+      "sip",
+      "appliance",
+      "open_source"
+    ],
+    "resource_url": "https://www.sangoma.com/pbxact/",
+    "pros": [
+      "Commercial support path",
+      "Appliance/software flexibility",
+      "Strong analog/SIP gateway fit"
+    ],
+    "cons": [
+      "Self-managed operations still matter",
+      "Module licensing",
+      "Cloud UX less modern than UCaaS"
+    ],
+    "typical_customers": "SMB, integrators",
+    "discovery_query": "Sangoma Sangoma PBXact official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "middle_east",
+    "country_code": "il",
+    "name": "AudioCodes Live Cloud",
+    "vendor": "AudioCodes",
+    "lifecycle_category": "cutting_edge",
+    "description": "Managed Microsoft Teams voice/SBC service and migration portfolio.",
+    "tags": [
+      "cloud",
+      "teams",
+      "sbc",
+      "sip"
+    ],
+    "resource_url": "https://www.audiocodes.com/solutions-products/solutions/microsoft-teams/audiocodes-live-for-microsoft-teams",
+    "pros": [
+      "Strong SBC and Teams voice expertise",
+      "Managed migration model",
+      "Enterprise voice controls"
+    ],
+    "cons": [
+      "Best fit for Microsoft Teams",
+      "Requires voice design",
+      "Commercial engagement needed"
+    ],
+    "typical_customers": "Enterprise, Teams voice migrations",
+    "discovery_query": "AudioCodes AudioCodes Live Cloud official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "gb",
+    "name": "Colt Cloud Communications",
+    "vendor": "Colt",
+    "lifecycle_category": "cutting_edge",
+    "description": "European business cloud communications and SIP services.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "sip",
+      "telco"
+    ],
+    "resource_url": "https://www.colt.net/product/cloud-communications/",
+    "pros": [
+      "Strong enterprise network footprint",
+      "Voice plus connectivity",
+      "European coverage"
+    ],
+    "cons": [
+      "Enterprise sales motion",
+      "Feature details vary by market",
+      "Less SMB self-service"
+    ],
+    "typical_customers": "European enterprise",
+    "discovery_query": "Colt Colt Cloud Communications official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "de",
+    "name": "Placetel Cloud Telephone System",
+    "vendor": "Placetel",
+    "lifecycle_category": "cutting_edge",
+    "description": "German cloud telephony and business communications service.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "ucaas"
+    ],
+    "resource_url": "https://www.placetel.de/",
+    "pros": [
+      "Germany-focused compliance",
+      "Hosted PBX simplicity",
+      "Good SMB fit"
+    ],
+    "cons": [
+      "Regional scope",
+      "International features vary",
+      "API depth limited vs CPaaS"
+    ],
+    "typical_customers": "German SMB",
+    "discovery_query": "Placetel Placetel Cloud Telephone System official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "pl",
+    "name": "Daktela Contact Center",
+    "vendor": "Daktela",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud contact-center and business communications platform with Central/Eastern Europe footprint.",
+    "tags": [
+      "cloud",
+      "contact_center",
+      "voice"
+    ],
+    "resource_url": "https://daktela.com/",
+    "pros": [
+      "Omnichannel contact center",
+      "Regional support",
+      "Integrations and routing"
+    ],
+    "cons": [
+      "Contact-center focus",
+      "Global PSTN scope varies",
+      "Implementation required"
+    ],
+    "typical_customers": "Contact centers, retail, finance",
+    "discovery_query": "Daktela Daktela Contact Center official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "br",
+    "name": "Zenvia Voice",
+    "vendor": "Zenvia",
+    "lifecycle_category": "cutting_edge",
+    "description": "Latin American customer communication platform with programmable voice capabilities.",
+    "tags": [
+      "cpaas",
+      "api",
+      "voice",
+      "latam"
+    ],
+    "resource_url": "https://www.zenvia.com/en/platform/voice/",
+    "pros": [
+      "LATAM market focus",
+      "Voice plus messaging",
+      "Customer journey tooling"
+    ],
+    "cons": [
+      "Regional focus",
+      "Engineering/configuration required",
+      "Not a classic PBX"
+    ],
+    "typical_customers": "LATAM enterprise, retail, finance",
+    "discovery_query": "Zenvia Zenvia Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "cl",
+    "name": "Suma Móvil / VoIP enterprise",
+    "vendor": "Suma Movil",
+    "lifecycle_category": "mature_active",
+    "description": "Chile-focused business communications and VoIP services.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "sip",
+      "telco"
+    ],
+    "resource_url": "https://www.sumamovil.com/",
+    "pros": [
+      "Local support",
+      "Regional numbering",
+      "Hosted voice option"
+    ],
+    "cons": [
+      "Public technical detail limited",
+      "Regional scope",
+      "Advanced APIs require validation"
+    ],
+    "typical_customers": "Chile SMB",
+    "discovery_query": "Suma Movil Suma Móvil / VoIP enterprise official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "africa",
+    "country_code": "ma",
+    "name": "inwi Business Voice",
+    "vendor": "inwi",
+    "lifecycle_category": "mature_active",
+    "description": "Morocco telecom business voice and enterprise services portfolio.",
+    "tags": [
+      "telco",
+      "hosted",
+      "voice"
+    ],
+    "resource_url": "https://www.inwi.ma/entreprises",
+    "pros": [
+      "Local operator footprint",
+      "Connectivity bundle",
+      "Regulatory fit"
+    ],
+    "cons": [
+      "Cloud PBX details require sales validation",
+      "Limited public API detail",
+      "Regional scope"
+    ],
+    "typical_customers": "Morocco business",
+    "discovery_query": "inwi inwi Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "africa",
+    "country_code": "gh",
+    "name": "MTN Business Voice Ghana",
+    "vendor": "MTN Ghana",
+    "lifecycle_category": "mature_active",
+    "description": "Ghana business voice, mobile, and enterprise connectivity portfolio.",
+    "tags": [
+      "telco",
+      "hosted",
+      "voice"
+    ],
+    "resource_url": "https://mtn.com.gh/business/",
+    "pros": [
+      "Local mobile network reach",
+      "Business support",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "Cloud PBX detail varies",
+      "API details limited",
+      "Regional focus"
+    ],
+    "typical_customers": "Ghana business",
+    "discovery_query": "MTN Ghana MTN Business Voice Ghana official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "middle_east",
+    "country_code": "qa",
+    "name": "Ooredoo Business Voice",
+    "vendor": "Ooredoo",
+    "lifecycle_category": "mature_active",
+    "description": "Qatar business voice and enterprise communications portfolio.",
+    "tags": [
+      "telco",
+      "hosted",
+      "voice"
+    ],
+    "resource_url": "https://www.ooredoo.qa/web/en/business/",
+    "pros": [
+      "Local carrier footprint",
+      "Enterprise procurement",
+      "Connectivity and voice bundle"
+    ],
+    "cons": [
+      "Public feature detail varies",
+      "Regional scope",
+      "Integration may be sales-led"
+    ],
+    "typical_customers": "Qatar enterprise",
+    "discovery_query": "Ooredoo Ooredoo Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "vn",
+    "name": "Viettel Cloud PBX / Business Voice",
+    "vendor": "Viettel",
+    "lifecycle_category": "mature_active",
+    "description": "Vietnam telecom business voice and cloud communications portfolio.",
+    "tags": [
+      "telco",
+      "hosted",
+      "cloud"
+    ],
+    "resource_url": "https://vietteltelecom.vn/",
+    "pros": [
+      "National carrier reach",
+      "Local numbering",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "Product details vary by business unit",
+      "Regional scope",
+      "API depth requires validation"
+    ],
+    "typical_customers": "Vietnam business",
+    "discovery_query": "Viettel Viettel Cloud PBX / Business Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "hk",
+    "name": "HKT Cloud Communications",
+    "vendor": "HKT",
+    "lifecycle_category": "cutting_edge",
+    "description": "Hong Kong enterprise communications, cloud voice, and connectivity portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.hkt-enterprise.com/",
+    "pros": [
+      "Hong Kong enterprise footprint",
+      "Connectivity and voice bundle",
+      "Regional business support"
+    ],
+    "cons": [
+      "Sales-led details",
+      "Regional scope",
+      "API availability varies"
+    ],
+    "typical_customers": "Hong Kong enterprise",
+    "discovery_query": "HKT HKT Cloud Communications official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "tw",
+    "name": "遠傳企業雲端總機",
+    "vendor": "Far EasTone",
+    "lifecycle_category": "cutting_edge",
+    "description": "Taiwan enterprise cloud voice and hosted communications portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.fetnet.net/enterprise/",
+    "pros": [
+      "Taiwan carrier support",
+      "Connectivity bundle",
+      "Local service channel"
+    ],
+    "cons": [
+      "Public API detail limited",
+      "Contract dependency",
+      "Cloud feature depth varies"
+    ],
+    "typical_customers": "Taiwan business",
+    "discovery_query": "Far EasTone 遠傳企業雲端總機 official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "asia_pacific",
+    "country_code": "tw",
+    "name": "台灣大哥大企業語音服務",
+    "vendor": "Taiwan Mobile",
+    "lifecycle_category": "mature_active",
+    "description": "Taiwan enterprise voice and telecom services portfolio.",
+    "tags": [
+      "hosted",
+      "telco",
+      "voice"
+    ],
+    "resource_url": "https://www.taiwanmobile.com/enterprise/",
+    "pros": [
+      "Local carrier coverage",
+      "Enterprise account support",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "Cloud PBX product detail varies",
+      "API details limited",
+      "Regional scope"
+    ],
+    "typical_customers": "Taiwan enterprise",
+    "discovery_query": "Taiwan Mobile 台灣大哥大企業語音服務 official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Google Voice for Google Workspace",
+    "vendor": "Google",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud phone system integrated with Google Workspace.",
+    "tags": [
+      "cloud",
+      "ucaas",
+      "workspace"
+    ],
+    "resource_url": "https://workspace.google.com/products/voice/",
+    "pros": [
+      "Simple Workspace integration",
+      "Google admin familiarity",
+      "Good small-team fit"
+    ],
+    "cons": [
+      "Enterprise PBX depth limited",
+      "PSTN country coverage limited",
+      "Analog devices need gateways"
+    ],
+    "typical_customers": "Google Workspace customers",
+    "discovery_query": "Google Google Voice for Google Workspace official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Amazon Connect",
+    "vendor": "AWS",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud contact center with telephony, routing, analytics, and AWS AI integrations.",
+    "tags": [
+      "cloud",
+      "contact_center",
+      "api",
+      "ai"
+    ],
+    "resource_url": "https://aws.amazon.com/connect/",
+    "pros": [
+      "Highly programmable",
+      "AWS ecosystem",
+      "Scales elastically"
+    ],
+    "cons": [
+      "Not a turnkey office PBX",
+      "Requires cloud engineering",
+      "Usage-cost governance needed"
+    ],
+    "typical_customers": "Contact centers, digital platforms",
+    "discovery_query": "AWS Amazon Connect official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Genesys Cloud CX Voice",
+    "vendor": "Genesys",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud customer experience platform with voice, routing, workforce, and AI capabilities.",
+    "tags": [
+      "cloud",
+      "contact_center",
+      "voice",
+      "ai"
+    ],
+    "resource_url": "https://www.genesys.com/capabilities/voice",
+    "pros": [
+      "Enterprise CC depth",
+      "AI/customer journey tools",
+      "Global operations model"
+    ],
+    "cons": [
+      "Complex implementation",
+      "Premium cost",
+      "Office PBX use is secondary"
+    ],
+    "typical_customers": "Enterprise contact centers",
+    "discovery_query": "Genesys Genesys Cloud CX Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "americas",
+    "country_code": "us",
+    "name": "Five9 VoiceStream / Cloud Contact Center",
+    "vendor": "Five9",
+    "lifecycle_category": "cutting_edge",
+    "description": "Cloud contact-center platform with programmable media/voice integrations.",
+    "tags": [
+      "cloud",
+      "contact_center",
+      "api",
+      "ai"
+    ],
+    "resource_url": "https://www.five9.com/products/call-center-software",
+    "pros": [
+      "Strong CCaaS features",
+      "AI and routing",
+      "Enterprise ecosystem"
+    ],
+    "cons": [
+      "Not a branch PBX replacement",
+      "Implementation required",
+      "Premium contact-center pricing"
+    ],
+    "typical_customers": "Contact centers",
+    "discovery_query": "Five9 Five9 VoiceStream / Cloud Contact Center official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "de",
+    "name": "Deutsche Telekom CompanyFlex",
+    "vendor": "Deutsche Telekom",
+    "lifecycle_category": "cutting_edge",
+    "description": "German telco SIP trunk/cloud voice portfolio for business communications.",
+    "tags": [
+      "cloud",
+      "sip",
+      "telco",
+      "hosted"
+    ],
+    "resource_url": "https://geschaeftskunden.telekom.de/internet-dsl/tarife/companyflex",
+    "pros": [
+      "German carrier reliability",
+      "SIP and cloud voice migration",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "Germany-focused",
+      "Telco procurement",
+      "API details limited"
+    ],
+    "typical_customers": "German enterprise and SMB",
+    "discovery_query": "Deutsche Telekom Deutsche Telekom CompanyFlex official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "gb",
+    "name": "BT Cloud Voice",
+    "vendor": "BT",
+    "lifecycle_category": "cutting_edge",
+    "description": "UK cloud-based phone system from BT Business.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://business.bt.com/products/voice/cloud-voice/",
+    "pros": [
+      "UK carrier footprint",
+      "Hosted PBX maturity",
+      "Connectivity bundle"
+    ],
+    "cons": [
+      "UK-centric",
+      "Feature tiers vary",
+      "API depth limited"
+    ],
+    "typical_customers": "UK SMB and enterprise",
+    "discovery_query": "BT BT Cloud Voice official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "nl",
+    "name": "KPN EEN / Cloud communications",
+    "vendor": "KPN",
+    "lifecycle_category": "mature_active",
+    "description": "Netherlands business voice and cloud communications portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.kpn.com/zakelijk.htm",
+    "pros": [
+      "Dutch carrier support",
+      "Connectivity bundle",
+      "Business service model"
+    ],
+    "cons": [
+      "Product detail varies",
+      "Regional scope",
+      "API depth limited"
+    ],
+    "typical_customers": "Netherlands business",
+    "discovery_query": "KPN KPN EEN / Cloud communications official cloud PBX VoIP API eSIM UCaaS"
+  },
+  {
+    "continent": "europe",
+    "country_code": "se",
+    "name": "Telia Touchpoint Plus",
+    "vendor": "Telia",
+    "lifecycle_category": "mature_active",
+    "description": "Nordic mobile PBX and business telephony portfolio.",
+    "tags": [
+      "cloud",
+      "hosted",
+      "telco"
+    ],
+    "resource_url": "https://www.telia.se/foretag",
+    "pros": [
+      "Nordic carrier footprint",
+      "Mobile PBX experience",
+      "Business support"
+    ],
+    "cons": [
+      "Regional scope",
+      "Public technical detail varies",
+      "Integration depth depends on package"
+    ],
+    "typical_customers": "Nordic SMB and enterprise",
+    "discovery_query": "Telia Telia Touchpoint Plus official cloud PBX VoIP API eSIM UCaaS"
+  }
+]

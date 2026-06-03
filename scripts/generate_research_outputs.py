@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.research.product_researcher import analyze_registry, summarize_registry
+from src.research.solution_crawler import discover_solution_catalog
 from src.research.tech_researcher import generate_awesome_list
 
 
@@ -52,6 +53,18 @@ SOURCES = [
     },
 ]
 
+CRAWLER_TAXONOMY = [
+    "UCaaS / cloud PBX",
+    "CCaaS / contact-center voice",
+    "CPaaS / programmable voice API",
+    "Open-source and self-hosted PBX",
+    "Regional telco hosted PBX and SIP voice",
+    "IoT SIM, eSIM, cellular connectivity",
+    "Industrial SCADA/PLC/building control",
+    "Wireless/radio/satellite alternatives",
+    "Serial, wired, relay, and dry-contact triggers",
+]
+
 
 def _records(df: pd.DataFrame) -> list[dict]:
     return json.loads(df.fillna("").to_json(orient="records"))
@@ -84,7 +97,29 @@ def _continent_label(continent: str, lang: str) -> str:
 
 
 def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
-    header = "".join(f"<th>{escape(c)}</th>" for c in columns)
+    labels = {
+        "continent": ("Continent", "洲別"),
+        "country_code": ("Country/region", "國家/地區"),
+        "name": ("Name", "名稱"),
+        "vendor": ("Vendor", "供應商"),
+        "lifecycle_assigned": ("Lifecycle", "生命週期"),
+        "recommended_terminals": ("Recommended terminals", "建議終端數"),
+        "recommended_devices": ("Recommended devices", "建議裝置數"),
+        "cost_band": ("Cost band", "成本區間"),
+        "cost_model": ("Cost model", "成本模式"),
+        "industry_fit": ("Industry fit", "適用產業"),
+        "resource_url": ("Source", "來源"),
+        "pros": ("Pros", "優點"),
+        "cons": ("Cons", "缺點"),
+        "category": ("Category", "類別"),
+        "medium": ("Medium", "媒介"),
+        "latency": ("Latency", "延遲"),
+        "security": ("Security", "安全性"),
+    }
+    header = "".join(
+        f"<th>{escape(labels.get(c, (c, c))[0 if lang == 'en' else 1])}</th>"
+        for c in columns
+    )
     rows = []
     for _, row in df.iterrows():
         cells = []
@@ -92,7 +127,12 @@ def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
             value = row.get(col, "")
             if col == "lifecycle_assigned":
                 value = _category_label(str(value), lang)
-            cells.append(f"<td>{escape(str(value))}</td>")
+            if col in {"resource_url", "url"} and value:
+                safe_url = escape(str(value), quote=True)
+                value = f'<a href="{safe_url}">official/source</a>'
+                cells.append(f"<td>{value}</td>")
+            else:
+                cells.append(f"<td>{escape(str(value))}</td>")
         rows.append("<tr>" + "".join(cells) + "</tr>")
     return f"<table><thead><tr>{header}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
 
@@ -138,9 +178,16 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
             else "- 新部署方向明顯轉向雲端/API/AI 語音，但混合式 PBX 與 TDM 平台仍是既有裝機的主要遷移風險。"
         ),
         "",
-        "## Lifecycle Counts" if not zh else "## 生命週期統計",
+        "## Crawler Coverage" if not zh else "## 爬蟲覆蓋分類",
         "",
     ]
+    for item in CRAWLER_TAXONOMY:
+        md.append(f"- {item}")
+    md.extend([
+        "",
+        "## Lifecycle Counts" if not zh else "## 生命週期統計",
+        "",
+    ])
     for category, count in lifecycle.items():
         md.append(f"- {_category_label(category, lang)}: {int(count)}")
     md.extend(["", "## Continent Coverage" if not zh else "## 洲別覆蓋", ""])
@@ -191,12 +238,16 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
     <div class="card"><div class="metric">{len(awesome)}</div><div>{"PSTN alternatives" if not zh else "PSTN 替代方案"}</div></div>
     <div class="card"><div class="metric">{registry['vendor'].nunique()}</div><div>{"Vendors" if not zh else "供應商"}</div></div>
   </section>
+  <h2>{"Crawler Coverage" if not zh else "爬蟲覆蓋分類"}</h2>
+  <ul>
+    {''.join(f'<li>{escape(item)}</li>' for item in CRAWLER_TAXONOMY)}
+  </ul>
   <h2>{"Lifecycle Summary" if not zh else "生命週期摘要"}</h2>
   {_html_table(summary, ["continent", "lifecycle_assigned", "count", "vendors"], lang)}
   <h2>{"Solution Registry" if not zh else "方案清單"}</h2>
-  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "generation", "description"], lang)}
+  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "recommended_terminals", "cost_band", "industry_fit", "resource_url", "pros", "cons"], lang)}
   <h2>{"PSTN Alternatives Awesome List" if not zh else "PSTN 替代方案 Awesome List"}</h2>
-  {_html_table(top_awesome, ["name", "category", "medium", "latency", "reliability", "security", "use_case"], lang)}
+  {_html_table(top_awesome, ["name", "category", "medium", "recommended_devices", "cost_model", "industry_fit", "latency", "security", "pros", "cons"], lang)}
   <h2>{"Sources" if not zh else "來源"}</h2>
   <ul>
     {''.join(f'<li><a href="{escape(s["url"])}">{escape(s["name"])}</a> - {escape(s["note_zh"] if zh else s["note_en"])}</li>' for s in SOURCES)}
@@ -218,6 +269,8 @@ def main() -> None:
 
     _write_json(FRONTEND_DATA / "solution_registry.json", _records(registry))
     _write_json(FRONTEND_DATA / "awesome_list.json", _records(awesome))
+    _write_json(FRONTEND_DATA / "crawler_discoveries.json", discover_solution_catalog())
+    _write_json(FRONTEND_DATA / "crawler_taxonomy.json", CRAWLER_TAXONOMY)
     _write_json(FRONTEND_DATA / "research_sources.json", SOURCES)
 
     for lang in ("en", "zh"):
@@ -225,7 +278,47 @@ def main() -> None:
         (REPORTS / f"global_research_report_{lang}.md").write_text(md)
         (REPORTS / f"global_research_report_{lang}.html").write_text(html)
 
-    index = """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PBX Estimation Reports</title></head><body><h1>PBX Estimation Reports</h1><ul><li><a href="zh/">中文網站</a></li><li><a href="en/">English site</a></li><li><a href="reports/global_research_report_zh.html">中文研究報告</a></li><li><a href="reports/global_research_report_en.html">English research report</a></li></ul></body></html>"""
+    index = f"""<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PBX Estimation</title>
+  <style>
+    body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; background: #f4f6f8; color: #172033; }}
+    main {{ min-height: 100vh; display: grid; place-items: center; padding: 24px; }}
+    section {{ width: min(920px, 100%); background: white; border: 1px solid #dbe3ea; border-radius: 8px; padding: 34px; }}
+    h1 {{ margin: 0 0 12px; font-size: 2rem; }}
+    p {{ color: #52606d; line-height: 1.6; max-width: 760px; }}
+    .metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 22px 0; }}
+    .metric {{ border: 1px solid #e4e9ef; border-radius: 8px; padding: 14px; }}
+    .metric strong {{ display: block; font-size: 1.7rem; color: #0f766e; }}
+    .actions {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+    a {{ color: #0f766e; font-weight: 700; text-decoration: none; border: 1px solid #b8c7d3; border-radius: 6px; padding: 10px 12px; }}
+    a.primary {{ background: #0f766e; color: white; border-color: #0f766e; }}
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>PBX Estimation</h1>
+    <p>Global PBX, UCaaS, CPaaS, eSIM/IoT, and non-PSTN trigger alternatives. 全球 PBX、UCaaS、CPaaS、eSIM/IoT 與非 PSTN 觸發替代方案研究。</p>
+    <div class="metrics">
+      <div class="metric"><strong>{len(registry)}</strong><span>Solutions / 解決方案</span></div>
+      <div class="metric"><strong>{registry['country_code'].nunique()}</strong><span>Countries / 國家地區</span></div>
+      <div class="metric"><strong>{len(awesome)}</strong><span>Alternatives / 替代技術</span></div>
+      <div class="metric"><strong>{registry['vendor'].nunique()}</strong><span>Vendors / 供應商</span></div>
+    </div>
+    <div class="actions">
+      <a class="primary" href="zh/">繁體中文網站</a>
+      <a href="en/">English Site</a>
+      <a href="reports/global_research_report_zh.html">中文研究報告</a>
+      <a href="reports/global_research_report_en.html">English Report</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>"""
     (REPORTS / "index.html").write_text(index)
 
 
