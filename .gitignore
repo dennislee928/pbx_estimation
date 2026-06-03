@@ -30,3 +30,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+auto_commit.sh
+
+/frontend/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node
