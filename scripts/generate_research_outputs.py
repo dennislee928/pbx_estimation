@@ -104,7 +104,7 @@ def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
         "vendor": ("Vendor", "供應商"),
         "lifecycle_assigned": ("Lifecycle", "生命週期"),
         "recommended_terminals": ("Recommended terminals", "建議終端數"),
-        "recommended_devices": ("Recommended devices", "建議裝置數"),
+        "recommended_devices": ("Recommended terminals/devices", "建議終端/裝置數"),
         "cost_band": ("Cost band", "成本區間"),
         "cost_model": ("Cost model", "成本模式"),
         "industry_fit": ("Industry fit", "適用產業"),
@@ -206,7 +206,7 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
     md_text = "\n".join(md) + "\n"
 
     top_registry = registry.sort_values(["continent", "country_code", "lifecycle_assigned", "name"]).head(120)
-    top_awesome = awesome.sort_values(["category", "medium", "name"]).head(80)
+    top_awesome = awesome.sort_values(["category", "medium", "name"])
     html = f"""<!doctype html>
 <html lang="{lang}">
 <head>
@@ -247,7 +247,7 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
   <h2>{"Solution Registry" if not zh else "方案清單"}</h2>
   {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "recommended_terminals", "cost_band", "industry_fit", "resource_url", "pros", "cons"], lang)}
   <h2>{"PSTN Alternatives Awesome List" if not zh else "PSTN 替代方案 Awesome List"}</h2>
-  {_html_table(top_awesome, ["name", "category", "medium", "recommended_devices", "cost_model", "industry_fit", "latency", "security", "pros", "cons"], lang)}
+  {_html_table(top_awesome, ["name", "category", "medium", "recommended_devices", "cost_model", "industry_fit", "resource_url", "latency", "security", "pros", "cons"], lang)}
   <h2>{"Sources" if not zh else "來源"}</h2>
   <ul>
     {''.join(f'<li><a href="{escape(s["url"])}">{escape(s["name"])}</a> - {escape(s["note_zh"] if zh else s["note_en"])}</li>' for s in SOURCES)}
