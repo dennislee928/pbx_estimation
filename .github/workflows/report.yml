@@ -1,8 +1,10 @@
-name: Report Generation
+name: Report Generation and Pages Deploy
 
 on:
+  push:
+    branches:
+      - deploy/pages-clean
   schedule:
-    # 1st of every month at 00:00 UTC
     - cron: "0 0 1 * *"
   workflow_dispatch:
     inputs:
@@ -10,6 +12,15 @@ on:
         description: "Force re-download all raw data (skips cache)"
         type: boolean
         default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 env:
   PYTHON_VERSION: "3.12"
@@ -36,6 +47,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
       - name: Cache Python dependencies
         uses: actions/cache@v4
         with:
@@ -53,89 +71,82 @@ jobs:
           restore-keys: |
             ${{ env.CACHE_VERSION }}-raw-data-
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run 01_fetch_data.ipynb
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { execSync } = require("child_process");
-            execSync(
-              "papermill notebooks/01_fetch_data.ipynb " +
-              "notebooks/01_fetch_data_output.ipynb " +
-              "--log-output --progress-bar",
-              { stdio: "inherit" }
-            );
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
 
-      - name: Run 02_eda_visualization.ipynb
+      - name: Run notebooks
         run: |
-          papermill notebooks/02_eda_visualization.ipynb \
-            notebooks/02_eda_visualization_output.ipynb \
-            --log-output --progress-bar
+          set -euo pipefail
+          for nb in \
+            01_fetch_data \
+            02_eda_visualization \
+            03_logistic_growth \
+            04_survival_analysis \
+            05_verify_pipeline \
+            06_product_research \
+            07_tech_alternatives
+          do
+            papermill "notebooks/${nb}.ipynb" "notebooks/${nb}_output.ipynb" --log-output --progress-bar
+          done
 
-      - name: Run 03_logistic_growth.ipynb
-        run: |
-          papermill notebooks/03_logistic_growth.ipynb \
-            notebooks/03_logistic_growth_output.ipynb \
-            --log-output --progress-bar
-
-      - name: Run 04_survival_analysis.ipynb
-        run: |
-          papermill notebooks/04_survival_analysis.ipynb \
-            notebooks/04_survival_analysis_output.ipynb \
-            --log-output --progress-bar
+      - name: Generate shared research outputs
+        run: python scripts/generate_research_outputs.py
 
       - name: Convert notebooks to HTML
         run: |
+          set -euo pipefail
           mkdir -p reports
           for nb in notebooks/*_output.ipynb; do
             name=$(basename "$nb" _output.ipynb)
-            jupyter nbconvert "$nb" --to html --output-dir reports/ --output "${name}.html"
+            jupyter nbconvert "$nb" --to html --output-dir reports --output "${name}.html"
+            jupyter nbconvert "$nb" --to pdf --output-dir reports --output "${name}.pdf" || \
+              echo "PDF conversion skipped for ${name} (check pandoc/tex installation)"
           done
 
-      - name: Upload reports as artifacts
+      - name: Build bilingual frontend
+        run: |
+          set -euo pipefail
+          rm -rf site frontend/public/reports
+          mkdir -p site frontend/public/reports
+          cp -R reports/. frontend/public/reports/
+          cd frontend
+          NEXT_PUBLIC_LANG=zh npm run build
+          mkdir -p ../site/zh
+          cp -R out/. ../site/zh/
+          NEXT_PUBLIC_LANG=en npm run build
+          mkdir -p ../site/en
+          cp -R out/. ../site/en/
+          cd ..
+          mkdir -p site/reports
+          cp -R reports/. site/reports/
+          mkdir -p site/zh/reports site/en/reports
+          cp -R reports/. site/zh/reports/
+          cp -R reports/. site/en/reports/
+          cp reports/index.html site/index.html
+
+      - name: Upload reports as workflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: pbx-reports-${{ github.run_id }}
-          path: reports/
+          path: |
+            reports/
+            data/processed/*.csv
           retention-days: 90
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Copy reports into Next.js public directory
-        run: |
-          mkdir -p frontend/public/reports
-          # Only HTML reports; .gitkeep and PDFs are excluded
-          cp reports/*.html frontend/public/reports/
-
-      - name: Build Next.js static site
-        run: npm run build
-        working-directory: frontend
-
-      - name: Verify build output
-        run: ls -la frontend/out/ frontend/out/reports/ 2>/dev/null || true
-
       - name: Configure GitHub Pages
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/out
+          path: site
 
       - name: Deploy to GitHub Pages
-        if: ${{ github.ref == 'refs/heads/main' }}
-        id: deploy
+        id: deployment
         uses: actions/deploy-pages@v4

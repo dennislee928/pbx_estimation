@@ -1,0 +1,48 @@
+const LANG = process.env.NEXT_PUBLIC_LANG || "zh";
+
+const translations = {
+  zh: {
+    siteTitle: "PBX 市場預測與 VoIP 趨勢分析",
+    reports: "分析報告",
+    research: "研究專題",
+    marketBrief: "市場研究簡報",
+    productResearch: "產品研究",
+    techAlternatives: "技術替代方案",
+    globalRegistry: "全球解決方案目錄",
+    report01: "資料擷取",
+    report02: "探索式資料分析",
+    report03: "羅吉斯成長模型",
+    report04: "存活分析",
+    report05: "管線驗證",
+    report06: "產品研究分析",
+    report07: "技術替代方案",
+    languageToggle: "English",
+    loading: "載入中...",
+  },
+  en: {
+    siteTitle: "PBX Market Estimation & VoIP Trend Analysis",
+    reports: "Reports",
+    research: "Research",
+    marketBrief: "Market Research Brief",
+    productResearch: "Product Research",
+    techAlternatives: "Tech Alternatives",
+    globalRegistry: "Global Solution Registry",
+    report01: "Data Fetch",
+    report02: "EDA & Visualization",
+    report03: "Logistic Growth Model",
+    report04: "Survival Analysis",
+    report05: "Pipeline Verification",
+    report06: "Product Research Analysis",
+    report07: "Tech Alternatives",
+    languageToggle: "繁體中文",
+    loading: "Loading...",
+  },
+};
+
+export function t(key) {
+  return translations[LANG]?.[key] ?? translations.zh[key] ?? key;
+}
+
+export function getLang() {
+  return LANG;
+}

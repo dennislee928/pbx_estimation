@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Gartner UCaaS Magic Quadrant, published 2025-09-22",
+    "url": "https://www.gartner.com/en/documents/6979866",
+    "note_en": "Used to anchor current major UCaaS provider categories and AI/UCaaS market framing.",
+    "note_zh": "用於校準現行主要 UCaaS 供應商分類與 AI/UCaaS 市場脈絡。"
+  },
+  {
+    "name": "Microsoft Teams Phone official product page",
+    "url": "https://www.microsoft.com/en-us/microsoft-teams/microsoft-teams-phone",
+    "note_en": "Confirms cloud phone, PSTN calling, Operator Connect/Direct Routing, SLA, and AI call features.",
+    "note_zh": "確認雲端電話、PSTN 通話、Operator Connect/Direct Routing、SLA 與 AI 通話功能。"
+  },
+  {
+    "name": "Twilio Programmable Voice documentation and 2026 platform announcement",
+    "url": "https://www.twilio.com/docs/voice",
+    "note_en": "Anchors API-first voice, real-time voice, and agentic communications patterns.",
+    "note_zh": "用於校準 API-first 語音、即時語音與代理式通訊模式。"
+  },
+  {
+    "name": "Zoom Phone official product page",
+    "url": "https://www.zoom.com/en/products/voip-phone/",
+    "note_en": "Confirms Zoom Phone as a cloud VoIP system with AI-assisted call workflows.",
+    "note_zh": "確認 Zoom Phone 為雲端 VoIP 電話系統並具備 AI 輔助通話流程。"
+  },
+  {
+    "name": "3CX V20 release notes",
+    "url": "https://www.3cx.com/blog/releases/v20-final/",
+    "note_en": "Anchors active mature software PBX lifecycle status.",
+    "note_zh": "用於校準成熟且仍活躍的軟體 PBX 生命週期狀態。"
+  }
+]

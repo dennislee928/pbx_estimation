@@ -1,0 +1,738 @@
+# Global PBX/VoIP Solutions Registry
+# Lifecycle categories: cutting_edge, mature_active, most_used_current, most_used_eol
+# Sources: vendor announcements, Gartner UCaaS MQ, Cavell Group, IDC, MIC Taiwan
+
+asia_pacific:
+  tw:
+    cutting_edge:
+      - name: EVOX Cloud PBX
+        vendor: EVOX
+        description: Cloud-native UCaaS targeting TW SMB with Teams/Salesforce integration
+        tags: [cloud, ucaas, api]
+        pros: [Local support, Chinese UI, Teams API integration, easy setup]
+        cons: [Internet dependency, monthly subscription cost, limited analog support]
+        typical_customers: SME 10-500 seats
+      - name: RingCentral MVP Taiwan
+        vendor: RingCentral
+        description: Global UCaaS platform with local PSTN breakout in TW
+        tags: [cloud, ucaas, api, webrtc]
+        pros: [Global presence, robust API library, analytics dashboard]
+        cons: [Higher price point, English-first UI, local support tier varies]
+        typical_customers: Enterprise 100+ seats
+    mature_active:
+      - name: Asterisk IP-PBX
+        vendor: Open Source / Digium
+        description: Most widely deployed open-source PBX platform globally
+        tags: [ip_pbx, sip, open_source, linux]
+        pros: [Free, huge community, infinite customization, any hardware]
+        cons: [Requires Linux admin, no official support, DIY security patching]
+        typical_customers: Tech-savvy SMB, SI VARs
+      - name: 3CX IP-PBX
+        vendor: 3CX
+        description: Windows/Linux software PBX with web management
+        tags: [ip_pbx, sip, windows, linux, web_management]
+        pros: [User-friendly web console, mobile/desktop softphone included, low TCO]
+        cons: [Annual license cost, limited analog FXO/FXS without gateway]
+        typical_customers: SME 5-500 seats
+      - name: Cisco Unified Communications Manager
+        vendor: Cisco
+        description: Enterprise-grade IP-PBX with full UC suite
+        tags: [ip_pbx, sip, enterprise, h323]
+        pros: [Enterprise reliability, extensive feature set, global support]
+        cons: [High TCO, complex licensing, requires certified admins]
+        typical_customers: Enterprise, government, education
+    most_used_current:
+      - name: 中華電信雲端總機
+        vendor: Chunghwa Telecom
+        description: "Taiwan's largest telco cloud PBX offering"
+        tags: [cloud, hosted, sip]
+        pros: ["Local #1 telco", island-wide QoS, bundling with fiber]
+        cons: [Proprietary features, limited API, long contract]
+        typical_customers: TW SME with CHT fiber
+      - name: Panasonic KX-NS系列
+        vendor: Panasonic
+        description: Hybrid IP-PBX, widely installed across TW SMB
+        tags: [ip_pbx, hybrid, fxs, fxo]
+        pros: [Analog phone support, reliable hardware, local SI network]
+        cons: [EOL announced 2021, no more firmware, parts via secondary market]
+        typical_customers: TW SMB with legacy analog phones
+      - name: NEC SV9100
+        vendor: NEC
+        description: Hybrid IP communication server (successor to SV7000)
+        tags: [ip_pbx, hybrid, sip, fxs]
+        pros: [NEC brand trust, hybrid analog/IP, UC apps available]
+        cons: [Complex programming, proprietary handsets, NCC license cost]
+        typical_customers: TW enterprise, hospitality
+    most_used_eol:
+      - name: Panasonic KX-TDA/TDE
+        vendor: Panasonic
+        eol_status: EOL
+        description: Legacy TDM hybrid PBX, EOL 2021, EOS 2024
+        tags: [tdm, hybrid, fxs, fxo, analog]
+        pros: [Rock-solid analog voice, huge install base, cheap二手]
+        cons: [EOL/EOS, no security patches, no VoIP integration, no UC]
+        typical_customers: TW SMB, retail shops, clinics
+      - name: Toshiba Strata CIX
+        vendor: Toshiba
+        eol_status: EOL
+        description: Legacy digital PBX, Toshiba exited telephony 2014
+        tags: [tdm, digital, fxs, fxo, analog]
+        pros: [Was reliable its era, simple programming]
+        cons: [Fully discontinued, no parts, no support, security risk]
+        typical_customers: TW older office buildings, schools
+      - name: Avaya IP Office R11-
+        vendor: Avaya
+        eol_status: EOL
+        description: Legacy IP-PBX platform on older releases before subscription model
+        tags: [ip_pbx, hybrid, fxs, sip]
+        pros: ["Was #1 SMB platform globally", rich features]
+        cons: [EOL for older versions, Avaya bankruptcy restructuring, forced subscription upgrade]
+        typical_customers: TW and global SMB, hospitality chains
+
+  jp:
+    cutting_edge:
+      - name: NTT Cloud PBX
+        vendor: NTT Communications
+        description: Enterprise cloud PBX with Japan's largest backbone
+        tags: [cloud, ucaas, sip]
+        pros: [NTT reliability, Japan-wide coverage, bundled with IPsec VPN]
+        cons: [Japanese-only support, long contracts, expensive]
+        typical_customers: Japanese enterprise, govt
+    mature_active:
+      - name: Asterisk on Sakura VPS
+        vendor: Open Source
+        description: Self-hosted Asterisk on Japan's popular VPS
+        tags: [ip_pbx, sip, open_source]
+        pros: [Low cost, full control, popular with JP engineers]
+        cons: [Self-managed, no Japanese-language support]
+        typical_customers: JP tech SMB, startups
+    most_used_current:
+      - name: Panasonic KX-NS1000
+        vendor: Panasonic
+        description: Hybrid IP-PBX dominant in Japanese SMB market
+        tags: [ip_pbx, hybrid, fxs]
+        pros: [Massive JP install base, analog backward compatibility]
+        cons: [EOL transition, limited cloud features]
+        typical_customers: JP SMB, retail chains
+    most_used_eol:
+      - name: NEC SV7000
+        vendor: NEC
+        eol_status: EOL
+        description: Legacy digital PBX, some models EOL, parts discontinued
+        tags: [tdm, digital, fxs]
+        pros: [Was backbone of JP enterprise telephony]
+        cons: [EOL, no IP upgrade path, security risk]
+        typical_customers: JP enterprise, hotels
+
+  kr:
+    cutting_edge:
+      - name: KakaoWork Cloud PBX
+        vendor: Kakao
+        description: Cloud PBX integrated with KakaoTalk business platform
+        tags: [cloud, api, webrtc]
+        pros: [KakaoTalk integration, popular with KR SMB, easy mobile]
+        cons: [KR-only market, Kakao platform dependency, limited SIP trunking]
+        typical_customers: KR SMB, startups
+    mature_active:
+      - name: FreeSWITCH
+        vendor: Open Source
+        description: High-performance open-source soft-switch
+        tags: [ip_pbx, sip, open_source, webrtc]
+        pros: [Carrier-grade scalability, WebRTC support, active community]
+        cons: [Steep learning curve, complex configuration]
+        typical_customers: Telcos, contact centers, large enterprises
+    most_used_current:
+      - name: Ericsson-LG iPECS
+        vendor: Ericsson-LG
+        description: Hybrid IP communication system for KR market
+        tags: [ip_pbx, hybrid, sip, fxs]
+        pros: [Strong KR channel, LG brand, hybrid analog/IP]
+        cons: [Proprietary handsets, limited API]
+        typical_customers: KR SMB, government
+    most_used_eol:
+      - name: Samsung OfficeServ
+        vendor: Samsung
+        eol_status: EOL
+        description: Legacy hybrid PBX, Samsung exited PBX market 2021
+        tags: [tdm, ip_pbx, hybrid, fxs]
+        pros: [Was very popular in KR, large install base]
+        cons: [Discontinued, no firmware, no parts]
+        typical_customers: KR SMB, schools, clinics
+
+  cn:
+    cutting_edge:
+      - name: Alibaba Cloud Call Center
+        vendor: Alibaba Cloud
+        description: AI-powered cloud contact center with PBX capabilities
+        tags: [cloud, ai, api, webrtc]
+        pros: [Alibaba ecosystem, AI integration, massive scale]
+        cons: [China-only compliance, requires ICP license, Great Firewall]
+        typical_customers: CN enterprise, e-commerce
+    mature_active:
+      - name: FreeSWITCH / FusionPBX
+        vendor: Open Source
+        description: Widely deployed by CN integrators as white-label platforms
+        tags: [ip_pbx, sip, open_source, webrtc]
+        pros: [Highly customizable, white-label ready, CN community modified versions]
+        cons: [GPL license complexities in CN, no official CN support]
+        typical_customers: CN SI, calling card operators
+    most_used_current:
+      - name: Huawei eSpace U1900
+        vendor: Huawei
+        description: Enterprise IP-PBX platform dominant in CN market
+        tags: [ip_pbx, sip, enterprise]
+        pros: [Huawei ecosystem, "CN #1 enterprise telephony", government contracts]
+        cons: [US sanctions impact, limited international support, proprietary]
+        typical_customers: CN enterprise, government, SOEs
+    most_used_eol:
+      - name: ZTE ZXV10 P300
+        vendor: ZTE
+        eol_status: EOL
+        description: Legacy hybrid PBX, phased out as ZTE shifts to cloud
+        tags: [tdm, hybrid, fxs, fxo]
+        pros: [Widely deployed across CN SMB, low cost二手]
+        cons: [EOL, no updates, security concerns]
+        typical_customers: CN SMB, county-level government
+
+  in:
+    cutting_edge:
+      - name: Knowlarity Cloud PBX
+        vendor: Knowlarity
+        description: India's largest cloud telephony provider
+        tags: [cloud, api, sms, voice]
+        pros: [India market leader, API-first, pay-per-use, local regulatory compliance]
+        cons: [Limited outside India, voice quality varies by region]
+        typical_customers: IN SMB, e-commerce, real estate
+    mature_active:
+      - name: Exotel
+        vendor: Exotel
+        description: Cloud communication platform for Indian enterprises
+        tags: [cloud, api, cpaas]
+        pros: [Strong IN compliance (TRAI), virtual numbers, developer-friendly]
+        cons: [India-only focus, pricing per call, limited UC features]
+        typical_customers: IN enterprise, fintech, healthcare
+    most_used_current:
+      - name: Matrix SETU
+        vendor: Matrix
+        description: Indian-made hybrid PBX systems widely deployed
+        tags: [ip_pbx, hybrid, fxs, fxo]
+        pros: [Manufactured in India, affordable, rugged, local support]
+        cons: [Limited cloud features, basic VoIP, no API]
+        typical_customers: IN SMB, rural offices, manufacturing
+    most_used_eol:
+      - name: Panasonic KX-TA series
+        vendor: Panasonic
+        eol_status: EOL
+        description: Older analog PBX still operational across India
+        tags: [tdm, analog, fxs, fxo]
+        pros: [Indestructible hardware, very low power, extensive二手 market]
+        cons: [No VoIP, no security, no expansion, EOL decades ago]
+        typical_customers: IN SMB, rural India, government sub-offices
+
+  sg:
+    cutting_edge:
+      - name: RingCentral Singapore
+        vendor: RingCentral
+        description: Full UCaaS with local SG PSTN and data center
+        tags: [cloud, ucaas, api, webrtc]
+        pros: [Local DC, SingTel partnership, strong SEA presence]
+        cons: [Premium pricing, overkill for very small teams]
+        typical_customers: SG SME 10-200 seats, MNC regional HQs
+    most_used_current:
+      - name: SingTel Cloud PBX
+        vendor: SingTel
+        description: Singapore's #1 telco hosted PBX
+        tags: [cloud, hosted, sip]
+        pros: [SingTel QoS, local support, bundling with fiber]
+        cons: [Long contract term, limited advanced features]
+        typical_customers: SG SME, government agencies
+
+  au:
+    cutting_edge:
+      - name: Whispir
+        vendor: Whispir
+        description: Australian cloud communications platform with PBX capabilities
+        tags: [cloud, api, sms, voice]
+        pros: [ASX-listed, compliance-focused, strong AU support]
+        cons: [AU/NZ focus, pricing per interaction]
+        typical_customers: AU enterprise, government, emergency services
+    most_used_current:
+      - name: Telstra Cloud PBX
+        vendor: Telstra
+        description: Australia's #1 telco hosted voice platform
+        tags: [cloud, hosted, sip]
+        pros: [Telstra network, AU-wide coverage, 24/7 support]
+        cons: [Telstra lock-in, expensive, slow feature rollout]
+        typical_customers: AU SME, enterprise, government
+
+  id:
+    most_used_eol:
+      - name: Panasonic KX-TES series
+        vendor: Panasonic
+        eol_status: EOL
+        description: Analog PBX widely distributed across Indonesian archipelago
+        tags: [tdm, analog, fxs]
+        pros: [Available in every Indonesian city, cheap, easy maintenance]
+        cons: [EOL, no VoIP, poor voice quality over long-distance印尼内线]
+        typical_customers: ID SMB, hotels, schools in islands outside Java
+
+europe:
+  gb:
+    cutting_edge:
+      - name: Gamma Horizon
+        vendor: Gamma Communications
+        description: UK's leading UCaaS platform with CPaaS capabilities
+        tags: [cloud, ucaas, api, webrtc]
+        pros: ["UK #1", Ofcom-compliant, full SIP/API, strong channel]
+        cons: [UK-only focus, pricing per user, limited global presence]
+        typical_customers: UK SME 5-500 seats
+      - name: Teams Phone (Direct Routing)
+        vendor: Microsoft
+        description: Microsoft Teams native telephony via Direct Routing
+        tags: [cloud, ucaas, api, webrtc, ai]
+        pros: [Teams integration at scale, meeting+phone one pane, AI features]
+        cons: [Requires E5 or add-on license, SBC complexity, PSTN cost]
+        typical_customers: Enterprise with M365 E5, 100+ users
+    mature_active:
+      - name: 3CX
+        vendor: 3CX
+        description: Market-leading software PBX in the UK
+        tags: [ip_pbx, sip, cloud, windows]
+        pros: [UK-based company, excellent SIP trunking, free for up to 10 users]
+        cons: [Annual pricing model shift (v20), no analog without gateway]
+        typical_customers: UK SME 5-500 seats
+    most_used_current:
+      - name: BT Cloud Voice
+        vendor: BT Group
+        description: UK's incumbent telco cloud voice platform
+        tags: [cloud, hosted, sip]
+        pros: [BT brand trust, UK-wide reach, PSTN migration pathway]
+        cons: [BT bureaucracy, long contracts, limited API]
+        typical_customers: UK enterprise, public sector, multi-site
+    most_used_eol:
+      - name: BT Business Phone System (CS3500)
+        vendor: BT (formerly Siemens)
+        eol_status: EOL
+        description: Legacy digital PBX, PSTN switch-off forced retirement
+        tags: [tdm, digital, fxs]
+        pros: [Was UK's most deployed PBX, well-understood by engineers]
+        cons: [BT PSTN switch-off Jan 2027, forced migration, no modern features]
+        typical_customers: UK enterprise, government, any organization still on ISDN
+
+  de:
+    cutting_edge:
+      - name: Teamphone (Telekom)
+        vendor: Deutsche Telekom
+        description: DT's cloud PBX for German SME with Teams integration
+        tags: [cloud, ucaas, api]
+        pros: [Telekom network, GDPR-compliant, German support]
+        cons: [German language only, DT lock-in, slower innovation]
+        typical_customers: German SME, Mittelstand
+    mature_active:
+      - name: Starface
+        vendor: Starface
+        description: German SIP-PBX platform popular in DACH region
+        tags: [ip_pbx, sip, linux]
+        pros: [German engineering, modular, strong DACH channel]
+        cons: [Limited outside DACH, proprietary hardware option]
+        typical_customers: DACH SME 10-250 seats
+    most_used_current:
+      - name: Auerswald VM series
+        vendor: Auerswald
+        description: German hybrid PBX, widely used in Mittelstand
+        tags: [ip_pbx, hybrid, fxs, fxo]
+        pros: [German quality, analog + VoIP, Made in Germany]
+        cons: [Expensive, limited cloud features, regional focus]
+        typical_customers: German SMB, manufacturing, craft businesses
+    most_used_eol:
+      - name: Siemens HiPath 3000/4000
+        vendor: Siemens/Unify
+        eol_status: EOL
+        description: Legacy enterprise PBX, EOS announced by Atos/Unify
+        tags: [tdm, ip_pbx, digital, fxs]
+        pros: [Was Germany's enterprise standard, huge install base]
+        cons: [EOS, no patches, forced migration, complex decommissioning]
+        typical_customers: German enterprise, hospitals, government
+
+  fr:
+    cutting_edge:
+      - name: Poly (formerly Polycom) on Teams
+        vendor: HP/Poly
+        description: Teams-certified devices for French enterprise telephony
+        tags: [cloud, webrtc, enterprise]
+        pros: [Premium hardware, Teams certified, Microsoft ecosystem]
+        cons: [Expensive hardware, Poly/HP transition uncertainty]
+        typical_customers: French enterprise, meeting rooms
+    most_used_current:
+      - name: Orange Business Cloud PBX
+        vendor: Orange
+        description: France's #1 telco enterprise cloud telephony
+        tags: [cloud, hosted, sip]
+        pros: [Orange network, France-wide, full support]
+        cons: [Orange lock-in, expensive, limited API]
+        typical_customers: French enterprise, public sector
+    most_used_eol:
+      - name: Alcatel-Lucent OmniPCX Office
+        vendor: Alcatel-Lucent (now Nokia)
+        eol_status: EOL
+        description: Legacy IP-PBX, no longer actively developed
+        tags: [ip_pbx, digital, fxs]
+        pros: [Was French enterprise standard, reliable TDM/IP hybrid]
+        cons: [EOL, Nokia no longer invests, security risk, skilled engineers retiring]
+        typical_customers: French enterprise, government, hotels
+
+  se:
+    cutting_edge:
+      - name: Telavox
+        vendor: Telavox
+        description: Nordic cloud communications platform with UCaaS/CPaaS
+        tags: [cloud, ucaas, api]
+        pros: [Nordic market leader, API-first, strong compliance]
+        cons: [Nordic focus, limited outside Scandinavia]
+        typical_customers: Nordic SME, enterprise
+    most_used_current:
+      - name: Telia Fonster
+        vendor: Telia
+        description: Sweden's incumbent cloud PBX
+        tags: [cloud, hosted, sip]
+        pros: [Telia network, all-Sweden coverage]
+        cons: [Carrier pricing, slow innovation]
+        typical_customers: Swedish SME, public sector
+    most_used_eol:
+      - name: Ericsson MD110
+        vendor: Ericsson
+        eol_status: EOL
+        description: Legendary digital PBX, still running in many Swedish orgs
+        tags: [tdm, digital, fxs]
+        pros: [Ericsson reliability, 99.999% uptime reputation]
+        cons: [Clunky maintenance, no IP, PSTN phase-out forcing retirement]
+        typical_customers: Swedish enterprise, government, defense
+
+  it:
+    cutting_edge:
+      - name: CloudItalia UCaaS
+        vendor: CloudItalia (Fastweb)
+        description: Italian cloud UCaaS platform
+        tags: [cloud, ucaas, sip]
+        pros: [Italian support, Fastweb network, local data center]
+        cons: [Italy-only, limited API]
+        typical_customers: Italian SME, enterprise
+    most_used_eol:
+      - name: Siemens HiPath / Unify OpenScape
+        vendor: Siemens/Unify
+        eol_status: EOL
+        description: Legacy IP-PBX, EOS migrating, widely deployed in Italy
+        tags: [ip_pbx, digital, fxs]
+        pros: [Very large IT install base, known by IT SI]
+        cons: [EOS, complex licensing, expensive maintenance]
+        typical_customers: Italian enterprise, manufacturing, banking
+
+  nl:
+    cutting_edge:
+      - name: Voiceworks
+        vendor: Voiceworks
+        description: Dutch wholesale UCaaS platform for service providers
+        tags: [cloud, ucaas, api, wholesale]
+        pros: [API-first carrier platform, strong NL base, PSTN migration]
+        cons: [Wholesale only, not sold directly to end-customers]
+        typical_customers: NL service providers, resellers
+    most_used_current:
+      - name: KPN Voice
+        vendor: KPN
+        description: Dutch incumbent enterprise voice portfolio
+        tags: [cloud, hosted, sip]
+        pros: [KPN network, NL-wide, PSTN alternative]
+        cons: [KPN pricing, limited flexibility]
+        typical_customers: NL enterprise, government
+
+  ch:
+    cutting_edge:
+      - name: Swisscom Cloud PBX
+        vendor: Swisscom
+        description: Swiss-hosted cloud communication platform
+        tags: [cloud, ucaas, sip]
+        pros: [Swiss data center, GDPR/Swiss law, Swisscom reliability]
+        cons: [Premium pricing, Switzerland-only]
+        typical_customers: CH SME, enterprise, financial services
+
+  dk:
+    cutting_edge:
+      - name: Telenor Cloud PBX Denmark
+        vendor: Telenor
+        description: Danish cloud voice platform
+        tags: [cloud, hosted, sip]
+        pros: [Telenor DK network, Nordic reach]
+        cons: [Limited API, carrier SLAs]
+        typical_customers: DK SME, public sector
+
+  "no":
+    most_used_current:
+      - name: Telenor Norway IP Telephony
+        vendor: Telenor
+        description: IP voice from Norway's largest telco
+        tags: [cloud, sip, hosted]
+        pros: [Telenor dominance, PSTN migration complete (2022)]
+        cons: [Telenor pricing, limited third-party SIP]
+        typical_customers: NO enterprise, government
+
+  es:
+    cutting_edge:
+      - name: MasMovil Cloud PBX
+        vendor: MasMovil
+        description: Spanish challenger telco cloud voice
+        tags: [cloud, hosted, sip]
+        pros: [Competitive pricing, Yoigo/MasMovil network, growing]
+        cons: [Spain-only, business support limited vs incumbents]
+        typical_customers: ES SME, startups
+    most_used_eol:
+      - name: Telefonica PBX Legacy
+        vendor: Telefonica
+        eol_status: EOL
+        description: Legacy TDM/hosted PBX from Spanish incumbent
+        tags: [tdm, digital, fxs]
+        pros: [Was Spain's only option, universal availability]
+        cons: [Obsolete tech, Telefonica migration push, PSTN deadline ES 2025]
+        typical_customers: ES enterprise, government, any organization on RDSI
+
+americas:
+  us:
+    cutting_edge:
+      - name: Zoom Phone
+        vendor: Zoom Video Communications
+        description: Cloud-native phone system integrated with Zoom Meetings
+        tags: [cloud, ucaas, webrtc, ai]
+        pros: [Zoom simplicity, fast deployment, AI Companion, competitive pricing]
+        cons: [Meeting-phone integration still maturing, no analog without ATA]
+        typical_customers: US SME 1-500 seats, education, healthcare
+      - name: Twilio Flex
+        vendor: Twilio
+        description: Fully programmable cloud contact center with CPaaS
+        tags: [cloud, cpaas, api, webrtc, ai]
+        pros: [Full programmability, AI/ML integration, global reach, pay-as-you-go]
+        cons: [Requires development investment, not plug-and-play, complex pricing]
+        typical_customers: US tech-forward enterprises, contact centers, developers
+      - name: Five9
+        vendor: Five9
+        description: Intelligent cloud contact center with AI/ML capabilities
+        tags: [cloud, ai, ccaas, api]
+        pros: [AI-native, WFO integration, Salesforce Service Cloud partnership]
+        cons: [Expensive, enterprise-focused, complex setup]
+        typical_customers: US enterprise contact centers
+    mature_active:
+      - name: Cisco Webex Calling
+        vendor: Cisco
+        description: Cloud calling from Webex portfolio
+        tags: [cloud, ucaas, sip, enterprise]
+        pros: [Cisco ecosystem, enterprise security, global compliance]
+        cons: [Complex licensing, Cisco pricing, Webex vs Teams wars]
+        typical_customers: US enterprise, government, Cisco shops
+      - name: Asterisk / FreePBX
+        vendor: Open Source / Sangoma
+        description: Open-source PBX with commercial GUI (FreePBX)
+        tags: [ip_pbx, sip, open_source, linux]
+        pros: [FreePBX GUI simplifies Asterisk, huge US community, commercial support via Sangoma]
+        cons: [Asterisk complexity, GUI adds abstraction layer, security requires attention]
+        typical_customers: US SMB, VARs, tech-savvy IT teams
+    most_used_current:
+      - name: RingCentral MVP
+        vendor: RingCentral
+        description: Market-leading UCaaS platform in North America
+        tags: [cloud, ucaas, api, webrtc]
+        pros: [Market share leader, full UC suite, extensive integrations, global reach]
+        cons: [Past outages, complex add-on pricing, migration from legacy can be painful]
+        typical_customers: US SME 10-1000 seats, healthcare, legal
+      - name: Comcast Business VoiceEdge
+        vendor: Comcast
+        description: Cable MSO hosted voice, bundled with broadband
+        tags: [cloud, hosted, sip]
+        pros: [Comcast broadband bundle, US-wide, managed router included]
+        cons: [Comcast service reputation, limited advanced features, locked to Comcast]
+        typical_customers: US SMB 1-100 seats, retail, restaurants
+    most_used_eol:
+      - name: Avaya IP Office / Aura
+        vendor: Avaya
+        eol_status: EOL
+        description: Legacy on-premise PBX, Avaya restructuring
+        tags: [ip_pbx, hybrid, fxs, sip]
+        pros: [Gargantuan install base, once the enterprise standard]
+        cons: [Avaya bankruptcy, forced cloud migration, declining support quality, parts scarcity]
+        typical_customers: US enterprise, hospitality, government, education
+      - name: Nortel (now Avaya) BCM / CS1000
+        vendor: Nortel / Avaya
+        eol_status: EOL
+        description: Legendary Canadian digital PBX, EOL after Nortel bankruptcy
+        tags: [tdm, digital, fxs]
+        pros: [Best voice quality of its era, very durable, beloved by telecom engineers]
+        cons: [EOL since Nortel bankruptcy 2009, no support, no parts, security nightmare]
+        typical_customers: US/CA enterprise still running on borrowed time
+      - name: Mitel MiVoice Business (older)
+        vendor: Mitel
+        eol_status: EOL
+        description: Legacy Mitel on-prem PBX pre-cloud era
+        tags: [ip_pbx, hybrid, fxs]
+        pros: [Strong install base, particularly in healthcare/government]
+        cons: [Mitel acquisition turmoil, older versions EOL, cloud push]
+        typical_customers: US healthcare, government, hospitality
+
+  ca:
+    cutting_edge:
+      - name: Dialpad
+        vendor: Dialpad
+        description: AI-powered cloud UCaaS platform
+        tags: [cloud, ucaas, ai, webrtc]
+        pros: [AI-native (transcription, sentiment), Vancouver HQ, modern UX]
+        cons: [AI features are add-on cost, less mature than RingCentral, US focus]
+        typical_customers: CA/US tech companies, professional services
+    most_used_current:
+      - name: Bell Canada Unified Communications
+        vendor: Bell Canada
+        description: Canadian incumbent cloud voice
+        tags: [cloud, hosted, sip]
+        pros: [Bell network, Canada-wide, French/English support]
+        cons: [Bell pricing, limited API, long contracts]
+        typical_customers: CA enterprise, government, Quebecois orgs
+    most_used_eol:
+      - name: Nortel BCM / CS1000
+        vendor: Nortel (Avaya)
+        eol_status: EOL
+        description: Nortel infrastructure still running in CA orgs
+        tags: [tdm, digital, fxs]
+        pros: [Nortel pride in Canada, still functional for basic voice]
+        cons: [EOL since 2009, zero security updates, migrating off is urgent]
+        typical_customers: CA enterprise, government, healthcare, education
+
+  br:
+    cutting_edge:
+      - name: Twilio Brazil
+        vendor: Twilio
+        description: CPaaS platform with Brazilian local numbers and compliance
+        tags: [cloud, cpaas, api, webrtc]
+        pros: [API-first, local BR numbers, Anatel compliance, flexible]
+        cons: [Internet-dependent, latency for voice, per-transaction cost]
+        typical_customers: BR tech companies, contact centers, developers
+    mature_active:
+      - name: Issabel
+        vendor: Open Source (BR community)
+        description: Brazilian open-source PBX distribution based on Asterisk
+        tags: [ip_pbx, sip, open_source, linux]
+        pros: [Portuguese UI, BR community, free, active development]
+        cons: [Less international support, documentation mostly in PT-BR]
+        typical_customers: BR SMB, VARs, tech teams
+    most_used_current:
+      - name: VONIX Cloud PBX
+        vendor: VONIX (BrisaNet)
+        description: Brazilian cloud PBX market leader
+        tags: [cloud, hosted, sip]
+        pros: ["BR #1", local support, Anatel compliance, good voice quality]
+        cons: [Brazil-only, limited API, premium pricing]
+        typical_customers: BR SME, enterprise
+    most_used_eol:
+      - name: Panasonic KX-TDA Brazil
+        vendor: Panasonic
+        eol_status: EOL
+        description: Legacy Panasonic PBX widely imported and deployed in BR
+        tags: [tdm, hybrid, fxs]
+        pros: [Affordable, widely available二手, known by all BR integrators]
+        cons: [EOL, no support, high import cost for replacement parts, FXO line scarcity]
+        typical_customers: BR SMB, retail, outskirt offices
+      - name: Intelbras (legacy)
+        vendor: Intelbras
+        eol_status: EOL
+        description: Brazilian national PBX manufacturer legacy TDM lines
+        tags: [tdm, digital, fxs, fxo]
+        pros: [National manufacturer, full BR support, affordable for local market]
+        cons: [TDM-only, no IP migration path, limited features]
+        typical_customers: BR SMB, interior offices, rural areas
+
+  mx:
+    most_used_current:
+      - name: Telmex Cloud PBX
+        vendor: Telmex (América Móvil)
+        description: Mexican incumbent hosted PBX
+        tags: [cloud, hosted, sip]
+        pros: [Telmex network dominance, Mexico-wide coverage, bundled with internet]
+        cons: [Telmex monopoly pricing, support quality, limited features]
+        typical_customers: MX SME, enterprise, government
+
+africa:
+  za:
+    cutting_edge:
+      - name: Spark
+        vendor: Spark (Vox Telecom)
+        description: South African hosted voice platform
+        tags: [cloud, hosted, sip]
+        pros: ["ZA #1", local support, ICASA compliance]
+        cons: [ZA-only, internet-dependent, load shedding impact]
+        typical_customers: ZA SME, enterprise
+    most_used_current:
+      - name: Vox Cloud PBX
+        vendor: Vox Telecom
+        description: South Africa's largest independent telecom cloud PBX
+        tags: [cloud, hosted, sip]
+        pros: [Vox network, ZA-wide, FTTH bundle options]
+        cons: [Vox-dependent, limited outside major cities]
+        typical_customers: ZA SME, enterprise
+    most_used_eol:
+      - name: Alcatel-Lucent OmniPCX (SA installs)
+        vendor: Alcatel-Lucent
+        eol_status: EOL
+        description: Legacy PBX deployed in ZA enterprise pre-cloud
+        tags: [tdm, digital, fxs]
+        pros: [ZA enterprise standard for decades, well-understood]
+        cons: [EOL, no factory support, reliance on二手 market]
+        typical_customers: ZA enterprise, mining companies, government
+
+  ng:
+    cutting_edge:
+      - name: MTN Business Cloud PBX
+        vendor: MTN
+        description: Nigeria's largest operator cloud voice
+        tags: [cloud, hosted, sip]
+        pros: [MTN network dominance, Nigeria-wide, mobile-first]
+        cons: [Internet reliability dependent on 4G/5G coverage, power outages]
+        typical_customers: NG SME, enterprise in Lagos/Abuja
+    most_used_current:
+      - name: IHS Telecoms hosted PBX
+        vendor: IHS Nigeria
+        description: Nigerian-hosted voice platform via tower infrastructure
+        tags: [cloud, hosted, sip]
+        pros: [IHS tower infrastructure, Nigeria focus, improving reliability]
+        cons: [Limited reach beyond major cities, nascent market]
+        typical_customers: NG SME, retail chains
+
+middle_east:
+  ae:
+    cutting_edge:
+      - name: Du Cloud PBX
+        vendor: du (Emirates Integrated)
+        description: UAE cloud voice platform for enterprise
+        tags: [cloud, hosted, sip]
+        pros: ["UAE #2 telco", local hosting, TRA compliance]
+        cons: [UAE-only, expensive, strict VoIP regulation]
+        typical_customers: UAE enterprise, free zones
+    most_used_current:
+      - name: Etisalat Cloud Voice
+        vendor: e& (Etisalat)
+        description: UAE's #1 telco enterprise cloud telephony
+        tags: [cloud, hosted, sip]
+        pros: [Etisalat network monopoly, UAE-wide, integrated with e& services]
+        cons: [Monopoly pricing, strict UAE VoIP regulation, limited third-party SIP]
+        typical_customers: UAE enterprise, government, hospitality
+
+  il:
+    cutting_edge:
+      - name: AudioCodes
+        vendor: AudioCodes
+        description: Israeli voice networking, now cloud voice and meeting AI
+        tags: [cloud, sip, ai, webrtc]
+        pros: [Deep VoIP expertise, SBC/voice tech leader, Microsoft Teams partner]
+        cons: [Complex product portfolio, hardware + cloud transition]
+        typical_customers: Global enterprise, Microsoft Teams shops, service providers
+    mature_active:
+      - name: FreeSWITCH (IL community)
+        vendor: Open Source
+        description: Deployed by Israeli VoIP companies for high-scale platforms
+        tags: [ip_pbx, sip, open_source, webrtc]
+        pros: [Carrier-grade, used by many IL VoIP ops, active IL community]
+        cons: [Expertise required, mainly carrier/wholesale use]
+        typical_customers: IL VoIP carriers, contact center platforms
