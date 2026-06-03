@@ -19,6 +19,7 @@ def logistic(t: np.ndarray, K: float, r: float, t0: float) -> np.ndarray:
 def fit_country(
     years: np.ndarray,
     penetration: np.ndarray,
+    death_threshold: float = 0.05,
     p0: tuple[float, float, float] = (50.0, 0.3, 2010.0),
     bounds: tuple = (
         (0.0, -1.0, 1960.0),
@@ -30,6 +31,7 @@ def fit_country(
     Args:
         years: Array of year values.
         penetration: Array of penetration values.
+        death_threshold: Fraction of K below which the market is "dead".
         p0: Initial guess (K, r, t0).
         bounds: Parameter bounds.
 
@@ -46,7 +48,7 @@ def fit_country(
             "death_year": np.nan, "r_squared": np.nan,
             "fitted": None, "rmse": np.nan,
             "converged": False,
-            "death_threshold": 0.05,
+            "death_threshold": death_threshold,
         }
 
     try:
@@ -64,17 +66,19 @@ def fit_country(
             "death_year": np.nan, "r_squared": np.nan,
             "fitted": None, "rmse": np.nan,
             "converged": False,
-            "death_threshold": 0.05,
+            "death_threshold": death_threshold,
         }
 
-    death_threshold = 0.05
     death_year = np.nan
-    if K_fit > 0 and r_fit != 0:
+    # A "death year" only makes sense for a declining market (r < 0): the curve
+    # falls below death_threshold * K at some point in the future. For a growing
+    # market (r >= 0) the curve never declines, so death_year stays NaN instead
+    # of resolving to a nonsensical year in the past.
+    if K_fit > 0 and r_fit < 0 and 0.0 < death_threshold < 1.0:
         death_val = death_threshold * K_fit
-        if death_val < K_fit:
-            t_death = t0_fit - np.log(K_fit / death_val - 1) / r_fit
-            if death_threshold < 1.0 and t0_fit > 1900:
-                death_year = t_death
+        t_death = t0_fit - np.log(K_fit / death_val - 1) / r_fit
+        if t_death > 1900:
+            death_year = t_death
 
     return {
         "K": K_fit,
@@ -106,7 +110,7 @@ def fit_all_countries(
         ctry = panel[panel[country_col] == country].sort_values(year_col)
         years = ctry[year_col].values
         penetration = ctry[penetration_col].values
-        result = fit_country(years, penetration)
+        result = fit_country(years, penetration, death_threshold=death_threshold)
         result["country"] = country
         result["death_threshold"] = death_threshold
         results.append(result)

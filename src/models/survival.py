@@ -152,7 +152,10 @@ def plot_hazard_ratios(model: CoxPHFitter, ax=None) -> None:
         _, ax = plt.subplots(figsize=(8, max(4, len(model.covariates_) * 0.6)))
 
     hr = model.hazard_ratios_
-    ci = model.confidence_intervals_
+    # confidence_intervals_ are on the coefficient (log-hazard) scale, while
+    # hazard_ratios_ are exp(beta). Exponentiate the bounds so both live on the
+    # same hazard-ratio scale before computing error bars.
+    ci = np.exp(model.confidence_intervals_)
     cis = []
     for c in hr.index:
         if c in ci.index:
@@ -161,12 +164,11 @@ def plot_hazard_ratios(model: CoxPHFitter, ax=None) -> None:
             cis.append((np.nan, np.nan))
 
     y_pos = range(len(hr))
+    xerr_lower = [max(0, hr.values[i] - cis[i][0]) for i in range(len(hr))]
+    xerr_upper = [max(0, cis[i][1] - hr.values[i]) for i in range(len(hr))]
     ax.errorbar(
         hr.values, y_pos,
-        xerr=[
-            [hr.values[i] - cis[i][0] for i in range(len(hr))],
-            [cis[i][1] - hr.values[i] for i in range(len(hr))],
-        ],
+        xerr=[xerr_lower, xerr_upper],
         fmt="o", capsize=5, color="steelblue",
     )
     ax.axvline(1.0, color="gray", linestyle="--", alpha=0.5)

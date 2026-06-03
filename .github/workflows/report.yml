@@ -29,6 +29,14 @@ env:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - name: Checkout repository
@@ -90,7 +98,7 @@ jobs:
       - name: Generate shared research outputs
         run: python scripts/generate_research_outputs.py
 
-      - name: Convert notebooks to HTML and PDF
+      - name: Convert notebooks to HTML
         run: |
           set -euo pipefail
           mkdir -p reports

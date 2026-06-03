@@ -141,17 +141,17 @@ Reports are automatically generated and published via a scheduled GitHub Actions
 
 ### 數學模型
 
-#### 1. S 曲線（邏輯斯諦成長模型）— 趨勢預測
+#### 1. S 曲線（羅吉斯成長模型，又稱邏輯性成長模型）— 趨勢預測
 
 $$P(t) = \frac{K}{1 + e^{-r(t - t_0)}}$$
 
-使用 `scipy.optimize.curve_fit` 對每個國家獨立擬合，預測市場飽和點與死亡點。
+使用 `scipy.optimize.curve_fit` 對每個國家獨立擬合，預測市場飽和點與消亡時間點。
 
 #### 2. Cox 比例風險模型 — 產品存活分析
 
 $$h(t|X) = h_0(t) \exp(\sum_{i=1}^n \beta_i X_i)$$
 
-使用 `lifelines.CoxPHFitter`，共變數包含 PSTN 退場政策（BEREC 資料）、寬頻普及率等。
+使用 `lifelines.CoxPHFitter`，共變量包含 PSTN 退場政策（BEREC 資料）、寬頻普及率等。
 
 ### 資料來源
 

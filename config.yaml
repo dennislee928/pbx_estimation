@@ -35,7 +35,7 @@ model:
 data:
   world_bank:
     indicators:
-      fixed_subs: "IT.NET.USER.ZS"           # Fixed telephone subscriptions (per 100 people)
+      fixed_subs: "IT.MLT.MAIN.P2"           # Fixed telephone subscriptions (per 100 people)
       broadband: "IT.NET.BBND.P2"             # Fixed broadband subscriptions (per 100 people)
       gdp_per_capita: "NY.GDP.PCAP.CD"
       urban_pop: "SP.URB.TOTL.IN.ZS"
