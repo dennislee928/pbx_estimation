@@ -12,9 +12,10 @@ const CATEGORIES = [
   { id: "most_used_eol", labelEn: "Most Used (EOL)", labelZh: "主流採用（已停產）" },
 ];
 
-const SAMPLE_ORDER = ["cutting_edge", "mature_active", "most_used_current", "most_used_eol"];
-const SAMPLES = SAMPLE_ORDER.flatMap((cat) =>
-  registry.filter((row) => row.lifecycle_assigned === cat).slice(0, 8)
+const FULL_REGISTRY = [...registry].sort((a, b) =>
+  `${a.continent}-${a.country_code}-${a.lifecycle_assigned}-${a.name}`.localeCompare(
+    `${b.continent}-${b.country_code}-${b.lifecycle_assigned}-${b.name}`
+  )
 );
 
 const continentCount = new Set(registry.map((row) => row.continent)).size;
@@ -90,8 +91,8 @@ export default function ProductResearchPage() {
             </tr>
           </thead>
           <tbody>
-            {SAMPLES.map((s) => (
-              <tr key={s.name}>
+            {FULL_REGISTRY.map((s) => (
+              <tr key={`${s.vendor}-${s.name}-${s.country_code}`}>
                 <td>{s.name}</td>
                 <td>{s.vendor}</td>
                 <td>{String(s.country_code).toUpperCase()}</td>

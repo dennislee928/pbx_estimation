@@ -85,7 +85,29 @@ def _continent_label(continent: str, lang: str) -> str:
 
 
 def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
-    header = "".join(f"<th>{escape(c)}</th>" for c in columns)
+    labels = {
+        "continent": ("Continent", "洲別"),
+        "country_code": ("Country/region", "國家/地區"),
+        "name": ("Name", "名稱"),
+        "vendor": ("Vendor", "供應商"),
+        "lifecycle_assigned": ("Lifecycle", "生命週期"),
+        "recommended_terminals": ("Recommended terminals", "建議終端數"),
+        "recommended_devices": ("Recommended devices", "建議裝置數"),
+        "cost_band": ("Cost band", "成本區間"),
+        "cost_model": ("Cost model", "成本模式"),
+        "industry_fit": ("Industry fit", "適用產業"),
+        "resource_url": ("Source", "來源"),
+        "pros": ("Pros", "優點"),
+        "cons": ("Cons", "缺點"),
+        "category": ("Category", "類別"),
+        "medium": ("Medium", "媒介"),
+        "latency": ("Latency", "延遲"),
+        "security": ("Security", "安全性"),
+    }
+    header = "".join(
+        f"<th>{escape(labels.get(c, (c, c))[0 if lang == 'en' else 1])}</th>"
+        for c in columns
+    )
     rows = []
     for _, row in df.iterrows():
         cells = []
