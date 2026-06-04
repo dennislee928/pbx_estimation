@@ -1,0 +1,13 @@
+schemaVersion: 1.2
+
+endpoints:
+  - name: research-mcp
+    displayName: PBX Research MCP
+    service:
+      basePath: /
+      port: 8080
+    type: REST
+    schemaFilePath: openapi.yaml
+    networkVisibilities:
+      - Public
+      - Project

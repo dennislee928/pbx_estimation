@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: PBX Research MCP Service
+  version: 1.0.0
+  description: >-
+    Research / crawl / validation / gathering / analysis / report microservice
+    for the PBX market estimation project.
+servers:
+  - url: /
+paths:
+  /healthz:
+    get:
+      summary: Health check and tool listing
+      responses:
+        "200":
+          description: Service is healthy
+  /tools:
+    get:
+      summary: List available tool schemas
+      responses:
+        "200":
+          description: Tool schemas
+  /validate:
+    get:
+      summary: Validate generated research outputs
+      responses:
+        "200":
+          description: Validation summary
+  /analyze:
+    get:
+      summary: Rank alternatives and solutions for a scene
+      parameters:
+        - in: query
+          name: scene
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: top_k
+          schema:
+            type: integer
+            default: 8
+      responses:
+        "200":
+          description: Ranked alternatives and solutions
+  /generate:
+    post:
+      summary: Run the research generation pipeline
+      responses:
+        "200":
+          description: Generation and validation result
+  /tool/{name}:
+    post:
+      summary: Invoke any registered tool by name with JSON arguments
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            enum:
+              - generate_research_outputs
+              - validate_research_outputs
+              - analyze_scene
+              - web_fetch
+              - extract_content
+              - web_crawl
+              - fetch_feed
+              - check_links
+              - validate_dataset
+              - dataset_stats
+              - full_text_search
+              - get_record
+              - search_sources
+              - gather_evidence
+              - build_report
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Tool result
