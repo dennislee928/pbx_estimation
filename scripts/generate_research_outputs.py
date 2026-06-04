@@ -19,6 +19,7 @@ from src.research.tech_researcher import generate_awesome_list
 PROCESSED = ROOT / "data" / "processed"
 FRONTEND_DATA = ROOT / "frontend" / "data"
 REPORTS = ROOT / "reports"
+README = ROOT / "README.md"
 
 SOURCES = [
     {
@@ -73,6 +74,54 @@ def _records(df: pd.DataFrame) -> list[dict]:
 def _write_json(path: Path, data: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+
+def _crawler_context(registry: pd.DataFrame, awesome: pd.DataFrame) -> dict:
+    """Summarize current known options before the crawler/discovery stage expands them."""
+    return {
+        "known_solution_count": int(len(registry)),
+        "known_country_region_count": int(registry["country_code"].nunique()),
+        "known_alternative_count": int(len(awesome)),
+        "known_vendor_count": int(registry["vendor"].nunique()),
+        "existing_solution_names": sorted(registry["name"].dropna().astype(str).unique().tolist()),
+        "existing_alternative_names": sorted(awesome["name"].dropna().astype(str).unique().tolist()),
+        "crawler_instruction": "Use these existing solutions and alternatives as seed knowledge, then search for additional PBX/UCaaS/CPaaS/eSIM/IoT/non-PSTN options not already listed.",
+        "expansion_queries": [
+            "new UCaaS cloud PBX providers by country official",
+            "programmable voice API CPaaS providers official docs",
+            "IoT eSIM cellular connectivity platform edge device command official",
+            "PSTN replacement alarm line IP gateway official",
+            "industrial building automation PBX event relay alternatives official",
+        ],
+    }
+
+
+def _update_readme_summary(registry: pd.DataFrame, awesome: pd.DataFrame) -> None:
+    start = "<!-- CICD_SUMMARY_START -->"
+    end = "<!-- CICD_SUMMARY_END -->"
+    today = date.today().isoformat()
+    summary = "\n".join(
+        [
+            start,
+            "## CI/CD Crawler Summary",
+            "",
+            f"_Last generated: {today}_",
+            "",
+            f"- {len(registry)} 解決方案",
+            f"- {registry['country_code'].nunique()} 國家/地區",
+            f"- {len(awesome)} 替代技術",
+            f"- {registry['vendor'].nunique()} 供應商",
+            "",
+            end,
+        ]
+    )
+    text = README.read_text() if README.exists() else ""
+    if start in text and end in text:
+        before = text.split(start, 1)[0].rstrip()
+        after = text.split(end, 1)[1].lstrip()
+        README.write_text(f"{before}\n\n{summary}\n\n{after}")
+    else:
+        README.write_text(f"{text.rstrip()}\n\n{summary}\n")
 
 
 def _category_label(category: str, lang: str) -> str:
@@ -269,9 +318,11 @@ def main() -> None:
 
     _write_json(FRONTEND_DATA / "solution_registry.json", _records(registry))
     _write_json(FRONTEND_DATA / "awesome_list.json", _records(awesome))
+    _write_json(FRONTEND_DATA / "crawler_seed_context.json", _crawler_context(registry, awesome))
     _write_json(FRONTEND_DATA / "crawler_discoveries.json", discover_solution_catalog())
     _write_json(FRONTEND_DATA / "crawler_taxonomy.json", CRAWLER_TAXONOMY)
     _write_json(FRONTEND_DATA / "research_sources.json", SOURCES)
+    _update_readme_summary(registry, awesome)
 
     for lang in ("en", "zh"):
         md, html = _build_report(lang, registry, awesome)

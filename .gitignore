@@ -38,3 +38,8 @@ frontend/public/reports/
 auto_commit.sh
 
 /frontend/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node
+/frontend/.next
+/frontend/out/_next
+
+# RAG asset staging
+rag_engine/dist/

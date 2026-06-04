@@ -1,0 +1,15 @@
+name = "pbx-rag-engine"
+main = "src/worker.js"
+compatibility_date = "2026-06-04"
+
+[ai]
+binding = "AI"
+
+[[r2_buckets]]
+binding = "RAG_ASSETS"
+bucket_name = "pbx-rag-assets"
+
+[vars]
+USE_WORKERS_AI = "true"
+ALLOWED_ORIGINS = "*"
+RAG_ASSET_PREFIX = "latest"

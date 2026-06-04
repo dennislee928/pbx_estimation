@@ -109,7 +109,7 @@ jupyter notebook notebooks/
 
 Reports are automatically generated and published via a scheduled GitHub Actions workflow:
 
-- **Schedule**: Runs on the 1st of every month at 00:00 UTC
+- **Schedule**: Runs every hour at minute 0 UTC
 - **Trigger**: Also supports manual dispatch via GitHub UI
 - **Steps**:
   1. Fetch latest data from World Bank / ITU / BEREC APIs
@@ -119,6 +119,57 @@ Reports are automatically generated and published via a scheduled GitHub Actions
   5. Optionally deploy to GitHub Pages for a live dashboard
 
 > 💡 **Manual trigger**: Go to `Actions` → `Report Generation` → `Run workflow` → `Run now`
+
+### Cloud RAG Endpoint and Asset Sync
+
+The technology alternatives page uses browser-side keyword filtering for quick narrowing, then calls the Cloudflare Worker in `rag_engine/` for cloud RAG prioritization. CI builds a RAG asset manifest from `reports/`, `data/processed/`, and `frontend/data/`, uploads those assets to Cloudflare R2 when configured, and the Worker retrieves report/data evidence from that bucket.
+
+Set these repository secrets for Cloudflare RAG:
+
+- `CLOUD_RAG_ENDPOINT`
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_R2_BUCKET` (default Worker binding expects `pbx-rag-assets`)
+
+Alternatively, the same self-developed RAG engine can run on Hugging Face Spaces as a Docker Space using the files in `rag_engine/`. Set `HF_TOKEN` and `HF_SPACE_ID` to let CI upload the Docker Space. Hugging Face's default CPU Basic Space is currently free and provides 2 vCPU, 16 GB RAM, and 50 GB non-persistent disk. The Space endpoint can also be used as `CLOUD_RAG_ENDPOINT`.
+
+The endpoint returns:
+
+```json
+{
+  "recommendation": "short explanation",
+  "alternatives": [{ "name": "MQTT (MQTT-SN)", "rank": 1, "reason": "why it fits" }],
+  "solutions": [{ "name": "Twilio Programmable Voice", "rank": 1, "reason": "why it fits" }],
+  "documents": [{ "name": "reports/global_research_report_zh.md", "rank": 1, "excerpt": "retrieved report/data evidence" }]
+}
+```
+
+### NotebookLM
+
+Google NotebookLM does not have an official public file-upload API. CI therefore creates a NotebookLM-ready bundle at `rag_engine/dist/notebooklm_sources/` and includes it in the workflow artifact for manual upload. If you run an unofficial bridge such as `notebooklm-rest-api` or `notebooklm-py`, set `NOTEBOOKLM_UPLOAD_URL` and optionally `NOTEBOOKLM_API_TOKEN`; CI will post the selected sources to that endpoint.
+
+### How to Fill `.env.example`
+
+Copy `.env.example` to `.env` for local work, and add the same names as GitHub repository secrets when CI needs them.
+
+| Variable | How to get the value |
+|----------|----------------------|
+| `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbx-rag-engine.<account>.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
+| `CLOUD_RAG_ENDPOINT` | Same endpoint as above, stored as a GitHub secret so `.github/workflows/report.yml` can pass it into `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` during the Pages build. |
+| `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens → Create Token. Grant enough permission for Workers/R2 object upload for this account/bucket. |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard → select account → account ID in the dashboard/API Tokens page, or run `npx wrangler whoami` after login. |
+| `CLOUDFLARE_R2_BUCKET` | Create an R2 bucket in Cloudflare Dashboard → R2, or run `npx wrangler r2 bucket create pbx-rag-assets`. Default: `pbx-rag-assets`. |
+| `HF_TOKEN` | Hugging Face → Settings → Access Tokens → create a token with write access to Spaces. Use this as a GitHub secret for CI deployment. |
+| `HF_SPACE_ID` | Hugging Face Space repo id in `<username-or-org>/<space-name>` format, for example `dennis-lee/pbx-rag-engine`. Create it in the Hugging Face UI or let CI create it with `hf repos create ... --type space --space-sdk docker --exist-ok`. |
+| `NOTEBOOKLM_UPLOAD_URL` | Optional. Only set this if you run an unofficial NotebookLM bridge such as `notebooklm-rest-api` or `notebooklm-py`. Use that bridge's upload endpoint URL. Leave empty for manual NotebookLM upload. |
+| `NOTEBOOKLM_API_TOKEN` | Optional token required by your unofficial NotebookLM bridge, if any. Leave empty if the bridge does not require bearer auth. |
+| `NOTEBOOKLM_TIMEOUT` | HTTP timeout in seconds for the optional NotebookLM bridge upload. Default: `60`. |
+| `PORT` | Runtime port for the Hugging Face Docker Space/local server. Hugging Face Docker Spaces should use `7860`. |
+| `HOST` | Runtime host bind address. Use `0.0.0.0` for Docker/Hugging Face Spaces. |
+| `ALLOWED_ORIGINS` | CORS allowlist for the RAG engine. Use `*` for quick testing, or the GitHub Pages origin for production. |
+| `HF_RAG_ASSET_ROOT` | Local asset directory inside the Hugging Face Docker container. Keep `/app/dist/hf_assets` unless you change the Dockerfile. |
+| `USE_WORKERS_AI` | Cloudflare Worker setting. Use `true` to call Workers AI for the final summary, or `false` to use deterministic retrieval/ranking only. Hugging Face Docker Space uses deterministic mode. |
 
 ### Dependencies
 
@@ -175,12 +226,56 @@ jupyter notebook notebooks/
 
 透過 GitHub Actions 定期自動執行：
 
-- **排程**：每月 1 日 UTC 00:00 自動執行
+- **排程**：每小時 UTC 整點自動執行
 - **手動觸發**：GitHub UI → Actions → Report Generation → Run workflow
 - **流程**：抓取最新資料 → 依序執行所有 Notebook → 輸出 HTML/PDF 報告 → 產出可下載的 Artifact
+
+### 雲端 RAG 端點與資產同步
+
+技術替代方案頁面只在瀏覽器做快速關鍵字篩選，優先排序由 `rag_engine/` 的 Cloudflare Worker 回傳。CI 會將 `reports/`、`data/processed/`、`frontend/data/` 建成 RAG asset manifest，並在設定 Cloudflare secrets 後上傳到 Cloudflare R2 bucket，Worker 會從 bucket 讀取報告/資料證據。
+
+需要的 repository secrets：`CLOUD_RAG_ENDPOINT`、`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_R2_BUCKET`。
+
+也可以用 `rag_engine/` 的 Dockerfile 將同一套自研 RAG engine 部署到 Hugging Face Spaces。設定 `HF_TOKEN` 與 `HF_SPACE_ID` 後，CI 會上傳 Docker Space；Hugging Face CPU Basic Space 目前為免費方案，並提供 2 vCPU、16 GB RAM、50 GB 非持久磁碟。Space URL 也可作為 `CLOUD_RAG_ENDPOINT`。
+
+### NotebookLM
+
+Google NotebookLM 沒有官方公開檔案上傳 API。CI 會產生 `rag_engine/dist/notebooklm_sources/`，並放進 workflow artifact 供手動上傳。若你自行架設 `notebooklm-rest-api` 或 `notebooklm-py` 這類非官方橋接服務，可設定 `NOTEBOOKLM_UPLOAD_URL` 與選用的 `NOTEBOOKLM_API_TOKEN`，CI 會將來源檔 POST 到該端點。
+
+### 如何填寫 `.env.example`
+
+本機開發可將 `.env.example` 複製為 `.env`；CI 需要使用的值，請用同名 GitHub repository secrets 設定。
+
+| 變數 | 取得方式 |
+|------|----------|
+| `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` / `CLOUD_RAG_ENDPOINT` | 使用 Cloudflare Worker URL 或 Hugging Face Space URL。前者給前端建置用，後者是 CI secret 名稱。 |
+| `RAG_ASSET_PREFIX` | 通常維持 `latest`。只有要分 staging/date namespace 時才需要修改。 |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens 建立，需有 Workers/R2 上傳權限。 |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 帳號頁面取得，或登入後執行 `npx wrangler whoami`。 |
+| `CLOUDFLARE_R2_BUCKET` | Cloudflare R2 建立 bucket；預設 `pbx-rag-assets`。 |
+| `HF_TOKEN` | Hugging Face Settings → Access Tokens 建立具 Spaces 寫入權限的 token。 |
+| `HF_SPACE_ID` | Hugging Face Space repo id，格式 `<username-or-org>/<space-name>`。 |
+| `NOTEBOOKLM_UPLOAD_URL` / `NOTEBOOKLM_API_TOKEN` | 只有使用非官方 NotebookLM bridge 時才填；手動上傳 NotebookLM 時保持空白。 |
+| `NOTEBOOKLM_TIMEOUT` | NotebookLM bridge 上傳 timeout 秒數，預設 `60`。 |
+| `PORT` / `HOST` | Docker/Hugging Face Spaces 使用 `7860` 與 `0.0.0.0`。 |
+| `ALLOWED_ORIGINS` | RAG engine CORS 設定；測試可用 `*`，正式環境建議填 GitHub Pages origin。 |
+| `HF_RAG_ASSET_ROOT` | Hugging Face Docker container 內的資產路徑，除非改 Dockerfile，維持 `/app/dist/hf_assets`。 |
+| `USE_WORKERS_AI` | Cloudflare Worker 是否使用 Workers AI 產生摘要；Hugging Face Docker Space 使用 deterministic ranking。 |
 
 ---
 
 ## License
 
 MIT
+
+<!-- CICD_SUMMARY_START -->
+## CI/CD Crawler Summary
+
+_Last generated: 2026-06-04_
+
+- 156 解決方案
+- 42 國家/地區
+- 106 替代技術
+- 126 供應商
+
+<!-- CICD_SUMMARY_END -->

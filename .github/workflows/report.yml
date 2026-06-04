@@ -8,7 +8,7 @@ on:
       - deploy/pages-ui-crawler
       - deploy/pages-ui-crawler-clean
   schedule:
-    - cron: "0 0 1 * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
     inputs:
       refetch_data:
@@ -17,7 +17,7 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -28,12 +28,13 @@ concurrency:
 env:
   PYTHON_VERSION: "3.12"
   CACHE_VERSION: v1
+  RAG_ASSET_PREFIX: latest
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
 
@@ -44,6 +45,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref }}
+          fetch-depth: 0
 
       - name: Setup Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v5
@@ -83,6 +87,23 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Generate crawler seed context and shared research outputs
+        run: python scripts/generate_research_outputs.py
+
+      - name: Commit crawler summary back to main
+        if: ${{ github.event_name == 'schedule' || github.ref_name == 'main' }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md data/processed/solution_registry.csv data/processed/awesome_list.csv frontend/data/*.json reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
+          if git diff --cached --quiet; then
+            echo "No crawler summary changes to commit."
+          else
+            git commit -m "chore: update crawler summary"
+            git push origin HEAD:main
+          fi
+
       - name: Run notebooks
         run: |
           set -euo pipefail
@@ -98,7 +119,7 @@ jobs:
             papermill "notebooks/${nb}.ipynb" "notebooks/${nb}_output.ipynb" --log-output --progress-bar
           done
 
-      - name: Generate shared research outputs
+      - name: Refresh shared research outputs after notebooks
         run: python scripts/generate_research_outputs.py
 
       - name: Convert notebooks to HTML
@@ -112,7 +133,73 @@ jobs:
               echo "PDF conversion skipped for ${name} (check pandoc/tex installation)"
           done
 
+      - name: Build RAG asset manifest
+        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}"
+
+      - name: Check RAG upload configuration
+        id: rag_config
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
+        run: |
+          set -euo pipefail
+          if [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ] && [ -n "${CLOUDFLARE_R2_BUCKET}" ]; then
+            echo "cloudflare_r2_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "cloudflare_r2_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${NOTEBOOKLM_UPLOAD_URL}" ]; then
+            echo "notebooklm_upload_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "notebooklm_upload_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${HF_TOKEN}" ] && [ -n "${HF_SPACE_ID}" ]; then
+            echo "hf_space_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "hf_space_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload RAG assets to Cloudflare R2
+        if: ${{ steps.rag_config.outputs.cloudflare_r2_enabled == 'true' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: |
+          set -euo pipefail
+          npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
+          while IFS=$'\t' read -r key path; do
+            npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
+          done < rag_engine/dist/rag_assets_r2.tsv
+
+      - name: Upload RAG assets to NotebookLM-compatible endpoint
+        if: ${{ steps.rag_config.outputs.notebooklm_upload_enabled == 'true' }}
+        env:
+          NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
+          NOTEBOOKLM_API_TOKEN: ${{ secrets.NOTEBOOKLM_API_TOKEN }}
+        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notebooklm
+
+      - name: Deploy RAG engine to Hugging Face Docker Space
+        if: ${{ steps.rag_config.outputs.hf_space_enabled == 'true' }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade "huggingface_hub[cli]"
+          hf repos create "${HF_SPACE_ID}" --type space --space-sdk docker --exist-ok
+          hf upload "${HF_SPACE_ID}" rag_engine --type space \
+            --exclude ".wrangler/*" \
+            --exclude "node_modules/*" \
+            --commit-message "deploy rag engine"
+
       - name: Build bilingual frontend
+        env:
+          NEXT_PUBLIC_CLOUD_RAG_ENDPOINT: ${{ secrets.CLOUD_RAG_ENDPOINT }}
         run: |
           set -euo pipefail
           rm -rf site frontend/public/reports
@@ -141,6 +228,8 @@ jobs:
           path: |
             reports/
             data/processed/*.csv
+            rag_engine/dist/rag_assets_manifest.json
+            rag_engine/dist/notebooklm_sources/
           retention-days: 90
 
       - name: Configure GitHub Pages

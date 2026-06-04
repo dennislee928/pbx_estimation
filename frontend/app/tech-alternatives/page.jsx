@@ -3,10 +3,40 @@
 import { useState } from "react";
 import { t, getLang } from "../../i18n";
 import alternatives from "../../data/awesome_list.json";
+import registry from "../../data/solution_registry.json";
+import crawlerSeed from "../../data/crawler_seed_context.json";
 
 const L = getLang();
+const CLOUD_RAG_ENDPOINT = process.env.NEXT_PUBLIC_CLOUD_RAG_ENDPOINT || "";
 
 const splitList = (value) => String(value || "").split("; ").filter(Boolean);
+const searchable = (value) => String(value || "").toLowerCase();
+const tokenize = (value) => searchable(value)
+  .replace(/[^\p{L}\p{N}]+/gu, " ")
+  .split(/\s+/)
+  .filter((token) => token.length >= 2);
+
+const textMatches = (query, row, fields) => {
+  const tokens = tokenize(query);
+  if (!tokens.length) return true;
+  const text = searchable(fields.map((field) => row[field]).join(" "));
+  return tokens.some((token) => text.includes(token));
+};
+
+const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
+  .map((item, index) => {
+    if (typeof item === "string") return { name: item, rank: index + 1, reason: "" };
+    return {
+      name: item.name || item.id || "",
+      rank: Number(item.rank || index + 1),
+      reason: item.reason || item.rationale || item.summary || "",
+      excerpt: item.excerpt || "",
+      key: item.key || "",
+      score: item.score || "",
+      resource_url: item.resource_url || "",
+    };
+  })
+  .filter((item) => item.name);
 const zhMedium = (medium) => ({
   ethernet_ip: "乙太網路/IP",
   ethernet_wire: "乙太網路線路",
@@ -71,7 +101,8 @@ const zhIndustries = (value) => String(value || "")
 
 const zhSummary = (alt) => {
   const category = alt.cat === "web" ? "網路/API" : "非 PSTN 實體線路";
-  return `${category} 替代方案，透過 ${zhMedium(alt.medium)} 作為 PBX/UCaaS 事件到邊緣裝置的控制路徑，適合在傳統電話線不可用、成本過高或需要更多稽核與自動化時採用。`;
+  const protocols = splitList(alt.protocols).slice(0, 3).join("、") || zhMedium(alt.medium);
+  return `${alt.name} 是 ${category} 替代方案，使用 ${protocols} 透過 ${zhMedium(alt.medium)} 承接 PBX/UCaaS 事件並執行「${alt.use_case}」。建議規模為 ${zhScale(alt.recommended_devices)}，常見於 ${zhIndustries(alt.industry_fit)}；延遲 ${alt.latency}、成本 ${zhCost(alt.cost_model)}，適合需要明確稽核、低延遲或脫離傳統電話線觸發的場景。`;
 };
 
 const ALTS = alternatives.map((alt) => ({
@@ -89,8 +120,94 @@ const CAT_FILTERS = [
 
 export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
+  const [scene, setScene] = useState("");
   const [expanded, setExpanded] = useState(null);
-  const filtered = filter === "all" ? ALTS : ALTS.filter((a) => a.cat === filter);
+  const [cloudRag, setCloudRag] = useState(null);
+  const [cloudRagStatus, setCloudRagStatus] = useState("idle");
+  const [cloudRagError, setCloudRagError] = useState("");
+
+  const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
+  const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
+  const cloudDocuments = normalizeCloudItems(cloudRag?.documents);
+  const filtered = ALTS
+    .filter((a) => filter === "all" || a.cat === filter)
+    .filter((a) => textMatches(scene, a, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]))
+    .sort((a, b) => {
+      const aRank = cloudAlternativeRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
+      const bRank = cloudAlternativeRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
+      return aRank - bRank || a.name.localeCompare(b.name);
+    });
+  const rankedSolutions = registry
+    .filter((row) => !scene.trim() || textMatches(scene, row, ["name", "vendor", "continent", "country_code", "lifecycle_assigned", "tags", "description", "pros", "cons", "typical_customers", "recommended_terminals", "cost_band", "industry_fit"]) || cloudSolutionRanks.has(row.name))
+    .sort((a, b) => {
+      const aRank = cloudSolutionRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
+      const bRank = cloudSolutionRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
+      return aRank - bRank || a.name.localeCompare(b.name);
+    })
+    .slice(0, 6);
+  const cloudRecommendation = cloudRag?.recommendation || cloudRag?.summary || "";
+
+  async function askCloudRag() {
+    if (!scene.trim() || !CLOUD_RAG_ENDPOINT) return;
+    setCloudRagStatus("loading");
+    setCloudRagError("");
+    try {
+      const response = await fetch(CLOUD_RAG_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scene,
+          language: L,
+          crawler_seed_context: crawlerSeed,
+          alternatives: ALTS.map(({ name, category, medium, description, protocols, latency, reliability, security, complexity, cost_model, recommended_devices, industry_fit, use_case, pros, cons, resource_url }) => ({
+            name,
+            category,
+            medium,
+            description,
+            protocols,
+            latency,
+            reliability,
+            security,
+            complexity,
+            cost_model,
+            recommended_devices,
+            industry_fit,
+            use_case,
+            pros,
+            cons,
+            resource_url,
+          })),
+          solutions: registry.map(({ name, vendor, continent, country_code, lifecycle_assigned, tags, description, pros, cons, typical_customers, recommended_terminals, cost_band, industry_fit, resource_url }) => ({
+            name,
+            vendor,
+            continent,
+            country_code,
+            lifecycle_assigned,
+            tags,
+            description,
+            pros,
+            cons,
+            typical_customers,
+            recommended_terminals,
+            cost_band,
+            industry_fit,
+            resource_url,
+          })),
+          expected_response_schema: {
+            recommendation: "short explanation",
+            alternatives: [{ name: "existing alternative name", rank: 1, reason: "why it fits" }],
+            solutions: [{ name: "existing solution name", rank: 1, reason: "why it fits" }],
+          },
+        }),
+      });
+      if (!response.ok) throw new Error(`Cloud RAG returned HTTP ${response.status}`);
+      setCloudRag(await response.json());
+      setCloudRagStatus("done");
+    } catch (error) {
+      setCloudRagError(error instanceof Error ? error.message : String(error));
+      setCloudRagStatus("error");
+    }
+  }
 
   return (
     <div className="research-page">
@@ -100,6 +217,51 @@ export default function TechAlternativesPage() {
           ? `Comprehensive catalog of alternatives to physical phone line command/trigger on edge devices. Covers ${ALTS.length} technologies across IP/API, brokered messaging, industrial, wired, wireless, cellular, satellite, serial, and electrical-contact media.`
           : `實體電話線觸發/控制邊緣裝置的替代方案完整目錄。涵蓋 ${ALTS.length} 種技術，橫跨 IP/API、訊息佇列、工業、有線、無線、蜂巢、衛星、序列匯流排與電氣接點媒介。`}
       </p>
+
+      <div className="research-section">
+        <h3>{L === "en" ? "Scene Filter and Cloud RAG" : "場景篩選與雲端 RAG"}</h3>
+        <div className="scene-filter">
+          <label htmlFor="scene-filter">
+            {L === "en" ? "Type your scene" : "輸入你的場景"}
+          </label>
+          <input
+            id="scene-filter"
+            value={scene}
+            onChange={(event) => setScene(event.target.value)}
+            placeholder={L === "en" ? "Example: hotel door relay, remote farm alarm, factory PLC audit trail" : "例如：飯店房門繼電器、偏遠農場警報、工廠 PLC 稽核"}
+          />
+          <small>
+            {L === "en"
+              ? "Keyword filtering happens in the browser. Prioritization is requested from a cloud RAG endpoint configured by NEXT_PUBLIC_CLOUD_RAG_ENDPOINT."
+              : "瀏覽器只做關鍵字篩選；優先排序會送到 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 設定的雲端 RAG 端點處理。"}
+          </small>
+          <button
+            type="button"
+            onClick={askCloudRag}
+            disabled={!scene.trim() || !CLOUD_RAG_ENDPOINT || cloudRagStatus === "loading"}
+            className="cloud-rag-button"
+          >
+            {cloudRagStatus === "loading"
+              ? (L === "en" ? "Asking cloud RAG..." : "雲端 RAG 分析中...")
+              : (L === "en" ? "Prioritize with Cloud RAG" : "使用雲端 RAG 優先排序")}
+          </button>
+          {!CLOUD_RAG_ENDPOINT && (
+            <small className="cloud-rag-warning">
+              {L === "en"
+                ? "Set NEXT_PUBLIC_CLOUD_RAG_ENDPOINT at build time to enable cloud RAG."
+                : "建置時設定 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 才會啟用雲端 RAG。"}
+            </small>
+          )}
+        </div>
+        {(cloudRecommendation || cloudRagStatus === "error") && (
+          <div className="rag-panel">
+            <strong>{L === "en" ? "Cloud RAG recommendation" : "雲端 RAG 建議"}</strong>
+            <p>
+              {cloudRagStatus === "error" ? cloudRagError : cloudRecommendation}
+            </p>
+          </div>
+        )}
+      </div>
 
       <div className="research-section">
         <h3>{L === "en" ? "Filter by Category" : "按類別篩選"}</h3>
@@ -124,7 +286,38 @@ export default function TechAlternativesPage() {
         </div>
       </div>
 
+      {scene.trim() && (
+        <div className="research-section">
+          <h3>{L === "en" ? "Prioritized PBX/UCaaS Solutions" : "優先解決方案"}</h3>
+          <div className="ranked-solution-grid">
+            {rankedSolutions.map((row) => (
+              <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
+                <strong>{row.name}</strong>
+                <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
+                <small>{row.recommended_terminals} · {row.cost_band}</small>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {cloudDocuments.length > 0 && (
+        <div className="research-section">
+          <h3>{L === "en" ? "Retrieved Report/Data Evidence" : "已檢索報告/資料證據"}</h3>
+          <div className="ranked-solution-grid">
+            {cloudDocuments.map((doc) => (
+              <div className="ranked-solution" key={`${doc.rank}-${doc.name}`}>
+                <strong>#{doc.rank} {doc.name}</strong>
+                <span>{doc.reason}</span>
+                {doc.excerpt && <small>{doc.excerpt}</small>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="research-section">
+        <h3>{L === "en" ? `Prioritized Alternatives (${filtered.length})` : `優先替代技術（${filtered.length}）`}</h3>
         {filtered.map((alt) => (
           <div
             key={alt.name}
@@ -144,6 +337,7 @@ export default function TechAlternativesPage() {
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{alt.cat === "web" ? "IP" : "RF"} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
+                {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.latency}</span>
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.complexity}</span>
               </div>
@@ -151,7 +345,7 @@ export default function TechAlternativesPage() {
             {expanded === alt.name && (
               <div style={{ marginTop: 12, borderTop: "1px solid #eee", paddingTop: 12 }}>
                 <p style={{ fontSize: "0.82rem", lineHeight: 1.6, marginTop: 0 }}>
-                  {L === "en" ? alt.description : zhSummary(alt)}
+                  {L === "en" ? `${alt.description} Use case: ${alt.use_case}. Recommended scale: ${alt.recommended_devices}; industry fit: ${alt.industry_fit}.` : zhSummary(alt)}
                 </p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: "0.8rem", marginBottom: 8 }}>
                   <div><strong>{L === "en" ? "Reliability:" : "可靠性:"}</strong> {alt.reliability}</div>

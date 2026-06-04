@@ -1,4 +1,7 @@
 {
   "/_not-found/page": "/_not-found",
-  "/page": "/"
+  "/page": "/",
+  "/market-brief/page": "/market-brief",
+  "/tech-alternatives/page": "/tech-alternatives",
+  "/product-research/page": "/product-research"
 }

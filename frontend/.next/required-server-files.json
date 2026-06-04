@@ -2,7 +2,9 @@
   "version": 1,
   "config": {
     "env": {
-      "NEXT_PUBLIC_BASE_PATH": "/pbx_estimation"
+      "NEXT_PUBLIC_BASE_PATH": "/pbx_estimation/zh",
+      "NEXT_PUBLIC_LANG": "zh",
+      "NEXT_PUBLIC_CLOUD_RAG_ENDPOINT": ""
     },
     "webpack": null,
     "eslint": {
@@ -15,7 +17,7 @@
     "typedRoutes": false,
     "distDir": ".next",
     "cleanDistDir": true,
-    "assetPrefix": "/pbx_estimation",
+    "assetPrefix": "/pbx_estimation/zh",
     "cacheMaxMemorySize": 52428800,
     "configOrigin": "next.config.mjs",
     "useFileSystemPublicRoutes": true,
@@ -49,7 +51,7 @@
         256,
         384
       ],
-      "path": "/pbx_estimation/_next/image/",
+      "path": "/pbx_estimation/zh/_next/image/",
       "loader": "default",
       "loaderFile": "",
       "domains": [],
@@ -73,9 +75,9 @@
       "pagesBufferLength": 5
     },
     "amp": {
-      "canonicalBase": "/pbx_estimation"
+      "canonicalBase": "/pbx_estimation/zh"
     },
-    "basePath": "/pbx_estimation",
+    "basePath": "/pbx_estimation/zh",
     "sassOptions": {},
     "trailingSlash": true,
     "i18n": null,
