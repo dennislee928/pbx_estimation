@@ -358,6 +358,10 @@ jobs:
           cp -R reports/. site/zh/reports/
           cp -R reports/. site/en/reports/
           if [ "${NEXT_PUBLIC_SITE_BASE_PATH}" = "/" ]; then
+            mkdir -p site/pbx_estimation
+            cp -R site/zh site/pbx_estimation/zh
+            cp -R site/en site/pbx_estimation/en
+            cp -R site/reports site/pbx_estimation/reports
             cat > site/index.html <<'EOF'
           <!doctype html>
           <meta charset="utf-8">
