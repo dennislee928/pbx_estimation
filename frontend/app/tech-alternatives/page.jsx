@@ -3,10 +3,41 @@
 import { useState } from "react";
 import { t, getLang } from "../../i18n";
 import alternatives from "../../data/awesome_list.json";
+import registry from "../../data/solution_registry.json";
 
 const L = getLang();
 
 const splitList = (value) => String(value || "").split("; ").filter(Boolean);
+const searchable = (value) => String(value || "").toLowerCase();
+const tokenize = (value) => searchable(value)
+  .replace(/[^\p{L}\p{N}]+/gu, " ")
+  .split(/\s+/)
+  .filter((token) => token.length >= 2);
+
+const SCENE_HINTS = [
+  { keys: ["door", "lock", "access", "門", "門禁", "開門"], terms: ["door", "lock", "access", "relay", "dry contact", "osdp", "wiegand", "building", "門禁", "relay"] },
+  { keys: ["alarm", "siren", "security", "警報", "保全", "告警"], terms: ["alarm", "siren", "security", "contact id", "sia", "cap", "警報", "security"] },
+  { keys: ["factory", "plc", "scada", "industrial", "工廠", "產線", "plc"], terms: ["plc", "scada", "modbus", "opc", "profinet", "ethercat", "industrial", "工業"] },
+  { keys: ["remote", "rural", "farm", "cellular", "遠端", "農場", "偏遠"], terms: ["lorawan", "cellular", "nb-iot", "lte-m", "satellite", "esim", "remote", "agriculture"] },
+  { keys: ["audit", "queue", "retry", "稽核", "重送", "佇列"], terms: ["amqp", "rabbitmq", "kafka", "redis", "nats", "webhook", "audit", "retry", "queue"] },
+  { keys: ["teams", "ucaas", "cloud", "call", "客服", "雲端", "電話"], terms: ["cloud", "ucaas", "cpaas", "api", "voice", "sip", "contact center", "teams"] },
+];
+
+const scoreText = (query, row, fields) => {
+  const tokens = tokenize(query);
+  if (!tokens.length) return 0;
+  const text = searchable(fields.map((field) => row[field]).join(" "));
+  let score = tokens.reduce((sum, token) => sum + (text.includes(token) ? 8 : 0), 0);
+  for (const hint of SCENE_HINTS) {
+    if (hint.keys.some((key) => searchable(query).includes(key))) {
+      score += hint.terms.reduce((sum, term) => sum + (text.includes(term) ? 5 : 0), 0);
+    }
+  }
+  if (/low|cheap|cost|便宜|低成本/.test(searchable(query)) && /low|very low|低/.test(text)) score += 10;
+  if (/secure|security|tls|encrypt|安全|加密/.test(searchable(query)) && /tls|aes|mtls|oauth|secure|安全|加密/.test(text)) score += 10;
+  if (/fast|latency|real.?time|即時|低延遲/.test(searchable(query)) && /<\s?(1|5|10|50|100)ms|real-time|low latency/i.test(text)) score += 10;
+  return score;
+};
 const zhMedium = (medium) => ({
   ethernet_ip: "乙太網路/IP",
   ethernet_wire: "乙太網路線路",
@@ -71,7 +102,8 @@ const zhIndustries = (value) => String(value || "")
 
 const zhSummary = (alt) => {
   const category = alt.cat === "web" ? "網路/API" : "非 PSTN 實體線路";
-  return `${category} 替代方案，透過 ${zhMedium(alt.medium)} 作為 PBX/UCaaS 事件到邊緣裝置的控制路徑，適合在傳統電話線不可用、成本過高或需要更多稽核與自動化時採用。`;
+  const protocols = splitList(alt.protocols).slice(0, 3).join("、") || zhMedium(alt.medium);
+  return `${alt.name} 是 ${category} 替代方案，使用 ${protocols} 透過 ${zhMedium(alt.medium)} 承接 PBX/UCaaS 事件並執行「${alt.use_case}」。建議規模為 ${zhScale(alt.recommended_devices)}，常見於 ${zhIndustries(alt.industry_fit)}；延遲 ${alt.latency}、成本 ${zhCost(alt.cost_model)}，適合需要明確稽核、低延遲或脫離傳統電話線觸發的場景。`;
 };
 
 const ALTS = alternatives.map((alt) => ({
@@ -89,8 +121,20 @@ const CAT_FILTERS = [
 
 export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
+  const [scene, setScene] = useState("");
   const [expanded, setExpanded] = useState(null);
-  const filtered = filter === "all" ? ALTS : ALTS.filter((a) => a.cat === filter);
+  const rankedAlternatives = ALTS
+    .map((alt) => ({ ...alt, matchScore: scoreText(scene, alt, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]) }))
+    .filter((a) => filter === "all" || a.cat === filter)
+    .filter((a) => !scene.trim() || a.matchScore > 0)
+    .sort((a, b) => (scene.trim() ? b.matchScore - a.matchScore : 0) || a.name.localeCompare(b.name));
+  const filtered = rankedAlternatives;
+  const rankedSolutions = registry
+    .map((row) => ({ ...row, matchScore: scoreText(scene, row, ["name", "vendor", "continent", "country_code", "lifecycle_assigned", "tags", "description", "pros", "cons", "typical_customers", "recommended_terminals", "cost_band", "industry_fit"]) }))
+    .filter((row) => scene.trim() && row.matchScore > 0)
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, 6);
+  const ragContext = rankedAlternatives.slice(0, 3);
 
   return (
     <div className="research-page">
@@ -100,6 +144,38 @@ export default function TechAlternativesPage() {
           ? `Comprehensive catalog of alternatives to physical phone line command/trigger on edge devices. Covers ${ALTS.length} technologies across IP/API, brokered messaging, industrial, wired, wireless, cellular, satellite, serial, and electrical-contact media.`
           : `實體電話線觸發/控制邊緣裝置的替代方案完整目錄。涵蓋 ${ALTS.length} 種技術，橫跨 IP/API、訊息佇列、工業、有線、無線、蜂巢、衛星、序列匯流排與電氣接點媒介。`}
       </p>
+
+      <div className="research-section">
+        <h3>{L === "en" ? "Scene Filter and RAG Ranking" : "場景篩選與 RAG 排序"}</h3>
+        <div className="scene-filter">
+          <label htmlFor="scene-filter">
+            {L === "en" ? "Type your scene" : "輸入你的場景"}
+          </label>
+          <input
+            id="scene-filter"
+            value={scene}
+            onChange={(event) => setScene(event.target.value)}
+            placeholder={L === "en" ? "Example: hotel door relay, remote farm alarm, factory PLC audit trail" : "例如：飯店房門繼電器、偏遠農場警報、工廠 PLC 稽核"}
+          />
+          <small>
+            {L === "en"
+              ? "Local RAG-style retrieval ranks alternatives and PBX/UCaaS solutions by scene terms, protocols, industries, security, latency, and cost signals."
+              : "本機 RAG 式檢索會依場景詞、協定、產業、安全、延遲與成本訊號，排序替代技術與 PBX/UCaaS 解決方案。"}
+          </small>
+        </div>
+        {scene.trim() && (
+          <div className="rag-panel">
+            <strong>{L === "en" ? "RAG recommendation" : "RAG 建議"}</strong>
+            <p>
+              {ragContext.length
+                ? (L === "en"
+                  ? `Prioritize ${ragContext.map((a) => a.name).join(", ")} because they match the entered scene across control path, deployment medium, cost/security posture, or industry fit.`
+                  : `優先評估 ${ragContext.map((a) => a.name).join("、")}，因為它們在控制路徑、部署媒介、成本/安全性或產業適配上最符合輸入場景。`)
+                : (L === "en" ? "No strong match yet. Try adding device type, site type, latency, network, or cost constraints." : "目前沒有明確匹配。可加入裝置類型、場域、延遲、網路或成本限制。")}
+            </p>
+          </div>
+        )}
+      </div>
 
       <div className="research-section">
         <h3>{L === "en" ? "Filter by Category" : "按類別篩選"}</h3>
@@ -124,7 +200,23 @@ export default function TechAlternativesPage() {
         </div>
       </div>
 
+      {scene.trim() && (
+        <div className="research-section">
+          <h3>{L === "en" ? "Prioritized PBX/UCaaS Solutions" : "優先解決方案"}</h3>
+          <div className="ranked-solution-grid">
+            {rankedSolutions.map((row) => (
+              <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
+                <strong>{row.name}</strong>
+                <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
+                <small>{row.recommended_terminals} · {row.cost_band}</small>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="research-section">
+        <h3>{L === "en" ? `Prioritized Alternatives (${filtered.length})` : `優先替代技術（${filtered.length}）`}</h3>
         {filtered.map((alt) => (
           <div
             key={alt.name}
@@ -144,6 +236,7 @@ export default function TechAlternativesPage() {
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{alt.cat === "web" ? "IP" : "RF"} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
+                {scene.trim() && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>RAG {alt.matchScore}</span>}
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.latency}</span>
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.complexity}</span>
               </div>
@@ -151,7 +244,7 @@ export default function TechAlternativesPage() {
             {expanded === alt.name && (
               <div style={{ marginTop: 12, borderTop: "1px solid #eee", paddingTop: 12 }}>
                 <p style={{ fontSize: "0.82rem", lineHeight: 1.6, marginTop: 0 }}>
-                  {L === "en" ? alt.description : zhSummary(alt)}
+                  {L === "en" ? `${alt.description} Use case: ${alt.use_case}. Recommended scale: ${alt.recommended_devices}; industry fit: ${alt.industry_fit}.` : zhSummary(alt)}
                 </p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: "0.8rem", marginBottom: 8 }}>
                   <div><strong>{L === "en" ? "Reliability:" : "可靠性:"}</strong> {alt.reliability}</div>

@@ -109,7 +109,7 @@ jupyter notebook notebooks/
 
 Reports are automatically generated and published via a scheduled GitHub Actions workflow:
 
-- **Schedule**: Runs on the 1st of every month at 00:00 UTC
+- **Schedule**: Runs every hour at minute 0 UTC
 - **Trigger**: Also supports manual dispatch via GitHub UI
 - **Steps**:
   1. Fetch latest data from World Bank / ITU / BEREC APIs
@@ -175,7 +175,7 @@ jupyter notebook notebooks/
 
 透過 GitHub Actions 定期自動執行：
 
-- **排程**：每月 1 日 UTC 00:00 自動執行
+- **排程**：每小時 UTC 整點自動執行
 - **手動觸發**：GitHub UI → Actions → Report Generation → Run workflow
 - **流程**：抓取最新資料 → 依序執行所有 Notebook → 輸出 HTML/PDF 報告 → 產出可下載的 Artifact
 
@@ -184,3 +184,15 @@ jupyter notebook notebooks/
 ## License
 
 MIT
+
+<!-- CICD_SUMMARY_START -->
+## CI/CD Crawler Summary
+
+_Last generated: 2026-06-04_
+
+- 156 解決方案
+- 42 國家/地區
+- 106 替代技術
+- 126 供應商
+
+<!-- CICD_SUMMARY_END -->

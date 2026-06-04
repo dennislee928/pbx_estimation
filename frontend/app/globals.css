@@ -295,6 +295,78 @@ body {
   border-bottom: 2px solid #e8edf5;
 }
 
+.scene-filter {
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+
+.scene-filter label {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: #172033;
+}
+
+.scene-filter input {
+  width: 100%;
+  border: 1px solid #b8c7d3;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  color: #172033;
+  background: #fbfcfd;
+}
+
+.scene-filter small,
+.rag-panel p,
+.ranked-solution small {
+  color: #667085;
+  line-height: 1.5;
+}
+
+.rag-panel {
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+
+.rag-panel strong {
+  color: #155e75;
+}
+
+.rag-panel p {
+  margin-top: 6px;
+  font-size: 0.86rem;
+}
+
+.ranked-solution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.ranked-solution {
+  display: grid;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  padding: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ranked-solution span {
+  color: #344054;
+  font-size: 0.82rem;
+}
+
 .research-section p,
 .research-section li {
   font-size: 0.9rem;
