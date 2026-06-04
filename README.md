@@ -147,9 +147,9 @@ For a custom subdomain such as `mtk-pbx-estimation.example.com`, set:
 Then set GitHub repository variables:
 
 - `PAGES_CUSTOM_DOMAIN=mtk-pbx-estimation.example.com`
-- `NEXT_PUBLIC_SITE_BASE_PATH=/`
+- Optional override: `NEXT_PUBLIC_SITE_BASE_PATH=/`
 
-The workflow writes `site/CNAME` and builds frontend assets for root-domain hosting. Keep `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default `https://dennislee928.github.io/pbx_estimation/` URL.
+When `PAGES_CUSTOM_DOMAIN` is set and `NEXT_PUBLIC_SITE_BASE_PATH` is blank, the workflow automatically builds frontend assets for root-domain hosting. Keep `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only when you explicitly want the default `https://dennislee928.github.io/pbx_estimation/` URL.
 
 See `docs/cloudflare_pages_dns.md` for the exact Cloudflare DNS records.
 
@@ -176,7 +176,7 @@ Copy `.env.example` to `.env` for local work, and add the same names as GitHub r
 |----------|----------------------|
 | `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbxanalyze.pcleegood.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
 | `CLOUD_RAG_ENDPOINT` | Same endpoint as above, stored as a GitHub secret so `.github/workflows/report.yml` can pass it into `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` during the Pages build. |
-| `NEXT_PUBLIC_SITE_BASE_PATH` | GitHub repository variable. Use `/pbx_estimation` for the default GitHub Pages project URL, or `/` for a custom domain controlled by Cloudflare DNS. |
+| `NEXT_PUBLIC_SITE_BASE_PATH` | Optional GitHub repository variable. Leave blank when `PAGES_CUSTOM_DOMAIN` is set; the workflow will use `/`. Use `/pbx_estimation` only for the default GitHub Pages project URL. |
 | `PAGES_CUSTOM_DOMAIN` | GitHub repository variable. Set to the custom domain hostname only, for example `mtk-pbx-estimation.example.com`; do not include `https://` or `/pbx_estimation`. |
 | `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare R2 Account API Token, for example your `pbx_application_token`. This is used by Wrangler remote upload. It is not the same as an R2 S3 Access Key ID. |

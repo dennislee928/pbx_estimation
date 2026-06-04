@@ -67,10 +67,10 @@ Use repository variables, not secrets:
 
 ```text
 PAGES_CUSTOM_DOMAIN=mtk-pbx-estimation.dennisleehappy.org
-NEXT_PUBLIC_SITE_BASE_PATH=/
+NEXT_PUBLIC_SITE_BASE_PATH=
 ```
 
-The workflow writes `site/CNAME` and builds frontend assets for root-domain hosting when these variables are set.
+The workflow writes `site/CNAME` and builds frontend assets for root-domain hosting when `PAGES_CUSTOM_DOMAIN` is set. Leave `NEXT_PUBLIC_SITE_BASE_PATH` blank unless you need to override the path; the workflow will use `/` for a custom domain.
 
 ## Expected URLs
 
@@ -86,4 +86,4 @@ Default GitHub Pages project URL:
 https://dennislee928.github.io/pbx_estimation/zh/
 ```
 
-Use `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default project URL. Use `/` for the custom domain.
+Use `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default project URL. For the custom domain, leave it blank or set `/`.
