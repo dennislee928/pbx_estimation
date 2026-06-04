@@ -68,3 +68,52 @@ test("empty scene returns empty ranks", async () => {
   assert.deepEqual(result.alternatives, []);
   assert.deepEqual(result.solutions, []);
 });
+
+test("loads catalog and documents from bucket context", async () => {
+  const objects = new Map([
+    ["latest/rag_engine/dist/rag_assets_manifest.json", {
+      asset_count: 4,
+      assets: [
+        {
+          path: "reports/global_research_report_zh.md",
+          key: "latest/reports/global_research_report_zh.md",
+          content_type: "text/markdown",
+          sha256: "abc",
+        },
+      ],
+    }],
+    ["latest/frontend/data/awesome_list.json", alternatives],
+    ["latest/frontend/data/solution_registry.json", solutions],
+    ["latest/frontend/data/crawler_seed_context.json", {
+      known_solution_count: 156,
+      known_country_region_count: 42,
+      known_alternative_count: 106,
+      known_vendor_count: 126,
+    }],
+    ["latest/reports/global_research_report_zh.md", "hotel door relay dry contact hospitality evidence"],
+  ]);
+  const env = {
+    USE_WORKERS_AI: "false",
+    RAG_ASSET_PREFIX: "latest",
+    RAG_ASSETS: {
+      async get(key) {
+        const value = objects.get(key);
+        if (value === undefined) return null;
+        return {
+          async json() {
+            return value;
+          },
+          async text() {
+            return typeof value === "string" ? value : JSON.stringify(value);
+          },
+        };
+      },
+    },
+  };
+
+  const result = await handleRagRequest({ scene: "hotel door relay" }, env);
+  assert.equal(result.alternatives[0].name, "Dry Contact / Relay Closure");
+  assert.equal(result.documents[0].name, "reports/global_research_report_zh.md");
+  assert.equal(result.evidence.asset_manifest_count, 4);
+  assert.equal(result.evidence.crawler_seed_counts.known_vendor_count, 126);
+});

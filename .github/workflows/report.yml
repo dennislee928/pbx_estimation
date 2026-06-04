@@ -136,26 +136,45 @@ jobs:
       - name: Build RAG asset manifest
         run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}"
 
+      - name: Check RAG upload configuration
+        id: rag_config
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
+        run: |
+          set -euo pipefail
+          if [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ] && [ -n "${CLOUDFLARE_R2_BUCKET}" ]; then
+            echo "cloudflare_r2_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "cloudflare_r2_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${NOTEBOOKLM_UPLOAD_URL}" ]; then
+            echo "notebooklm_upload_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "notebooklm_upload_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Upload RAG assets to Cloudflare R2
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' && env.CLOUDFLARE_R2_BUCKET != '' }}
+        if: ${{ steps.rag_config.outputs.cloudflare_r2_enabled == 'true' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
         run: |
           set -euo pipefail
-          python -c 'import json; m=json.load(open("rag_engine/dist/rag_assets_manifest.json")); [print(f"{a["key"]}\t{a["path"]}") for a in m["assets"]]' > /tmp/rag_assets.tsv
           npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
           while IFS=$'\t' read -r key path; do
             npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
-          done < /tmp/rag_assets.tsv
+          done < rag_engine/dist/rag_assets_r2.tsv
 
-      - name: Upload RAG assets to NoteLLM-compatible endpoint
-        if: ${{ env.NOTELLM_UPLOAD_URL != '' }}
+      - name: Upload RAG assets to NotebookLM-compatible endpoint
+        if: ${{ steps.rag_config.outputs.notebooklm_upload_enabled == 'true' }}
         env:
-          NOTELLM_UPLOAD_URL: ${{ secrets.NOTELLM_UPLOAD_URL }}
-          NOTELLM_API_TOKEN: ${{ secrets.NOTELLM_API_TOKEN }}
-        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notellm
+          NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
+          NOTEBOOKLM_API_TOKEN: ${{ secrets.NOTEBOOKLM_API_TOKEN }}
+        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notebooklm
 
       - name: Build bilingual frontend
         env:
@@ -188,6 +207,8 @@ jobs:
           path: |
             reports/
             data/processed/*.csv
+            rag_engine/dist/rag_assets_manifest.json
+            rag_engine/dist/notebooklm_sources/
           retention-days: 90
 
       - name: Configure GitHub Pages

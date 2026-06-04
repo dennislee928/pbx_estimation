@@ -30,6 +30,10 @@ const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
       name: item.name || item.id || "",
       rank: Number(item.rank || index + 1),
       reason: item.reason || item.rationale || item.summary || "",
+      excerpt: item.excerpt || "",
+      key: item.key || "",
+      score: item.score || "",
+      resource_url: item.resource_url || "",
     };
   })
   .filter((item) => item.name);
@@ -124,6 +128,7 @@ export default function TechAlternativesPage() {
 
   const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
   const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
+  const cloudDocuments = normalizeCloudItems(cloudRag?.documents);
   const filtered = ALTS
     .filter((a) => filter === "all" || a.cat === filter)
     .filter((a) => textMatches(scene, a, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]))
@@ -291,6 +296,21 @@ export default function TechAlternativesPage() {
                 <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
                 <small>{row.recommended_terminals} · {row.cost_band}</small>
               </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {cloudDocuments.length > 0 && (
+        <div className="research-section">
+          <h3>{L === "en" ? "Retrieved Report/Data Evidence" : "已檢索報告/資料證據"}</h3>
+          <div className="ranked-solution-grid">
+            {cloudDocuments.map((doc) => (
+              <div className="ranked-solution" key={`${doc.rank}-${doc.name}`}>
+                <strong>#{doc.rank} {doc.name}</strong>
+                <span>{doc.reason}</span>
+                {doc.excerpt && <small>{doc.excerpt}</small>}
+              </div>
             ))}
           </div>
         </div>

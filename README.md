@@ -120,17 +120,31 @@ Reports are automatically generated and published via a scheduled GitHub Actions
 
 > 💡 **Manual trigger**: Go to `Actions` → `Report Generation` → `Run workflow` → `Run now`
 
-### Cloud RAG Endpoint
+### Cloud RAG Endpoint and Asset Sync
 
-The technology alternatives page uses browser-side keyword filtering for quick narrowing, then calls a cloud RAG service for prioritization. Set the repository secret `CLOUD_RAG_ENDPOINT` before the Pages build. The endpoint should accept a JSON `POST` containing `scene`, current alternatives, current solutions, and crawler seed context, and return:
+The technology alternatives page uses browser-side keyword filtering for quick narrowing, then calls the Cloudflare Worker in `rag_engine/` for cloud RAG prioritization. CI builds a RAG asset manifest from `reports/`, `data/processed/`, and `frontend/data/`, uploads those assets to Cloudflare R2 when configured, and the Worker retrieves report/data evidence from that bucket.
+
+Set these repository secrets for Cloudflare RAG:
+
+- `CLOUD_RAG_ENDPOINT`
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_R2_BUCKET` (default Worker binding expects `pbx-rag-assets`)
+
+The endpoint returns:
 
 ```json
 {
   "recommendation": "short explanation",
   "alternatives": [{ "name": "MQTT (MQTT-SN)", "rank": 1, "reason": "why it fits" }],
-  "solutions": [{ "name": "Twilio Programmable Voice", "rank": 1, "reason": "why it fits" }]
+  "solutions": [{ "name": "Twilio Programmable Voice", "rank": 1, "reason": "why it fits" }],
+  "documents": [{ "name": "reports/global_research_report_zh.md", "rank": 1, "excerpt": "retrieved report/data evidence" }]
 }
 ```
+
+### NotebookLM
+
+Google NotebookLM does not have an official public file-upload API. CI therefore creates a NotebookLM-ready bundle at `rag_engine/dist/notebooklm_sources/` and includes it in the workflow artifact for manual upload. If you run an unofficial bridge such as `notebooklm-rest-api` or `notebooklm-py`, set `NOTEBOOKLM_UPLOAD_URL` and optionally `NOTEBOOKLM_API_TOKEN`; CI will post the selected sources to that endpoint.
 
 ### Dependencies
 
@@ -191,9 +205,15 @@ jupyter notebook notebooks/
 - **手動觸發**：GitHub UI → Actions → Report Generation → Run workflow
 - **流程**：抓取最新資料 → 依序執行所有 Notebook → 輸出 HTML/PDF 報告 → 產出可下載的 Artifact
 
-### 雲端 RAG 端點
+### 雲端 RAG 端點與資產同步
 
-技術替代方案頁面只在瀏覽器做快速關鍵字篩選，優先排序由雲端 RAG 服務回傳。請在 repository secret 設定 `CLOUD_RAG_ENDPOINT`，端點需接受包含 `scene`、現有替代技術、現有解決方案與 crawler seed context 的 JSON `POST`，並回傳 `recommendation`、`alternatives`、`solutions` 排序結果。
+技術替代方案頁面只在瀏覽器做快速關鍵字篩選，優先排序由 `rag_engine/` 的 Cloudflare Worker 回傳。CI 會將 `reports/`、`data/processed/`、`frontend/data/` 建成 RAG asset manifest，並在設定 Cloudflare secrets 後上傳到 Cloudflare R2 bucket，Worker 會從 bucket 讀取報告/資料證據。
+
+需要的 repository secrets：`CLOUD_RAG_ENDPOINT`、`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_R2_BUCKET`。
+
+### NotebookLM
+
+Google NotebookLM 沒有官方公開檔案上傳 API。CI 會產生 `rag_engine/dist/notebooklm_sources/`，並放進 workflow artifact 供手動上傳。若你自行架設 `notebooklm-rest-api` 或 `notebooklm-py` 這類非官方橋接服務，可設定 `NOTEBOOKLM_UPLOAD_URL` 與選用的 `NOTEBOOKLM_API_TOKEN`，CI 會將來源檔 POST 到該端點。
 
 ---
 

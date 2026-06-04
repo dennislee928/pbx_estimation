@@ -1,6 +1,6 @@
 # PBX Cloud RAG Engine
 
-Cloud RAG endpoint for the PBX estimation frontend. It runs as a Cloudflare Worker and accepts the catalog payload already sent by the frontend:
+Cloud RAG endpoint for the PBX estimation frontend. It runs as a Cloudflare Worker, reads uploaded `reports/`, `data/processed/`, and `frontend/data/` assets from Cloudflare R2, and can also accept the catalog payload sent by the frontend:
 
 ```http
 POST /
@@ -22,7 +22,8 @@ Response:
 {
   "recommendation": "short cloud RAG recommendation",
   "alternatives": [{ "name": "Dry Contact / Relay Closure", "rank": 1, "reason": "..." }],
-  "solutions": [{ "name": "Grandstream UCM Series", "rank": 1, "reason": "..." }]
+  "solutions": [{ "name": "Grandstream UCM Series", "rank": 1, "reason": "..." }],
+  "documents": [{ "name": "reports/global_research_report_zh.md", "rank": 1, "excerpt": "..." }]
 }
 ```
 
@@ -44,6 +45,12 @@ npm test
 npm run deploy
 ```
 
+Create the R2 bucket before deploying, or change `bucket_name` in `wrangler.toml`:
+
+```bash
+npx wrangler r2 bucket create pbx-rag-assets
+```
+
 After deploy, copy the Worker URL and set it as the repository secret:
 
 ```text
@@ -57,6 +64,46 @@ The existing GitHub Actions workflow passes that secret into the frontend build 
 - `USE_WORKERS_AI=true`: use Cloudflare Workers AI for the final recommendation paragraph.
 - `USE_WORKERS_AI=false`: use only deterministic retrieval and extractive recommendation.
 - `ALLOWED_ORIGINS=*`: CORS allowlist. Use a comma-separated list for production domains.
+- `RAG_ASSET_PREFIX=latest`: R2 prefix where CI uploads the generated RAG assets.
+
+## CI Asset Upload
+
+The GitHub Actions workflow builds a manifest from:
+
+- `reports/`
+- `data/processed/`
+- `frontend/data/`
+
+Then it uploads those files to Cloudflare R2 when these repository secrets are present:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_R2_BUCKET` (must match `pbx-rag-assets` unless `wrangler.toml` is changed)
+
+The Worker reads:
+
+- `latest/rag_engine/dist/rag_assets_manifest.json`
+- `latest/frontend/data/awesome_list.json`
+- `latest/frontend/data/solution_registry.json`
+- `latest/frontend/data/crawler_seed_context.json`
+- matching report/data text assets for document evidence.
+
+## NotebookLM
+
+Google NotebookLM does not provide an official public upload API. CI therefore creates a NotebookLM-ready manual source bundle at:
+
+```text
+rag_engine/dist/notebooklm_sources/
+```
+
+The bundle is capped at 50 sources and prioritizes generated reports and processed data. It is included in the workflow artifact.
+
+If you run an unofficial bridge such as `notebooklm-rest-api` or `notebooklm-py`, set:
+
+- `NOTEBOOKLM_UPLOAD_URL`
+- `NOTEBOOKLM_API_TOKEN` if your bridge requires it
+
+The workflow will then post the selected source files to that endpoint. This is intentionally opt-in because unofficial NotebookLM automation depends on browser/session internals and can break when Google changes the web app.
 
 ## Free-Tier Notes
 
@@ -64,4 +111,5 @@ Verified on June 4, 2026:
 
 - Cloudflare Workers Free: 100,000 requests/day, 10 ms CPU time, 128 MB memory.
 - Cloudflare Workers AI: included on Workers Free with 10,000 Neurons/day at no charge.
-- Cloudflare Vectorize has a free tier, but this Worker does not require Vectorize because the frontend sends the current catalog payload directly.
+- Cloudflare R2 has a free tier suitable for staging this repository's generated report/data assets.
+- Cloudflare Vectorize has a free tier, but this Worker does not require Vectorize because the catalog and document assets are retrieved from R2.

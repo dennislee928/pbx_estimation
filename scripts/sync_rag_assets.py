@@ -5,6 +5,8 @@ import hashlib
 import json
 import mimetypes
 import os
+import re
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
@@ -19,6 +21,9 @@ DEFAULT_INCLUDE_DIRS = [
     ROOT / "frontend" / "data",
 ]
 DEFAULT_MANIFEST = ROOT / "rag_engine" / "dist" / "rag_assets_manifest.json"
+DEFAULT_NOTEBOOKLM_DIR = ROOT / "rag_engine" / "dist" / "notebooklm_sources"
+NOTEBOOKLM_EXTENSIONS = {".md", ".txt", ".csv", ".json", ".html", ".pdf"}
+NOTEBOOKLM_SOURCE_LIMIT = 50
 
 
 def sha256(path: Path) -> str:
@@ -72,17 +77,88 @@ def write_manifest(manifest: dict, output: Path) -> None:
     output.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
 
 
-def upload_notellm(manifest: dict, endpoint: str, token: str, timeout: int) -> dict:
-    """Upload assets to a NoteLLM-compatible HTTP ingestion endpoint.
+def write_r2_pairs(manifest: dict, output: Path) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("w") as handle:
+        for asset in manifest["assets"]:
+            handle.write(f"{asset['key']}\t{asset['path']}\n")
 
-    Public NoteLLM docs currently expose agent note retrieval but do not document
-    a project file upload API. This adapter intentionally uses a generic,
-    explicit endpoint so CI can integrate with a future NoteLLM upload endpoint,
-    a NoteLLM MCP bridge, or a compatible custom ingestion service.
+
+def slug(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]+", "-", value).strip("-")[:120] or "source"
+
+
+def build_notebooklm_bundle(manifest: dict, output_dir: Path) -> dict:
+    """Create a NotebookLM-ready bundle of at most 50 uploadable sources."""
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    preferred = []
+    for asset in manifest["assets"]:
+        path = ROOT / asset["path"]
+        suffix = path.suffix.lower()
+        if suffix not in NOTEBOOKLM_EXTENSIONS:
+            continue
+        score = 0
+        if asset["path"].startswith("reports/"):
+            score += 40
+        if asset["path"].startswith("data/processed/"):
+            score += 30
+        if asset["path"].startswith("frontend/data/"):
+            score += 20
+        if suffix in {".md", ".txt", ".csv", ".json"}:
+            score += 10
+        preferred.append((score, asset))
+
+    selected = [asset for _, asset in sorted(preferred, key=lambda item: (-item[0], item[1]["path"]))[:NOTEBOOKLM_SOURCE_LIMIT]]
+    source_manifest = {
+        "generated_at": manifest["generated_at"],
+        "source_limit": NOTEBOOKLM_SOURCE_LIMIT,
+        "source_count": len(selected),
+        "sources": [],
+        "notes": [
+            "Google NotebookLM has no official public upload API.",
+            "Upload these files manually, or use an unofficial notebooklm-rest-api/notebooklm-py bridge at your own risk.",
+        ],
+    }
+
+    for index, asset in enumerate(selected, start=1):
+        source_path = ROOT / asset["path"]
+        destination_name = f"{index:02d}-{slug(asset['path'])}"
+        destination = output_dir / destination_name
+        shutil.copy2(source_path, destination)
+        source_manifest["sources"].append(
+            {
+                "source_file": destination.name,
+                "original_path": asset["path"],
+                "sha256": asset["sha256"],
+                "size": asset["size"],
+                "content_type": asset["content_type"],
+            }
+        )
+
+    (output_dir / "notebooklm_sources_manifest.json").write_text(
+        json.dumps(source_manifest, ensure_ascii=False, indent=2) + "\n"
+    )
+    return source_manifest
+
+
+def upload_notebooklm(manifest: dict, endpoint: str, token: str, timeout: int) -> dict:
+    """Upload sources to an unofficial NotebookLM-compatible ingestion endpoint.
+
+    Google NotebookLM has no official public file-upload API. This adapter is
+    intentionally generic so CI can call a self-hosted notebooklm-rest-api
+    instance or a notebooklm-py bridge when the user explicitly provides one.
     """
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     results = []
-    for asset in manifest["assets"]:
+    selected = [
+        asset
+        for asset in manifest["assets"]
+        if (ROOT / asset["path"]).suffix.lower() in NOTEBOOKLM_EXTENSIONS
+    ][:NOTEBOOKLM_SOURCE_LIMIT]
+    for asset in selected:
         path = ROOT / asset["path"]
         with path.open("rb") as handle:
             response = requests.post(
@@ -94,6 +170,7 @@ def upload_notellm(manifest: dict, endpoint: str, token: str, timeout: int) -> d
                     "sha256": asset["sha256"],
                     "content_type": asset["content_type"],
                     "source": "pbx_estimation",
+                    "target": "notebooklm",
                 },
                 files={"file": (path.name, handle, asset["content_type"])},
                 timeout=timeout,
@@ -107,11 +184,13 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build and optionally upload RAG assets.")
     parser.add_argument("--prefix", default=os.environ.get("RAG_ASSET_PREFIX", "latest"))
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    parser.add_argument("--r2-pairs", type=Path, default=ROOT / "rag_engine" / "dist" / "rag_assets_r2.tsv")
+    parser.add_argument("--notebooklm-dir", type=Path, default=DEFAULT_NOTEBOOKLM_DIR)
     parser.add_argument("--include", action="append", type=Path, default=None)
-    parser.add_argument("--notellm-upload-url", default=os.environ.get("NOTELLM_UPLOAD_URL", ""))
-    parser.add_argument("--notellm-token", default=os.environ.get("NOTELLM_API_TOKEN", ""))
-    parser.add_argument("--notellm-timeout", type=int, default=int(os.environ.get("NOTELLM_TIMEOUT", "60")))
-    parser.add_argument("--upload-notellm", action="store_true")
+    parser.add_argument("--notebooklm-upload-url", default=os.environ.get("NOTEBOOKLM_UPLOAD_URL", ""))
+    parser.add_argument("--notebooklm-token", default=os.environ.get("NOTEBOOKLM_API_TOKEN", ""))
+    parser.add_argument("--notebooklm-timeout", type=int, default=int(os.environ.get("NOTEBOOKLM_TIMEOUT", "60")))
+    parser.add_argument("--upload-notebooklm", action="store_true")
     return parser.parse_args()
 
 
@@ -120,12 +199,15 @@ def main() -> None:
     include_paths = [path if path.is_absolute() else ROOT / path for path in (args.include or DEFAULT_INCLUDE_DIRS)]
     manifest = build_manifest(include_paths, args.prefix)
     write_manifest(manifest, args.manifest)
+    write_r2_pairs(manifest, args.r2_pairs)
+    notebooklm_manifest = build_notebooklm_bundle(manifest, args.notebooklm_dir)
     print(f"Wrote {manifest['asset_count']} RAG assets to {args.manifest}")
+    print(f"Wrote {notebooklm_manifest['source_count']} NotebookLM sources to {args.notebooklm_dir}")
 
-    if args.upload_notellm:
-        if not args.notellm_upload_url:
-            raise SystemExit("NOTELLM_UPLOAD_URL is required when --upload-notellm is set")
-        result = upload_notellm(manifest, args.notellm_upload_url, args.notellm_token, args.notellm_timeout)
+    if args.upload_notebooklm:
+        if not args.notebooklm_upload_url:
+            raise SystemExit("NOTEBOOKLM_UPLOAD_URL is required when --upload-notebooklm is set")
+        result = upload_notebooklm(manifest, args.notebooklm_upload_url, args.notebooklm_token, args.notebooklm_timeout)
         print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
