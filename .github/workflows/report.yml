@@ -96,7 +96,9 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md data/processed/solution_registry.csv data/processed/awesome_list.csv frontend/data/*.json reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
+          git add README.md frontend/data/*.json
+          git add -f data/processed/solution_registry.csv data/processed/awesome_list.csv
+          git add -f reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
           if git diff --cached --quiet; then
             echo "No crawler summary changes to commit."
           else
