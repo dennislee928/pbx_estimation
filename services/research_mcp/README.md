@@ -17,6 +17,24 @@ From the repository root:
 docker build -f services/research_mcp/Dockerfile -t pbx-research-mcp:local .
 ```
 
+## Choreo Deployment
+
+Use port `8080`.
+
+The repository root contains `.choreo/component.yaml` for Choreo Dockerfile builds. The Docker image starts the HTTP service by default with:
+
+```bash
+python /app/server.py http
+```
+
+Available HTTP endpoints:
+
+- `GET /healthz`
+- `GET /validate`
+- `GET /analyze?scene=hotel%20door%20relay&top_k=5`
+- `POST /analyze`
+- `POST /generate`
+
 ## CI/CLI Usage
 
 Generate crawler seed context, shared research outputs, reports, and validation summary:
