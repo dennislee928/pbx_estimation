@@ -5,7 +5,9 @@ import json
 import os
 import subprocess
 import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 from typing import Any
 
 
@@ -188,9 +190,67 @@ def run_mcp() -> None:
         print(json.dumps(response), flush=True)
 
 
+class ResearchHttpHandler(BaseHTTPRequestHandler):
+    def _send_json(self, status: int, payload: Any) -> None:
+        body = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _read_json(self) -> dict[str, Any]:
+        length = int(self.headers.get("Content-Length") or "0")
+        if length == 0:
+            return {}
+        raw = self.rfile.read(length).decode("utf-8")
+        return json.loads(raw) if raw else {}
+
+    def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API.
+        parsed = urlparse(self.path)
+        if parsed.path in {"/", "/healthz"}:
+            self._send_json(200, {"ok": True, "service": "pbx-research-mcp"})
+            return
+        if parsed.path == "/validate":
+            self._send_json(200, validate_research_outputs())
+            return
+        if parsed.path == "/analyze":
+            query = parse_qs(parsed.query)
+            scene = query.get("scene", [""])[0]
+            top_k = int(query.get("top_k", ["8"])[0])
+            self._send_json(200, analyze_scene(scene, top_k))
+            return
+        self._send_json(404, {"ok": False, "error": "Not found"})
+
+    def do_POST(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API.
+        try:
+            payload = self._read_json()
+            if self.path == "/analyze":
+                self._send_json(200, analyze_scene(str(payload.get("scene", "")), int(payload.get("top_k", 8))))
+                return
+            if self.path == "/generate":
+                self._send_json(200, generate_research_outputs())
+                return
+            self._send_json(404, {"ok": False, "error": "Not found"})
+        except Exception as error:  # noqa: BLE001 - HTTP boundary should return JSON errors.
+            self._send_json(500, {"ok": False, "error": str(error)})
+
+    def log_message(self, format: str, *args: Any) -> None:
+        print(f"{self.address_string()} - {format % args}", file=sys.stderr)
+
+
+def run_http() -> None:
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "8080"))
+    server = ThreadingHTTPServer((host, port), ResearchHttpHandler)
+    print(f"PBX research MCP HTTP service listening on {host}:{port}", flush=True)
+    server.serve_forever()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="PBX research MCP service and CI runner.")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser("http", help="Run HTTP service for hosted microservice platforms.")
     subparsers.add_parser("mcp", help="Run MCP-compatible stdio server.")
     subparsers.add_parser("generate", help="Generate crawler/research outputs and validate them.")
     subparsers.add_parser("validate", help="Validate generated research outputs.")
@@ -202,6 +262,9 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.command == "http":
+        run_http()
+        return
     if args.command == "mcp":
         run_mcp()
         return

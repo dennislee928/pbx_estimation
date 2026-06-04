@@ -2,7 +2,9 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PBX_WORKSPACE=/workspace
+    PBX_WORKSPACE=/workspace \
+    HOST=0.0.0.0 \
+    PORT=8080
 
 WORKDIR /app
 
@@ -12,4 +14,7 @@ RUN python -m pip install --upgrade pip && \
 
 COPY services/research_mcp/server.py /app/server.py
 
+EXPOSE 8080
+
 ENTRYPOINT ["python", "/app/server.py"]
+CMD ["http"]
