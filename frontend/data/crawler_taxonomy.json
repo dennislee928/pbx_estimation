@@ -6,6 +6,7 @@
   "Regional telco hosted PBX and SIP voice",
   "IoT SIM, eSIM, cellular connectivity",
   "Industrial SCADA/PLC/building control",
-  "Wireless/radio/satellite alternatives",
-  "Serial, wired, relay, and dry-contact triggers"
+  "Non-IP physical, electrical, optical, acoustic, mechanical, pneumatic, hydraulic, and workflow triggers",
+  "Wireless/radio/satellite/cellular alternatives",
+  "Serial, wired, relay, dry-contact, access-control, AV, and building-bus triggers"
 ]
