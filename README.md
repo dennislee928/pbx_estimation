@@ -158,11 +158,11 @@ Copy `.env.example` to `.env` for local work, and add the same names as GitHub r
 | `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbx-rag-engine.<account>.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
 | `CLOUD_RAG_ENDPOINT` | Same endpoint as above, stored as a GitHub secret so `.github/workflows/report.yml` can pass it into `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` during the Pages build. |
 | `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens → Create Token. Grant enough permission for Workers/R2 object upload for this account/bucket. |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare R2 Account API Token, for example your `pbx_application_token`. This is used by Wrangler remote upload. It is not the same as an R2 S3 Access Key ID. |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard → select account → account ID in the dashboard/API Tokens page, or run `npx wrangler whoami` after login. |
 | `CLOUDFLARE_R2_BUCKET` | Create an R2 bucket in Cloudflare Dashboard → R2. Current default: `auto-rag`. |
-| `CLOUDFLARE_R2_S3_ENDPOINT` | Optional but recommended for CI uploads. Cloudflare Dashboard → R2 → bucket → S3 API. For your bucket, use `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`; CI strips the trailing `/auto-rag` when calling the S3 API. |
-| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` | Cloudflare Dashboard → R2 → Manage R2 API Tokens → create an R2 token with object read/write access for the `auto-rag` bucket. Use the Access Key ID. |
+| `CLOUDFLARE_R2_S3_ENDPOINT` | Optional S3 API path. If you use only `pbx_application_token`, leave all S3 fields empty. For S3 API mode, use `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`; CI strips the trailing `/auto-rag` when calling the S3 API. |
+| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` | Cloudflare Dashboard → R2 → Manage R2 API Tokens → create an R2 token with object read/write access for the `auto-rag` bucket. Use the 32-character Access Key ID. Do not use the Cloudflare API token or token id here. |
 | `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY` | Secret Access Key shown once when creating the R2 S3 API token. Store only as a local `.env` value or GitHub secret. |
 | `HF_TOKEN` | Hugging Face → Settings → Access Tokens → create a token with write access to Spaces. Use this as a GitHub secret for CI deployment. |
 | `HF_SPACE_ID` | Hugging Face Space repo id in `<username-or-org>/<space-name>` format, for example `dennis-lee/pbx-rag-engine`. Create it in the Hugging Face UI or let CI create it with `hf repos create ... --type space --space-sdk docker --exist-ok`. |
@@ -254,11 +254,11 @@ Google NotebookLM 沒有官方公開檔案上傳 API。CI 會產生 `rag_engine/
 |------|----------|
 | `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` / `CLOUD_RAG_ENDPOINT` | 使用 Cloudflare Worker URL 或 Hugging Face Space URL。前者給前端建置用，後者是 CI secret 名稱。 |
 | `RAG_ASSET_PREFIX` | 通常維持 `latest`。只有要分 staging/date namespace 時才需要修改。 |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens 建立，需有 Workers/R2 上傳權限。 |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare R2 Account API Token，例如你的 `pbx_application_token`。這是給 Wrangler remote upload 用，不是 R2 S3 Access Key ID。 |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 帳號頁面取得，或登入後執行 `npx wrangler whoami`。 |
 | `CLOUDFLARE_R2_BUCKET` | Cloudflare R2 建立 bucket；目前預設 `auto-rag`。 |
-| `CLOUDFLARE_R2_S3_ENDPOINT` | 選填但建議 CI 使用。Cloudflare Dashboard → R2 → bucket → S3 API；你的 bucket 可填 `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`。 |
-| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` / `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY` | Cloudflare Dashboard → R2 → Manage R2 API Tokens 建立限定 `auto-rag` bucket 的讀寫 token；secret key 只會顯示一次，放 GitHub secret。 |
+| `CLOUDFLARE_R2_S3_ENDPOINT` | 選填的 S3 API 路徑。如果只使用 `pbx_application_token`，請讓所有 S3 欄位保持空白。若使用 S3 API 模式，你的 bucket 可填 `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`。 |
+| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` / `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY` | Cloudflare Dashboard → R2 → Manage R2 API Tokens 建立限定 `auto-rag` bucket 的讀寫 token；Access Key ID 是 32 字元，不是 Cloudflare API token 或 token id。secret key 只會顯示一次，放 GitHub secret。 |
 | `HF_TOKEN` | Hugging Face Settings → Access Tokens 建立具 Spaces 寫入權限的 token。 |
 | `HF_SPACE_ID` | Hugging Face Space repo id，格式 `<username-or-org>/<space-name>`。 |
 | `NOTEBOOKLM_UPLOAD_URL` / `NOTEBOOKLM_API_TOKEN` | 只有使用非官方 NotebookLM bridge 時才填；手動上傳 NotebookLM 時保持空白。 |

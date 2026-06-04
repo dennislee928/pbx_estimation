@@ -195,6 +195,18 @@ jobs:
             done < rag_engine/dist/rag_assets_r2.tsv
           }
 
+          can_use_s3_api() {
+            if [ -z "${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}" ] || [ -z "${CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY}" ]; then
+              return 1
+            fi
+            if [ "${#CLOUDFLARE_R2_S3_ACCESS_KEY_ID}" -ne 32 ]; then
+              echo "CLOUDFLARE_R2_S3_ACCESS_KEY_ID is ${#CLOUDFLARE_R2_S3_ACCESS_KEY_ID} characters; Cloudflare R2 S3 Access Key IDs are 32 characters."
+              echo "Use Cloudflare Dashboard > R2 > Manage R2 API Tokens > Access Key ID, not the Cloudflare API token or token id."
+              return 1
+            fi
+            return 0
+          }
+
           upload_with_s3_api() {
             python -m pip install --quiet awscli
             export AWS_ACCESS_KEY_ID="${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}"
@@ -209,10 +221,14 @@ jobs:
             done < rag_engine/dist/rag_assets_r2.tsv
           }
 
-          if [ -n "${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}" ] && [ -n "${CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY}" ]; then
+          if can_use_s3_api; then
             upload_with_s3_api
-          else
+          elif [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ]; then
+            echo "Falling back to Wrangler remote upload."
             upload_with_wrangler_remote
+          else
+            echo "Cloudflare R2 upload is configured but no valid upload credentials are available."
+            exit 1
           fi
 
       - name: Upload RAG assets to NotebookLM-compatible endpoint

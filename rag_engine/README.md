@@ -117,13 +117,15 @@ The GitHub Actions workflow builds a manifest from:
 
 Then it uploads those files to Cloudflare R2 when these repository secrets are present:
 
-- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_API_TOKEN`, for example your `pbx_application_token`; this is used by Wrangler remote upload
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_R2_BUCKET` (must match `auto-rag` unless `wrangler.toml` is changed)
 - Optional S3 API upload secrets:
   - `CLOUDFLARE_R2_S3_ENDPOINT`, for example `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`
-  - `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`
+  - `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`, the 32-character R2 S3 Access Key ID, not the Cloudflare API token or token id
   - `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY`
+
+If you only have `pbx_application_token`, leave the S3 API secrets empty. CI will use `wrangler r2 object put --remote`.
 
 The Worker reads:
 
