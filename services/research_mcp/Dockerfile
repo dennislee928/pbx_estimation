@@ -47,8 +47,8 @@ COPY services/research_mcp/server.py /app/server.py
 # Non-root runtime. The mounted /workspace is read at runtime by the pipeline.
 RUN useradd --create-home --uid 10001 research \
     && mkdir -p /workspace \
-    && chown -R research:research /app /workspace
-USER research
+    && chown -R 10001:10001 /app /workspace
+USER 10001
 
 EXPOSE 8080
 
