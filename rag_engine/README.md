@@ -64,7 +64,7 @@ npm run deploy
 Create the R2 bucket before deploying, or change `bucket_name` in `wrangler.toml`:
 
 ```bash
-npx wrangler r2 bucket create pbx-rag-assets
+npx wrangler r2 bucket create auto-rag
 ```
 
 After deploy, copy the Worker URL and set it as the repository secret:
@@ -119,7 +119,11 @@ Then it uploads those files to Cloudflare R2 when these repository secrets are p
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_R2_BUCKET` (must match `pbx-rag-assets` unless `wrangler.toml` is changed)
+- `CLOUDFLARE_R2_BUCKET` (must match `auto-rag` unless `wrangler.toml` is changed)
+- Optional S3 API upload secrets:
+  - `CLOUDFLARE_R2_S3_ENDPOINT`, for example `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`
+  - `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`
+  - `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY`
 
 The Worker reads:
 

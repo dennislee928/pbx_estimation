@@ -7,7 +7,7 @@ binding = "AI"
 
 [[r2_buckets]]
 binding = "RAG_ASSETS"
-bucket_name = "pbx-rag-assets"
+bucket_name = "auto-rag"
 
 [vars]
 USE_WORKERS_AI = "true"

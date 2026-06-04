@@ -129,7 +129,8 @@ Set these repository secrets for Cloudflare RAG:
 - `CLOUD_RAG_ENDPOINT`
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_R2_BUCKET` (default Worker binding expects `pbx-rag-assets`)
+- `CLOUDFLARE_R2_BUCKET` (current Worker binding expects `auto-rag`)
+- Optional S3 API upload secrets: `CLOUDFLARE_R2_S3_ENDPOINT`, `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`, `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY`
 
 Alternatively, the same self-developed RAG engine can run on Hugging Face Spaces as a Docker Space using the files in `rag_engine/`. Set `HF_TOKEN` and `HF_SPACE_ID` to let CI upload the Docker Space. Hugging Face's default CPU Basic Space is currently free and provides 2 vCPU, 16 GB RAM, and 50 GB non-persistent disk. The Space endpoint can also be used as `CLOUD_RAG_ENDPOINT`.
 
@@ -159,7 +160,10 @@ Copy `.env.example` to `.env` for local work, and add the same names as GitHub r
 | `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens → Create Token. Grant enough permission for Workers/R2 object upload for this account/bucket. |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard → select account → account ID in the dashboard/API Tokens page, or run `npx wrangler whoami` after login. |
-| `CLOUDFLARE_R2_BUCKET` | Create an R2 bucket in Cloudflare Dashboard → R2, or run `npx wrangler r2 bucket create pbx-rag-assets`. Default: `pbx-rag-assets`. |
+| `CLOUDFLARE_R2_BUCKET` | Create an R2 bucket in Cloudflare Dashboard → R2. Current default: `auto-rag`. |
+| `CLOUDFLARE_R2_S3_ENDPOINT` | Optional but recommended for CI uploads. Cloudflare Dashboard → R2 → bucket → S3 API. For your bucket, use `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`; CI strips the trailing `/auto-rag` when calling the S3 API. |
+| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` | Cloudflare Dashboard → R2 → Manage R2 API Tokens → create an R2 token with object read/write access for the `auto-rag` bucket. Use the Access Key ID. |
+| `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY` | Secret Access Key shown once when creating the R2 S3 API token. Store only as a local `.env` value or GitHub secret. |
 | `HF_TOKEN` | Hugging Face → Settings → Access Tokens → create a token with write access to Spaces. Use this as a GitHub secret for CI deployment. |
 | `HF_SPACE_ID` | Hugging Face Space repo id in `<username-or-org>/<space-name>` format, for example `dennis-lee/pbx-rag-engine`. Create it in the Hugging Face UI or let CI create it with `hf repos create ... --type space --space-sdk docker --exist-ok`. |
 | `NOTEBOOKLM_UPLOAD_URL` | Optional. Only set this if you run an unofficial NotebookLM bridge such as `notebooklm-rest-api` or `notebooklm-py`. Use that bridge's upload endpoint URL. Leave empty for manual NotebookLM upload. |
@@ -252,7 +256,9 @@ Google NotebookLM 沒有官方公開檔案上傳 API。CI 會產生 `rag_engine/
 | `RAG_ASSET_PREFIX` | 通常維持 `latest`。只有要分 staging/date namespace 時才需要修改。 |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens 建立，需有 Workers/R2 上傳權限。 |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 帳號頁面取得，或登入後執行 `npx wrangler whoami`。 |
-| `CLOUDFLARE_R2_BUCKET` | Cloudflare R2 建立 bucket；預設 `pbx-rag-assets`。 |
+| `CLOUDFLARE_R2_BUCKET` | Cloudflare R2 建立 bucket；目前預設 `auto-rag`。 |
+| `CLOUDFLARE_R2_S3_ENDPOINT` | 選填但建議 CI 使用。Cloudflare Dashboard → R2 → bucket → S3 API；你的 bucket 可填 `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`。 |
+| `CLOUDFLARE_R2_S3_ACCESS_KEY_ID` / `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY` | Cloudflare Dashboard → R2 → Manage R2 API Tokens 建立限定 `auto-rag` bucket 的讀寫 token；secret key 只會顯示一次，放 GitHub secret。 |
 | `HF_TOKEN` | Hugging Face Settings → Access Tokens 建立具 Spaces 寫入權限的 token。 |
 | `HF_SPACE_ID` | Hugging Face Space repo id，格式 `<username-or-org>/<space-name>`。 |
 | `NOTEBOOKLM_UPLOAD_URL` / `NOTEBOOKLM_API_TOKEN` | 只有使用非官方 NotebookLM bridge 時才填；手動上傳 NotebookLM 時保持空白。 |
@@ -279,4 +285,3 @@ _Last generated: 2026-06-04_
 - 126 供應商
 
 <!-- CICD_SUMMARY_END -->
-
