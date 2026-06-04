@@ -133,6 +133,8 @@ jobs:
           done
 
       - name: Build bilingual frontend
+        env:
+          NEXT_PUBLIC_CLOUD_RAG_ENDPOINT: ${{ secrets.CLOUD_RAG_ENDPOINT }}
         run: |
           set -euo pipefail
           rm -rf site frontend/public/reports

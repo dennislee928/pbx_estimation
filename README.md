@@ -120,6 +120,18 @@ Reports are automatically generated and published via a scheduled GitHub Actions
 
 > 💡 **Manual trigger**: Go to `Actions` → `Report Generation` → `Run workflow` → `Run now`
 
+### Cloud RAG Endpoint
+
+The technology alternatives page uses browser-side keyword filtering for quick narrowing, then calls a cloud RAG service for prioritization. Set the repository secret `CLOUD_RAG_ENDPOINT` before the Pages build. The endpoint should accept a JSON `POST` containing `scene`, current alternatives, current solutions, and crawler seed context, and return:
+
+```json
+{
+  "recommendation": "short explanation",
+  "alternatives": [{ "name": "MQTT (MQTT-SN)", "rank": 1, "reason": "why it fits" }],
+  "solutions": [{ "name": "Twilio Programmable Voice", "rank": 1, "reason": "why it fits" }]
+}
+```
+
 ### Dependencies
 
 `pandas`, `numpy`, `scipy`, `matplotlib`, `seaborn`, `wbgapi`, `lifelines`, `scikit-learn`, `pyyaml`, `requests`, `jupyter`, `nbconvert`, `papermill`
@@ -178,6 +190,10 @@ jupyter notebook notebooks/
 - **排程**：每小時 UTC 整點自動執行
 - **手動觸發**：GitHub UI → Actions → Report Generation → Run workflow
 - **流程**：抓取最新資料 → 依序執行所有 Notebook → 輸出 HTML/PDF 報告 → 產出可下載的 Artifact
+
+### 雲端 RAG 端點
+
+技術替代方案頁面只在瀏覽器做快速關鍵字篩選，優先排序由雲端 RAG 服務回傳。請在 repository secret 設定 `CLOUD_RAG_ENDPOINT`，端點需接受包含 `scene`、現有替代技術、現有解決方案與 crawler seed context 的 JSON `POST`，並回傳 `recommendation`、`alternatives`、`solutions` 排序結果。
 
 ---
 

@@ -321,11 +321,33 @@ body {
   background: #fbfcfd;
 }
 
+.cloud-rag-button {
+  justify-self: start;
+  border: 1px solid #0f766e;
+  background: #0f766e;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cloud-rag-button:disabled {
+  background: #dbe3ea;
+  border-color: #c8d2dc;
+  color: #667085;
+  cursor: not-allowed;
+}
+
 .scene-filter small,
 .rag-panel p,
 .ranked-solution small {
   color: #667085;
   line-height: 1.5;
+}
+
+.cloud-rag-warning {
+  color: #92400e;
 }
 
 .rag-panel {

@@ -4,8 +4,10 @@ import { useState } from "react";
 import { t, getLang } from "../../i18n";
 import alternatives from "../../data/awesome_list.json";
 import registry from "../../data/solution_registry.json";
+import crawlerSeed from "../../data/crawler_seed_context.json";
 
 const L = getLang();
+const CLOUD_RAG_ENDPOINT = process.env.NEXT_PUBLIC_CLOUD_RAG_ENDPOINT || "";
 
 const splitList = (value) => String(value || "").split("; ").filter(Boolean);
 const searchable = (value) => String(value || "").toLowerCase();
@@ -14,30 +16,23 @@ const tokenize = (value) => searchable(value)
   .split(/\s+/)
   .filter((token) => token.length >= 2);
 
-const SCENE_HINTS = [
-  { keys: ["door", "lock", "access", "門", "門禁", "開門"], terms: ["door", "lock", "access", "relay", "dry contact", "osdp", "wiegand", "building", "門禁", "relay"] },
-  { keys: ["alarm", "siren", "security", "警報", "保全", "告警"], terms: ["alarm", "siren", "security", "contact id", "sia", "cap", "警報", "security"] },
-  { keys: ["factory", "plc", "scada", "industrial", "工廠", "產線", "plc"], terms: ["plc", "scada", "modbus", "opc", "profinet", "ethercat", "industrial", "工業"] },
-  { keys: ["remote", "rural", "farm", "cellular", "遠端", "農場", "偏遠"], terms: ["lorawan", "cellular", "nb-iot", "lte-m", "satellite", "esim", "remote", "agriculture"] },
-  { keys: ["audit", "queue", "retry", "稽核", "重送", "佇列"], terms: ["amqp", "rabbitmq", "kafka", "redis", "nats", "webhook", "audit", "retry", "queue"] },
-  { keys: ["teams", "ucaas", "cloud", "call", "客服", "雲端", "電話"], terms: ["cloud", "ucaas", "cpaas", "api", "voice", "sip", "contact center", "teams"] },
-];
-
-const scoreText = (query, row, fields) => {
+const textMatches = (query, row, fields) => {
   const tokens = tokenize(query);
-  if (!tokens.length) return 0;
+  if (!tokens.length) return true;
   const text = searchable(fields.map((field) => row[field]).join(" "));
-  let score = tokens.reduce((sum, token) => sum + (text.includes(token) ? 8 : 0), 0);
-  for (const hint of SCENE_HINTS) {
-    if (hint.keys.some((key) => searchable(query).includes(key))) {
-      score += hint.terms.reduce((sum, term) => sum + (text.includes(term) ? 5 : 0), 0);
-    }
-  }
-  if (/low|cheap|cost|便宜|低成本/.test(searchable(query)) && /low|very low|低/.test(text)) score += 10;
-  if (/secure|security|tls|encrypt|安全|加密/.test(searchable(query)) && /tls|aes|mtls|oauth|secure|安全|加密/.test(text)) score += 10;
-  if (/fast|latency|real.?time|即時|低延遲/.test(searchable(query)) && /<\s?(1|5|10|50|100)ms|real-time|low latency/i.test(text)) score += 10;
-  return score;
+  return tokens.some((token) => text.includes(token));
 };
+
+const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
+  .map((item, index) => {
+    if (typeof item === "string") return { name: item, rank: index + 1, reason: "" };
+    return {
+      name: item.name || item.id || "",
+      rank: Number(item.rank || index + 1),
+      reason: item.reason || item.rationale || item.summary || "",
+    };
+  })
+  .filter((item) => item.name);
 const zhMedium = (medium) => ({
   ethernet_ip: "乙太網路/IP",
   ethernet_wire: "乙太網路線路",
@@ -123,18 +118,91 @@ export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
   const [scene, setScene] = useState("");
   const [expanded, setExpanded] = useState(null);
-  const rankedAlternatives = ALTS
-    .map((alt) => ({ ...alt, matchScore: scoreText(scene, alt, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]) }))
+  const [cloudRag, setCloudRag] = useState(null);
+  const [cloudRagStatus, setCloudRagStatus] = useState("idle");
+  const [cloudRagError, setCloudRagError] = useState("");
+
+  const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
+  const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
+  const filtered = ALTS
     .filter((a) => filter === "all" || a.cat === filter)
-    .filter((a) => !scene.trim() || a.matchScore > 0)
-    .sort((a, b) => (scene.trim() ? b.matchScore - a.matchScore : 0) || a.name.localeCompare(b.name));
-  const filtered = rankedAlternatives;
+    .filter((a) => textMatches(scene, a, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]))
+    .sort((a, b) => {
+      const aRank = cloudAlternativeRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
+      const bRank = cloudAlternativeRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
+      return aRank - bRank || a.name.localeCompare(b.name);
+    });
   const rankedSolutions = registry
-    .map((row) => ({ ...row, matchScore: scoreText(scene, row, ["name", "vendor", "continent", "country_code", "lifecycle_assigned", "tags", "description", "pros", "cons", "typical_customers", "recommended_terminals", "cost_band", "industry_fit"]) }))
-    .filter((row) => scene.trim() && row.matchScore > 0)
-    .sort((a, b) => b.matchScore - a.matchScore)
+    .filter((row) => !scene.trim() || textMatches(scene, row, ["name", "vendor", "continent", "country_code", "lifecycle_assigned", "tags", "description", "pros", "cons", "typical_customers", "recommended_terminals", "cost_band", "industry_fit"]) || cloudSolutionRanks.has(row.name))
+    .sort((a, b) => {
+      const aRank = cloudSolutionRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
+      const bRank = cloudSolutionRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
+      return aRank - bRank || a.name.localeCompare(b.name);
+    })
     .slice(0, 6);
-  const ragContext = rankedAlternatives.slice(0, 3);
+  const cloudRecommendation = cloudRag?.recommendation || cloudRag?.summary || "";
+
+  async function askCloudRag() {
+    if (!scene.trim() || !CLOUD_RAG_ENDPOINT) return;
+    setCloudRagStatus("loading");
+    setCloudRagError("");
+    try {
+      const response = await fetch(CLOUD_RAG_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scene,
+          language: L,
+          crawler_seed_context: crawlerSeed,
+          alternatives: ALTS.map(({ name, category, medium, description, protocols, latency, reliability, security, complexity, cost_model, recommended_devices, industry_fit, use_case, pros, cons, resource_url }) => ({
+            name,
+            category,
+            medium,
+            description,
+            protocols,
+            latency,
+            reliability,
+            security,
+            complexity,
+            cost_model,
+            recommended_devices,
+            industry_fit,
+            use_case,
+            pros,
+            cons,
+            resource_url,
+          })),
+          solutions: registry.map(({ name, vendor, continent, country_code, lifecycle_assigned, tags, description, pros, cons, typical_customers, recommended_terminals, cost_band, industry_fit, resource_url }) => ({
+            name,
+            vendor,
+            continent,
+            country_code,
+            lifecycle_assigned,
+            tags,
+            description,
+            pros,
+            cons,
+            typical_customers,
+            recommended_terminals,
+            cost_band,
+            industry_fit,
+            resource_url,
+          })),
+          expected_response_schema: {
+            recommendation: "short explanation",
+            alternatives: [{ name: "existing alternative name", rank: 1, reason: "why it fits" }],
+            solutions: [{ name: "existing solution name", rank: 1, reason: "why it fits" }],
+          },
+        }),
+      });
+      if (!response.ok) throw new Error(`Cloud RAG returned HTTP ${response.status}`);
+      setCloudRag(await response.json());
+      setCloudRagStatus("done");
+    } catch (error) {
+      setCloudRagError(error instanceof Error ? error.message : String(error));
+      setCloudRagStatus("error");
+    }
+  }
 
   return (
     <div className="research-page">
@@ -146,7 +214,7 @@ export default function TechAlternativesPage() {
       </p>
 
       <div className="research-section">
-        <h3>{L === "en" ? "Scene Filter and RAG Ranking" : "場景篩選與 RAG 排序"}</h3>
+        <h3>{L === "en" ? "Scene Filter and Cloud RAG" : "場景篩選與雲端 RAG"}</h3>
         <div className="scene-filter">
           <label htmlFor="scene-filter">
             {L === "en" ? "Type your scene" : "輸入你的場景"}
@@ -159,19 +227,32 @@ export default function TechAlternativesPage() {
           />
           <small>
             {L === "en"
-              ? "Local RAG-style retrieval ranks alternatives and PBX/UCaaS solutions by scene terms, protocols, industries, security, latency, and cost signals."
-              : "本機 RAG 式檢索會依場景詞、協定、產業、安全、延遲與成本訊號，排序替代技術與 PBX/UCaaS 解決方案。"}
+              ? "Keyword filtering happens in the browser. Prioritization is requested from a cloud RAG endpoint configured by NEXT_PUBLIC_CLOUD_RAG_ENDPOINT."
+              : "瀏覽器只做關鍵字篩選；優先排序會送到 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 設定的雲端 RAG 端點處理。"}
           </small>
+          <button
+            type="button"
+            onClick={askCloudRag}
+            disabled={!scene.trim() || !CLOUD_RAG_ENDPOINT || cloudRagStatus === "loading"}
+            className="cloud-rag-button"
+          >
+            {cloudRagStatus === "loading"
+              ? (L === "en" ? "Asking cloud RAG..." : "雲端 RAG 分析中...")
+              : (L === "en" ? "Prioritize with Cloud RAG" : "使用雲端 RAG 優先排序")}
+          </button>
+          {!CLOUD_RAG_ENDPOINT && (
+            <small className="cloud-rag-warning">
+              {L === "en"
+                ? "Set NEXT_PUBLIC_CLOUD_RAG_ENDPOINT at build time to enable cloud RAG."
+                : "建置時設定 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 才會啟用雲端 RAG。"}
+            </small>
+          )}
         </div>
-        {scene.trim() && (
+        {(cloudRecommendation || cloudRagStatus === "error") && (
           <div className="rag-panel">
-            <strong>{L === "en" ? "RAG recommendation" : "RAG 建議"}</strong>
+            <strong>{L === "en" ? "Cloud RAG recommendation" : "雲端 RAG 建議"}</strong>
             <p>
-              {ragContext.length
-                ? (L === "en"
-                  ? `Prioritize ${ragContext.map((a) => a.name).join(", ")} because they match the entered scene across control path, deployment medium, cost/security posture, or industry fit.`
-                  : `優先評估 ${ragContext.map((a) => a.name).join("、")}，因為它們在控制路徑、部署媒介、成本/安全性或產業適配上最符合輸入場景。`)
-                : (L === "en" ? "No strong match yet. Try adding device type, site type, latency, network, or cost constraints." : "目前沒有明確匹配。可加入裝置類型、場域、延遲、網路或成本限制。")}
+              {cloudRagStatus === "error" ? cloudRagError : cloudRecommendation}
             </p>
           </div>
         )}
@@ -236,7 +317,7 @@ export default function TechAlternativesPage() {
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{alt.cat === "web" ? "IP" : "RF"} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
-                {scene.trim() && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>RAG {alt.matchScore}</span>}
+                {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.latency}</span>
                 <span style={{ fontSize: "0.7rem", color: "#666", background: "#f0f2f5", padding: "2px 8px", borderRadius: 10 }}>{alt.complexity}</span>
               </div>
