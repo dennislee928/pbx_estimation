@@ -34,6 +34,14 @@ try:  # pragma: no cover
 except Exception:  # noqa: BLE001
     BeautifulSoup = None  # type: ignore[assignment]
 
+
+def _soup(html: str) -> Any:
+    """BeautifulSoup with lxml when available, else the stdlib parser."""
+    try:
+        return BeautifulSoup(html, "lxml")
+    except Exception:  # noqa: BLE001 - lxml not installed
+        return BeautifulSoup(html, "html.parser")
+
 try:  # pragma: no cover
     import feedparser
 except Exception:  # noqa: BLE001
@@ -228,7 +236,7 @@ def _extract_text(html: str, url: str) -> str:
             pass
     if BeautifulSoup is not None:
         try:
-            soup = BeautifulSoup(html, "lxml")
+            soup = _soup(html)
             for tag in soup(["script", "style", "noscript", "template"]):
                 tag.decompose()
             text = soup.get_text(" ", strip=True)
@@ -244,7 +252,7 @@ def _parse_html(html: str, base_url: str) -> dict[str, Any]:
     links: list[str] = []
     headings: list[str] = []
     if BeautifulSoup is not None:
-        soup = BeautifulSoup(html, "lxml")
+        soup = _soup(html)
         if soup.title and soup.title.string:
             title = soup.title.string.strip()
         meta_desc = soup.find("meta", attrs={"name": "description"}) or soup.find("meta", attrs={"property": "og:description"})
