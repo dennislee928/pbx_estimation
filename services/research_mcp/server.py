@@ -206,12 +206,16 @@ def _require_httpx() -> None:
 
 def _client() -> "httpx.Client":
     _require_httpx()
-    return httpx.Client(
-        headers={"User-Agent": USER_AGENT, "Accept": "*/*"},
-        timeout=HTTP_TIMEOUT,
-        follow_redirects=True,
-        http2=True,
-    )
+    kwargs = {
+        "headers": {"User-Agent": USER_AGENT, "Accept": "*/*"},
+        "timeout": HTTP_TIMEOUT,
+        "follow_redirects": True,
+    }
+    try:
+        return httpx.Client(http2=True, **kwargs)
+    except ImportError:
+        # The optional 'h2' package isn't installed; fall back to HTTP/1.1.
+        return httpx.Client(**kwargs)
 
 
 def _extract_text(html: str, url: str) -> str:
