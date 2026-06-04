@@ -134,6 +134,23 @@ Set these repository secrets for Cloudflare RAG:
 
 Alternatively, the same self-developed RAG engine can run on Hugging Face Spaces as a Docker Space using the files in `rag_engine/`. Set `HF_TOKEN` and `HF_SPACE_ID` to let CI upload the Docker Space. Hugging Face's default CPU Basic Space is currently free and provides 2 vCPU, 16 GB RAM, and 50 GB non-persistent disk. The Space endpoint can also be used as `CLOUD_RAG_ENDPOINT`.
 
+### Cloudflare DNS for GitHub Pages
+
+DNS records cannot point to a URL path. In Cloudflare DNS, do not set a CNAME target such as `dennislee928.github.io/pbx_estimation`; the `/pbx_estimation` part is a path, not a hostname.
+
+For a custom subdomain such as `mtk-pbx-estimation.example.com`, set:
+
+- Type: `CNAME`
+- Name: `mtk-pbx-estimation`
+- Target/content: `dennislee928.github.io`
+
+Then set GitHub repository variables:
+
+- `PAGES_CUSTOM_DOMAIN=mtk-pbx-estimation.example.com`
+- `NEXT_PUBLIC_SITE_BASE_PATH=/`
+
+The workflow writes `site/CNAME` and builds frontend assets for root-domain hosting. Keep `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default `https://dennislee928.github.io/pbx_estimation/` URL.
+
 The endpoint returns:
 
 ```json
@@ -157,6 +174,8 @@ Copy `.env.example` to `.env` for local work, and add the same names as GitHub r
 |----------|----------------------|
 | `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbxanalyze.pcleegood.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
 | `CLOUD_RAG_ENDPOINT` | Same endpoint as above, stored as a GitHub secret so `.github/workflows/report.yml` can pass it into `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` during the Pages build. |
+| `NEXT_PUBLIC_SITE_BASE_PATH` | GitHub repository variable. Use `/pbx_estimation` for the default GitHub Pages project URL, or `/` for a custom domain controlled by Cloudflare DNS. |
+| `PAGES_CUSTOM_DOMAIN` | GitHub repository variable. Set to the custom domain hostname only, for example `mtk-pbx-estimation.example.com`; do not include `https://` or `/pbx_estimation`. |
 | `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare R2 Account API Token, for example your `pbx_application_token`. This is used by Wrangler remote upload. It is not the same as an R2 S3 Access Key ID. |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard → select account → account ID in the dashboard/API Tokens page, or run `npx wrangler whoami` after login. |

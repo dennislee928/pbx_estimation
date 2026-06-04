@@ -9,8 +9,9 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_WORKSPACE = Path(__file__).resolve().parents[2]
-WORKSPACE = Path(os.environ.get("PBX_WORKSPACE", DEFAULT_WORKSPACE)).resolve()
+script_path = Path(__file__).resolve()
+DEFAULT_WORKSPACE = script_path.parents[2] if len(script_path.parents) > 2 else Path.cwd()
+WORKSPACE = Path(os.environ.get("PBX_WORKSPACE") or DEFAULT_WORKSPACE).resolve()
 
 
 def _json(data: Any) -> str:
