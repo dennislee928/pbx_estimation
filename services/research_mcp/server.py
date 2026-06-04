@@ -34,6 +34,14 @@ try:  # pragma: no cover
 except Exception:  # noqa: BLE001
     BeautifulSoup = None  # type: ignore[assignment]
 
+
+def _soup(html: str) -> Any:
+    """BeautifulSoup with lxml when available, else the stdlib parser."""
+    try:
+        return BeautifulSoup(html, "lxml")
+    except Exception:  # noqa: BLE001 - lxml not installed
+        return BeautifulSoup(html, "html.parser")
+
 try:  # pragma: no cover
     import feedparser
 except Exception:  # noqa: BLE001
@@ -206,12 +214,16 @@ def _require_httpx() -> None:
 
 def _client() -> "httpx.Client":
     _require_httpx()
-    return httpx.Client(
-        headers={"User-Agent": USER_AGENT, "Accept": "*/*"},
-        timeout=HTTP_TIMEOUT,
-        follow_redirects=True,
-        http2=True,
-    )
+    kwargs = {
+        "headers": {"User-Agent": USER_AGENT, "Accept": "*/*"},
+        "timeout": HTTP_TIMEOUT,
+        "follow_redirects": True,
+    }
+    try:
+        return httpx.Client(http2=True, **kwargs)
+    except ImportError:
+        # The optional 'h2' package isn't installed; fall back to HTTP/1.1.
+        return httpx.Client(**kwargs)
 
 
 def _extract_text(html: str, url: str) -> str:
@@ -224,7 +236,7 @@ def _extract_text(html: str, url: str) -> str:
             pass
     if BeautifulSoup is not None:
         try:
-            soup = BeautifulSoup(html, "lxml")
+            soup = _soup(html)
             for tag in soup(["script", "style", "noscript", "template"]):
                 tag.decompose()
             text = soup.get_text(" ", strip=True)
@@ -240,7 +252,7 @@ def _parse_html(html: str, base_url: str) -> dict[str, Any]:
     links: list[str] = []
     headings: list[str] = []
     if BeautifulSoup is not None:
-        soup = BeautifulSoup(html, "lxml")
+        soup = _soup(html)
         if soup.title and soup.title.string:
             title = soup.title.string.strip()
         meta_desc = soup.find("meta", attrs={"name": "description"}) or soup.find("meta", attrs={"property": "og:description"})
