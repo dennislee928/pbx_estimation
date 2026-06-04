@@ -332,12 +332,10 @@ jobs:
             echo "CLOUD_RAG_ENDPOINT secret is empty; frontend Cloud RAG would be disabled."
             exit 1
           fi
-          if [ -z "${NEXT_PUBLIC_SITE_BASE_PATH}" ]; then
-            if [ -n "${PAGES_CUSTOM_DOMAIN}" ]; then
-              NEXT_PUBLIC_SITE_BASE_PATH="/"
-            else
-              NEXT_PUBLIC_SITE_BASE_PATH="/pbx_estimation"
-            fi
+          if [ -n "${PAGES_CUSTOM_DOMAIN}" ] && { [ -z "${NEXT_PUBLIC_SITE_BASE_PATH}" ] || [ "${NEXT_PUBLIC_SITE_BASE_PATH}" = "/pbx_estimation" ]; }; then
+            NEXT_PUBLIC_SITE_BASE_PATH="/"
+          elif [ -z "${NEXT_PUBLIC_SITE_BASE_PATH}" ]; then
+            NEXT_PUBLIC_SITE_BASE_PATH="/pbx_estimation"
           fi
           export NEXT_PUBLIC_SITE_BASE_PATH
           echo "Building frontend with NEXT_PUBLIC_SITE_BASE_PATH=${NEXT_PUBLIC_SITE_BASE_PATH}"
