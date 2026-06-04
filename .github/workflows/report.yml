@@ -238,6 +238,16 @@ jobs:
           NOTEBOOKLM_API_TOKEN: ${{ secrets.NOTEBOOKLM_API_TOKEN }}
         run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notebooklm
 
+      - name: Deploy Cloudflare RAG Worker
+        if: ${{ steps.rag_config.outputs.cloudflare_r2_enabled == 'true' }}
+        working-directory: rag_engine
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          npx wrangler deploy
+
       - name: Deploy RAG engine to Hugging Face Docker Space
         if: ${{ steps.rag_config.outputs.hf_space_enabled == 'true' }}
         env:
@@ -257,6 +267,10 @@ jobs:
           NEXT_PUBLIC_CLOUD_RAG_ENDPOINT: ${{ secrets.CLOUD_RAG_ENDPOINT }}
         run: |
           set -euo pipefail
+          if [ -z "${NEXT_PUBLIC_CLOUD_RAG_ENDPOINT}" ]; then
+            echo "CLOUD_RAG_ENDPOINT secret is empty; frontend Cloud RAG would be disabled."
+            exit 1
+          fi
           rm -rf site frontend/public/reports
           mkdir -p site frontend/public/reports
           cp -R reports/. frontend/public/reports/

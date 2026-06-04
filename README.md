@@ -155,7 +155,7 @@ Copy `.env.example` to `.env` for local work, and add the same names as GitHub r
 
 | Variable | How to get the value |
 |----------|----------------------|
-| `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbx-rag-engine.<account>.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
+| `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` | Public RAG endpoint used by the frontend build. Use either your Cloudflare Worker URL, for example `https://pbxanalyze.pcleegood.workers.dev/`, or your Hugging Face Space URL, for example `https://<user>-pbx-rag-engine.hf.space/`. |
 | `CLOUD_RAG_ENDPOINT` | Same endpoint as above, stored as a GitHub secret so `.github/workflows/report.yml` can pass it into `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT` during the Pages build. |
 | `RAG_ASSET_PREFIX` | Usually `latest`. Change only if you want separate R2/Hugging Face asset namespaces such as `staging` or a dated prefix. |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare R2 Account API Token, for example your `pbx_application_token`. This is used by Wrangler remote upload. It is not the same as an R2 S3 Access Key ID. |

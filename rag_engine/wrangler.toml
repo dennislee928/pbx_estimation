@@ -1,4 +1,4 @@
-name = "pbx-rag-engine"
+name = "pbxanalyze"
 main = "src/worker.js"
 compatibility_date = "2026-06-04"
 

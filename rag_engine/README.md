@@ -70,7 +70,7 @@ npx wrangler r2 bucket create auto-rag
 After deploy, copy the Worker URL and set it as the repository secret:
 
 ```text
-CLOUD_RAG_ENDPOINT=https://pbx-rag-engine.<your-account>.workers.dev/
+CLOUD_RAG_ENDPOINT=https://pbxanalyze.pcleegood.workers.dev/
 ```
 
 The existing GitHub Actions workflow passes that secret into the frontend build as `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT`.
