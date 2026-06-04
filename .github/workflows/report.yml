@@ -29,6 +29,7 @@ env:
   PYTHON_VERSION: "3.12"
   CACHE_VERSION: v1
   RAG_ASSET_PREFIX: latest
+  RESEARCH_MCP_RELEASE_TAG: research-mcp-latest
 
 jobs:
   generate:
@@ -149,6 +150,61 @@ jobs:
 
       - name: Build RAG asset manifest
         run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}"
+
+      - name: Package research MCP release assets
+        run: |
+          set -euo pipefail
+          rm -rf release
+          mkdir -p release/pbx-research-mcp
+          cp -R services/research_mcp release/pbx-research-mcp/
+          mkdir -p release/pbx-research-mcp/frontend/data
+          cp frontend/data/*.json release/pbx-research-mcp/frontend/data/
+          mkdir -p release/pbx-research-mcp/data/processed
+          cp data/processed/awesome_list.csv release/pbx-research-mcp/data/processed/
+          cp data/processed/solution_registry.csv release/pbx-research-mcp/data/processed/
+          mkdir -p release/pbx-research-mcp/reports
+          cp reports/global_research_report_*.html release/pbx-research-mcp/reports/
+          cp reports/global_research_report_*.md release/pbx-research-mcp/reports/
+          cp reports/index.html release/pbx-research-mcp/reports/
+          cp rag_engine/dist/rag_assets_manifest.json release/pbx-research-mcp/
+          cat > release/pbx-research-mcp/RELEASE.json <<EOF
+          {
+            "name": "pbx-research-mcp",
+            "tag": "${RESEARCH_MCP_RELEASE_TAG}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "run_number": "${GITHUB_RUN_NUMBER}",
+            "sha": "${GITHUB_SHA}",
+            "created_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          tar -czf release/pbx-research-mcp-latest.tar.gz -C release pbx-research-mcp
+
+      - name: Publish research MCP release
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.ref_name == 'main' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          notes_file="$(mktemp)"
+          cat > "${notes_file}" <<EOF
+          Rolling release for the PBX research MCP service and generated crawler/research assets.
+
+          Commit: ${GITHUB_SHA}
+          Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+
+          Asset:
+          - pbx-research-mcp-latest.tar.gz
+          EOF
+          if gh release view "${RESEARCH_MCP_RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release upload "${RESEARCH_MCP_RELEASE_TAG}" release/pbx-research-mcp-latest.tar.gz --clobber
+            gh release edit "${RESEARCH_MCP_RELEASE_TAG}" \
+              --title "PBX Research MCP Latest" \
+              --notes-file "${notes_file}"
+          else
+            gh release create "${RESEARCH_MCP_RELEASE_TAG}" release/pbx-research-mcp-latest.tar.gz \
+              --title "PBX Research MCP Latest" \
+              --notes-file "${notes_file}"
+          fi
 
       - name: Check RAG upload configuration
         id: rag_config
