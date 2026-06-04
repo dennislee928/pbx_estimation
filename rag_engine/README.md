@@ -122,7 +122,7 @@ Then it uploads those files to Cloudflare R2 when these repository secrets are p
 - `CLOUDFLARE_R2_BUCKET` (must match `auto-rag` unless `wrangler.toml` is changed)
 - Optional S3 API upload secrets:
   - `CLOUDFLARE_R2_S3_ENDPOINT`, for example `https://8dfc8c4994bd0925c72ab9e2eff79b48.r2.cloudflarestorage.com/auto-rag`
-  - `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`
+  - `CLOUDFLARE_R2_S3_ACCESS_KEY_ID`, the 32-character R2 S3 Access Key ID, not the Cloudflare API token or token id
   - `CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY`
 
 The Worker reads:
