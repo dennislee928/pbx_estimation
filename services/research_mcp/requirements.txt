@@ -1,0 +1,15 @@
+# Research MCP service runtime dependencies.
+# Kept lean but powerful: HTTP, HTML parsing, feeds, robots, data analysis.
+httpx[http2]>=0.27
+beautifulsoup4>=4.12
+lxml>=5.2
+selectolax>=0.3.21
+trafilatura>=1.9
+feedparser>=6.0
+tldextract>=5.1
+PyYAML>=6.0
+pandas>=2.0
+numpy>=1.24
+python-dateutil>=2.9
+charset-normalizer>=3.3
+urllib3>=2.2

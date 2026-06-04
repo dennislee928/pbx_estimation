@@ -87,3 +87,9 @@ https://dennislee928.github.io/pbx_estimation/zh/
 ```
 
 Use `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default project URL. For the custom domain, leave it blank or set `/`.
+
+## Plain HTML / Broken Assets
+
+If the page renders as plain unstyled HTML, inspect the console for asset URLs. Requests to `/pbx_estimation/zh/_next/...` mean the browser or Cloudflare is still serving a stale GitHub Pages build. The workflow publishes a compatibility copy under `/pbx_estimation`, but you should still purge the Cloudflare cache for `mtk-pbx-estimation.dennisleehappy.org/*` and hard-refresh the browser after a Pages deployment.
+
+Disable Cloudflare Rocket Loader for this hostname. Next.js static exports already optimize script loading, and Rocket Loader can rewrite Next.js script tags in ways that make debugging failed hydration harder.
