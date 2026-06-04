@@ -28,6 +28,7 @@ concurrency:
 env:
   PYTHON_VERSION: "3.12"
   CACHE_VERSION: v1
+  RAG_ASSET_PREFIX: latest
 
 jobs:
   generate:
@@ -131,6 +132,30 @@ jobs:
             jupyter nbconvert "$nb" --to pdf --output-dir reports --output "${name}.pdf" || \
               echo "PDF conversion skipped for ${name} (check pandoc/tex installation)"
           done
+
+      - name: Build RAG asset manifest
+        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}"
+
+      - name: Upload RAG assets to Cloudflare R2
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' && env.CLOUDFLARE_R2_BUCKET != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+        run: |
+          set -euo pipefail
+          python -c 'import json; m=json.load(open("rag_engine/dist/rag_assets_manifest.json")); [print(f"{a["key"]}\t{a["path"]}") for a in m["assets"]]' > /tmp/rag_assets.tsv
+          npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
+          while IFS=$'\t' read -r key path; do
+            npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
+          done < /tmp/rag_assets.tsv
+
+      - name: Upload RAG assets to NoteLLM-compatible endpoint
+        if: ${{ env.NOTELLM_UPLOAD_URL != '' }}
+        env:
+          NOTELLM_UPLOAD_URL: ${{ secrets.NOTELLM_UPLOAD_URL }}
+          NOTELLM_API_TOKEN: ${{ secrets.NOTELLM_API_TOKEN }}
+        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notellm
 
       - name: Build bilingual frontend
         env:
