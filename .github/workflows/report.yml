@@ -124,15 +124,24 @@ jobs:
       - name: Refresh shared research outputs after notebooks
         run: python scripts/generate_research_outputs.py
 
-      - name: Convert notebooks to HTML
+      - name: Convert notebooks to HTML and optional PDF
         run: |
           set -euo pipefail
           mkdir -p reports
+          can_convert_pdf=false
+          if command -v pandoc >/dev/null 2>&1 && command -v xelatex >/dev/null 2>&1; then
+            can_convert_pdf=true
+          else
+            echo "PDF conversion disabled because pandoc and/or xelatex is not installed on this runner."
+          fi
           for nb in notebooks/*_output.ipynb; do
             name=$(basename "$nb" _output.ipynb)
             jupyter nbconvert "$nb" --to html --output-dir reports --output "${name}.html"
-            jupyter nbconvert "$nb" --to pdf --output-dir reports --output "${name}.pdf" || \
-              echo "PDF conversion skipped for ${name} (check pandoc/tex installation)"
+            if [ "$can_convert_pdf" = "true" ]; then
+              jupyter nbconvert "$nb" --to pdf --output-dir reports --output "${name}.pdf"
+            else
+              echo "PDF conversion skipped for ${name}."
+            fi
           done
 
       - name: Build RAG asset manifest
@@ -144,12 +153,15 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          CLOUDFLARE_R2_S3_ENDPOINT: ${{ secrets.CLOUDFLARE_R2_S3_ENDPOINT }}
+          CLOUDFLARE_R2_S3_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_S3_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY }}
           NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
         run: |
           set -euo pipefail
-          if [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ] && [ -n "${CLOUDFLARE_R2_BUCKET}" ]; then
+          if [ -n "${CLOUDFLARE_R2_BUCKET}" ] && { { [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ]; } || { [ -n "${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}" ] && [ -n "${CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY}" ] && { [ -n "${CLOUDFLARE_R2_S3_ENDPOINT}" ] || [ -n "${CLOUDFLARE_ACCOUNT_ID}" ]; }; }; }; then
             echo "cloudflare_r2_enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "cloudflare_r2_enabled=false" >> "$GITHUB_OUTPUT"
@@ -171,12 +183,37 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+          CLOUDFLARE_R2_S3_ENDPOINT: ${{ secrets.CLOUDFLARE_R2_S3_ENDPOINT }}
+          CLOUDFLARE_R2_S3_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_S3_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
-          npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
-          while IFS=$'\t' read -r key path; do
-            npx wrangler r2 object put "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
-          done < rag_engine/dist/rag_assets_r2.tsv
+          upload_with_wrangler_remote() {
+            npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
+            while IFS=$'\t' read -r key path; do
+              npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
+            done < rag_engine/dist/rag_assets_r2.tsv
+          }
+
+          upload_with_s3_api() {
+            python -m pip install --quiet awscli
+            export AWS_ACCESS_KEY_ID="${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}"
+            export AWS_SECRET_ACCESS_KEY="${CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY}"
+            export AWS_DEFAULT_REGION=auto
+            s3_endpoint="${CLOUDFLARE_R2_S3_ENDPOINT:-https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com}"
+            s3_endpoint="${s3_endpoint%/}"
+            s3_endpoint="${s3_endpoint%/${CLOUDFLARE_R2_BUCKET}}"
+            aws --endpoint-url "${s3_endpoint}" s3 cp rag_engine/dist/rag_assets_manifest.json "s3://${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json"
+            while IFS=$'\t' read -r key path; do
+              aws --endpoint-url "${s3_endpoint}" s3 cp "${path}" "s3://${CLOUDFLARE_R2_BUCKET}/${key}"
+            done < rag_engine/dist/rag_assets_r2.tsv
+          }
+
+          if [ -n "${CLOUDFLARE_R2_S3_ACCESS_KEY_ID}" ] && [ -n "${CLOUDFLARE_R2_S3_SECRET_ACCESS_KEY}" ]; then
+            upload_with_s3_api
+          else
+            upload_with_wrangler_remote
+          fi
 
       - name: Upload RAG assets to NotebookLM-compatible endpoint
         if: ${{ steps.rag_config.outputs.notebooklm_upload_enabled == 'true' }}
