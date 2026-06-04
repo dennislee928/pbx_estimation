@@ -7,7 +7,7 @@ _Generated: 2026-06-04_
 ## 執行摘要
 
 - 涵蓋 156 個 PBX/VoIP/UCaaS 方案，分布於 42 個國家/地區與 5 個洲別群組。
-- 建立 106 種 PSTN 替代方案，涵蓋 API、IP、訊息佇列、工業、無線、蜂巢、衛星、序列匯流排與乾接點方案。
+- 建立 131 種 PSTN 替代方案，涵蓋 API、IP、訊息佇列、工業、無線、蜂巢、衛星、序列匯流排、乾接點、光學、聲學、機械、氣壓、液壓、視覺碼與人工流程方案。
 - 新部署方向明顯轉向雲端/API/AI 語音，但混合式 PBX 與 TDM 平台仍是既有裝機的主要遷移風險。
 
 ## 爬蟲覆蓋分類
@@ -19,8 +19,9 @@ _Generated: 2026-06-04_
 - Regional telco hosted PBX and SIP voice
 - IoT SIM, eSIM, cellular connectivity
 - Industrial SCADA/PLC/building control
-- Wireless/radio/satellite alternatives
-- Serial, wired, relay, and dry-contact triggers
+- Non-IP physical, electrical, optical, acoustic, mechanical, pneumatic, hydraulic, and workflow triggers
+- Wireless/radio/satellite/cellular alternatives
+- Serial, wired, relay, dry-contact, access-control, AV, and building-bus triggers
 
 ## 生命週期統計
 
@@ -39,8 +40,8 @@ _Generated: 2026-06-04_
 
 ## 技術替代方案
 
+- 非網路/實體媒介/工業/RF: 78
 - 網路/API/IP: 53
-- 非網路/無線/工業: 53
 
 ## 來源
 

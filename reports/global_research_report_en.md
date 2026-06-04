@@ -7,7 +7,7 @@ Global PBX/UCaaS vendor landscape, lifecycle classification, PSTN-alternative te
 ## Executive Summary
 
 - Covered 156 PBX/VoIP/UCaaS solutions across 42 countries/regions and 5 continent groups.
-- Built 106 PSTN alternatives spanning API, IP, brokered messaging, industrial, wireless, cellular, satellite, serial, and dry-contact solutions.
+- Built 131 PSTN alternatives spanning API, IP, brokered messaging, industrial, wireless, cellular, satellite, serial, dry-contact, optical, acoustic, mechanical, pneumatic, hydraulic, visual-code, and human-workflow solutions.
 - Current market direction is cloud/API/AI voice for new deployments, while hybrid PBX and TDM platforms remain material migration risks in installed bases.
 
 ## Crawler Coverage
@@ -19,8 +19,9 @@ Global PBX/UCaaS vendor landscape, lifecycle classification, PSTN-alternative te
 - Regional telco hosted PBX and SIP voice
 - IoT SIM, eSIM, cellular connectivity
 - Industrial SCADA/PLC/building control
-- Wireless/radio/satellite alternatives
-- Serial, wired, relay, and dry-contact triggers
+- Non-IP physical, electrical, optical, acoustic, mechanical, pneumatic, hydraulic, and workflow triggers
+- Wireless/radio/satellite/cellular alternatives
+- Serial, wired, relay, dry-contact, access-control, AV, and building-bus triggers
 
 ## Lifecycle Counts
 
@@ -39,8 +40,8 @@ Global PBX/UCaaS vendor landscape, lifecycle classification, PSTN-alternative te
 
 ## Technology Alternatives
 
+- Non-network/physical/industrial/RF: 78
 - Web/API/IP: 53
-- Non-web/wireless/industrial: 53
 
 ## Sources
 
