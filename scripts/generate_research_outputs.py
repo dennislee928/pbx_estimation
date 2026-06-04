@@ -62,8 +62,9 @@ CRAWLER_TAXONOMY = [
     "Regional telco hosted PBX and SIP voice",
     "IoT SIM, eSIM, cellular connectivity",
     "Industrial SCADA/PLC/building control",
-    "Wireless/radio/satellite alternatives",
-    "Serial, wired, relay, and dry-contact triggers",
+    "Non-IP physical, electrical, optical, acoustic, mechanical, pneumatic, hydraulic, and workflow triggers",
+    "Wireless/radio/satellite/cellular alternatives",
+    "Serial, wired, relay, dry-contact, access-control, AV, and building-bus triggers",
 ]
 
 
@@ -85,13 +86,21 @@ def _crawler_context(registry: pd.DataFrame, awesome: pd.DataFrame) -> dict:
         "known_vendor_count": int(registry["vendor"].nunique()),
         "existing_solution_names": sorted(registry["name"].dropna().astype(str).unique().tolist()),
         "existing_alternative_names": sorted(awesome["name"].dropna().astype(str).unique().tolist()),
-        "crawler_instruction": "Use these existing solutions and alternatives as seed knowledge, then search for additional PBX/UCaaS/CPaaS/eSIM/IoT/non-PSTN options not already listed.",
+        "crawler_instruction": "Use these existing solutions and alternatives as seed knowledge, then search without category boundaries for additional PBX/UCaaS/CPaaS/eSIM/IoT/non-PSTN options not already listed. Expand especially beyond RF into wired, optical, acoustic, mechanical, pneumatic, hydraulic, human workflow, document, visual-code, industrial, building, security, AV, and edge-control triggers.",
         "expansion_queries": [
             "new UCaaS cloud PBX providers by country official",
             "programmable voice API CPaaS providers official docs",
             "IoT eSIM cellular connectivity platform edge device command official",
             "PSTN replacement alarm line IP gateway official",
             "industrial building automation PBX event relay alternatives official",
+            "non RF non IP physical trigger alternatives relay optical acoustic pneumatic hydraulic official",
+            "building automation access control dry contact OSDP Wiegand KNX DALI DMX official",
+            "barcode QR USB HID scanner workflow trigger edge controller official",
+            "industrial actuator pneumatic hydraulic solenoid PLC control official",
+            "audio optical visual signal sensor trigger legacy equipment official",
+            "fire alarm nurse call elevator auxiliary relay dry contact interface official",
+            "AV control MIDI HDMI CEC infrared trigger command official",
+            "manual SOP paper ticket scan to trigger workflow official",
         ],
     }
 
@@ -217,9 +226,9 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
             else f"- 涵蓋 {len(registry)} 個 PBX/VoIP/UCaaS 方案，分布於 {registry['country_code'].nunique()} 個國家/地區與 {registry['continent'].nunique()} 個洲別群組。"
         ),
         (
-            f"- Built {len(awesome)} PSTN alternatives spanning API, IP, brokered messaging, industrial, wireless, cellular, satellite, serial, and dry-contact solutions."
+            f"- Built {len(awesome)} PSTN alternatives spanning API, IP, brokered messaging, industrial, wireless, cellular, satellite, serial, dry-contact, optical, acoustic, mechanical, pneumatic, hydraulic, visual-code, and human-workflow solutions."
             if not zh
-            else f"- 建立 {len(awesome)} 種 PSTN 替代方案，涵蓋 API、IP、訊息佇列、工業、無線、蜂巢、衛星、序列匯流排與乾接點方案。"
+            else f"- 建立 {len(awesome)} 種 PSTN 替代方案，涵蓋 API、IP、訊息佇列、工業、無線、蜂巢、衛星、序列匯流排、乾接點、光學、聲學、機械、氣壓、液壓、視覺碼與人工流程方案。"
         ),
         (
             "- Current market direction is cloud/API/AI voice for new deployments, while hybrid PBX and TDM platforms remain material migration risks in installed bases."
@@ -244,9 +253,9 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
         md.append(f"- {_continent_label(str(name), lang)}: {int(count)}")
     md.extend(["", "## Technology Alternatives" if not zh else "## 技術替代方案", ""])
     for name, count in tech_category.items():
-        label = "Web/API/IP" if name == "web" else "Non-web/wireless/industrial"
+        label = "Web/API/IP" if name == "web" else "Non-network/physical/industrial/RF"
         if zh:
-            label = "網路/API/IP" if name == "web" else "非網路/無線/工業"
+            label = "網路/API/IP" if name == "web" else "非網路/實體媒介/工業/RF"
         md.append(f"- {label}: {int(count)}")
     md.extend(["", "## Sources" if not zh else "## 來源", ""])
     for source in SOURCES:

@@ -924,8 +924,14 @@ def _alternative_device_range(alt: dict) -> str:
         return "100-100,000 remote devices"
     if any(k in text for k in ["scada", "dnp3", "iec 61850", "opc ua", "modbus"]):
         return "10-10,000 industrial points"
-    if any(k in text for k in ["rs-485", "dry contact", "relay"]):
+    if any(k in text for k in ["rs-485", "dry contact", "relay", "gpio", "opto", "contact", "e-stop", "nurse call", "fire alarm", "elevator"]):
         return "1-256 local I/O points"
+    if any(k in text for k in ["optical", "photo", "light", "acoustic", "audio", "vibration", "magnetic", "hall", "reed", "sensor"]):
+        return "1-10,000 sensed physical points"
+    if any(k in text for k in ["mechanical", "pneumatic", "hydraulic", "solenoid", "pushbutton", "foot pedal", "key switch", "interlock"]):
+        return "1-1,000 actuators or operator stations"
+    if any(k in text for k in ["barcode", "qr", "paper", "manual", "sop", "ticket"]):
+        return "1-1,000,000 workflow items/events"
     if any(k in text for k in ["zigbee", "z-wave", "thread", "ble", "matter"]):
         return "10-1,000 building devices"
     if any(k in text for k in ["api", "webhook", "grpc", "mqtt", "amqp", "nats"]):
@@ -940,6 +946,16 @@ def _alternative_industries(alt: dict) -> str:
         industries.extend(["Utilities", "Energy", "Water", "Industrial automation"])
     if any(k in text for k in ["building", "door", "lock", "lighting", "relay", "thread", "zigbee", "z-wave"]):
         industries.extend(["Smart building", "Facilities", "Hospitality", "Retail"])
+    if any(k in text for k in ["barcode", "qr", "paper", "ticket", "scan", "wedge"]):
+        industries.extend(["Retail", "Logistics", "Healthcare", "Field service"])
+    if any(k in text for k in ["optical", "photo", "light", "acoustic", "audio", "vibration", "magnetic", "sensor"]):
+        industries.extend(["Security", "Manufacturing", "Facilities", "Maintenance"])
+    if any(k in text for k in ["mechanical", "pneumatic", "hydraulic", "solenoid", "e-stop", "interlock"]):
+        industries.extend(["Manufacturing", "Industrial automation", "Utilities", "Safety systems"])
+    if any(k in text for k in ["hdmi", "midi", "av", "dmx", "signage"]):
+        industries.extend(["Venues", "Hospitality", "Broadcast", "Digital signage"])
+    if any(k in text for k in ["nurse", "fire alarm", "elevator", "access-control", "access control"]):
+        industries.extend(["Healthcare", "Public safety", "Facilities", "Access control"])
     if any(k in text for k in ["satellite", "lorawan", "cellular", "nb-iot", "lte-m", "private 5g"]):
         industries.extend(["Logistics", "Agriculture", "Remote infrastructure", "Public safety"])
     if any(k in text for k in ["api", "webhook", "grpc", "webrtc", "sip", "dtmf"]):
@@ -958,6 +974,8 @@ def _alternative_cost_model(alt: dict) -> str:
         return f"{cost}; subscription or message/device fees"
     if any(k in text for k in ["api", "webhook", "grpc", "mqtt", "amqp", "nats"]):
         return f"{cost}; platform/broker plus usage"
+    if any(k in text for k in ["pneumatic", "hydraulic", "mechanical", "solenoid", "optical", "acoustic", "vibration", "magnetic", "barcode", "qr", "paper", "manual"]):
+        return f"{cost}; hardware, fixture, or process-change cost"
     return cost
 
 
@@ -1033,6 +1051,31 @@ EXPANDED_ALTERNATIVE_SPECS = [
     ("HDMI-CEC device command", "non_web", "av_bus", ["HDMI-CEC"], "https://hdmi.org/spec/index", "Telephony events control displays and AV equipment.", "Hospitality; Meeting rooms; Digital signage"),
     ("Infrared blaster", "non_web", "infrared", ["IR", "NEC", "RC-5"], "https://en.wikipedia.org/wiki/Consumer_IR", "Gateway emits remote-control IR codes to legacy devices.", "Hospitality; AV; Retail"),
     ("Visible/audible tone sensor", "non_web", "sensor_trigger", ["Audio", "Optical"], "https://www.iso.org/standard/72361.html", "Sensor detects buzzer/light state and triggers integration.", "Legacy facilities; Safety retrofits; Maintenance"),
+    ("Opto-isolated digital input", "non_web", "electrical_contact", ["Optocoupler", "Digital input"], "https://en.wikipedia.org/wiki/Opto-isolator", "Electrically isolated input detects PBX gateway relay or alarm state.", "Security; Facilities; Industrial automation"),
+    ("Solenoid actuator trigger", "non_web", "mechanical_actuation", ["Solenoid", "Relay driver"], "https://en.wikipedia.org/wiki/Solenoid", "Electrical pulse moves a latch, valve, bell, or mechanical linkage.", "Access control; Industrial automation; Facilities"),
+    ("Pneumatic actuator command", "non_web", "pneumatic", ["Pneumatic valve", "Solenoid valve"], "https://www.emerson.com/en/final-control/products/eim-ehp", "Air valve actuation replaces line-based remote switching where compressed air exists.", "Manufacturing; Utilities; Safety systems"),
+    ("Hydraulic actuator command", "non_web", "hydraulic", ["Hydraulic valve", "Solenoid valve"], "https://www.parker.com/us/en/divisions/hydraulic-valve-division.html", "Hydraulic valve command drives heavy equipment or doors from local control panels.", "Industrial automation; Energy; Heavy equipment"),
+    ("Optical fiber contact closure extender", "non_web", "optical_signal", ["Fiber I/O", "Optical isolation"], "https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers", "Fiber extends isolated trigger signals across electrically noisy or lightning-prone sites.", "Utilities; Industrial automation; Campuses"),
+    ("Laser or photocell beam-break trigger", "non_web", "optical_signal", ["Photoelectric sensor", "Beam break"], "https://www.bannerengineering.com/us/en/products/sensors/photoelectric-sensors.html", "Light-beam interruption triggers local command or alarm logic.", "Security; Manufacturing; Access control"),
+    ("Stack-light or strobe sensor trigger", "non_web", "visual_signal", ["Photodiode", "Light sensor"], "https://www.analog.com/en/resources/technical-articles/photodiode-signal-conditioning.html", "Sensor watches stack lights, strobes, or indicators and converts them to commands.", "Legacy facilities; Manufacturing; Maintenance"),
+    ("Acoustic siren or buzzer classifier", "non_web", "acoustic_signal", ["Microphone", "DSP"], "https://www.analog.com/en/resources/technical-articles/sensor-signal-chain-design-for-audio.html", "Microphone detects alarm patterns or tones from legacy equipment.", "Safety retrofits; Facilities; Healthcare"),
+    ("Vibration or tamper sensor trigger", "non_web", "sensor_trigger", ["Accelerometer", "Piezo"], "https://www.analog.com/en/product-category/accelerometers.html", "Physical vibration or knock event starts a local workflow.", "Security; Industrial maintenance; Field equipment"),
+    ("Magnetic reed or Hall sensor trigger", "non_web", "magnetic", ["Reed switch", "Hall sensor"], "https://www.ti.com/sensors/magnetic-sensors/overview.html", "Door, window, or equipment state triggers command logic without network transport.", "Access control; Retail; Facilities"),
+    ("Physical key switch interlock", "non_web", "physical_key", ["Key switch", "Interlock"], "https://en.wikipedia.org/wiki/Interlock_(engineering)", "Operator key turn authorizes or triggers device actions.", "Industrial safety; Utilities; Secure rooms"),
+    ("Emergency-stop safety relay chain", "non_web", "electrical_contact", ["E-stop", "Safety relay"], "https://www.pilz.com/en-US/products/safety-relays", "Safety circuit state directly disables or commands machinery.", "Manufacturing; Safety systems; Robotics"),
+    ("Foot pedal or pushbutton station", "non_web", "mechanical_actuation", ["Pushbutton", "Foot switch"], "https://en.wikipedia.org/wiki/Push-button", "Human-operated contact station triggers equipment where automation is not justified.", "Clinics; Manufacturing; Service counters"),
+    ("QR code scan workflow", "non_web", "barcode_qr", ["QR Code", "Barcode scanner"], "https://www.gs1.org/standards/barcodes/2d-barcodes", "Scanning a code at the edge selects the device or workflow to trigger.", "Retail; Field service; Maintenance"),
+    ("Barcode scanner wedge command", "non_web", "barcode_qr", ["Barcode", "USB HID keyboard"], "https://www.gs1.org/standards/barcodes", "Barcode scanner sends keyboard-style commands to a local controller.", "Warehousing; Healthcare; Retail"),
+    ("Paper job ticket scan-to-trigger", "non_web", "paper_document", ["OCR", "Document scan"], "https://www.iso.org/standard/75818.html", "Paper ticket or label scan initiates a controlled workflow.", "Manufacturing; Logistics; Back office"),
+    ("Manual SOP escalation", "non_web", "manual_process", ["Runbook", "Checklist"], "https://www.iso.org/standard/70017.html", "Human checklist replaces unreliable line-trigger automation for low-frequency critical tasks.", "Facilities; Public safety; Compliance"),
+    ("Operator tablet local USB command", "non_web", "usb", ["USB CDC", "USB HID"], "https://www.usb.org/", "Tablet or local workstation sends command over a direct USB peripheral path.", "Kiosks; Labs; Field service"),
+    ("MIDI control surface trigger", "non_web", "av_bus", ["MIDI"], "https://www.midi.org/specifications", "MIDI buttons or faders trigger AV, paging, lighting, or room scenes.", "Venues; Broadcast; Hospitality"),
+    ("GPIO over PoE I/O appliance", "non_web", "electrical_contact", ["GPIO", "PoE"], "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os", "PoE I/O appliance converts local digital inputs and outputs without PSTN signaling.", "Facilities; Industrial automation; Retail"),
+    ("Current-loop 4-20mA threshold trigger", "non_web", "sensor_bus", ["4-20mA", "Analog input"], "https://www.analog.com/en/resources/technical-articles/4-20-ma-sensor-transmitters.html", "Analog process threshold triggers local control or alarm logic.", "Utilities; Process control; Energy"),
+    ("Thermostat or HVAC contact trigger", "non_web", "electrical_contact", ["Thermostat contact", "24VAC"], "https://www.ashrae.org/technical-resources/standards-and-guidelines", "Existing thermostat or control contacts initiate HVAC or building actions.", "Facilities; Smart building; Hospitality"),
+    ("Fire alarm NAC or auxiliary relay monitor", "non_web", "electrical_contact", ["NAC", "Aux relay"], "https://www.nfpa.org/codes-and-standards/nfpa-72-standard-development/72", "Fire-panel auxiliary output triggers paging, doors, or notification workflows.", "Public safety; Facilities; Healthcare"),
+    ("Nurse-call dry-contact bridge", "non_web", "electrical_contact", ["Nurse call", "Dry contact"], "https://www.nfpa.org/codes-and-standards/nfpa-99-standard-development/99", "Nurse-call output bridges care events to local alert workflows.", "Healthcare; Senior care; Facilities"),
+    ("Elevator controller discrete input", "non_web", "electrical_contact", ["Discrete input", "Interlock"], "https://www.asme.org/codes-standards/find-codes-standards/a17-1-csa-b44-safety-code-elevators-escalators", "Elevator controller input replaces phone-line side effects for access or emergency workflows.", "Hospitality; Facilities; Access control"),
     ("Computer vision event trigger", "web", "edge_ai", ["RTSP", "ONVIF", "AI inference"], "https://www.onvif.org/profiles/profile-t/", "Camera analytics convert visual events into commands.", "Security; Retail; Manufacturing"),
     ("ONVIF event service", "web", "ethernet_ip", ["ONVIF", "SOAP", "WS-Eventing"], "https://www.onvif.org/profiles/profile-t/", "Video/security device events trigger PBX or edge actions.", "Security; Facilities; Retail"),
     ("PTP time-synchronized command", "web", "ethernet_wire", ["IEEE 1588 PTP"], "https://standards.ieee.org/ieee/1588/6825/", "Time-aligned command execution across many local devices.", "Industrial automation; Broadcast; Energy"),
@@ -1058,7 +1101,7 @@ def _expanded_alternatives() -> list[dict]:
                 "protocols": protocols,
                 "latency": latency,
                 "bandwidth": "Small command/event payloads",
-                "range": "IP routed" if is_web else "Local, campus, regional, or carrier/radio footprint",
+                "range": "IP routed" if is_web else "Local, device, cable, optical, acoustic, mechanical, facility, carrier, or physical-process footprint",
                 "reliability": reliability,
                 "security": security,
                 "complexity": "Medium",

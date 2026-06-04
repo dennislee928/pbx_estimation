@@ -54,6 +54,24 @@ const zhMedium = (medium) => ({
   fieldbus: "工業現場匯流排",
   building_bus: "建築控制匯流排",
   access_control: "門禁控制",
+  sensor_bus: "感測器匯流排",
+  board_bus: "板級匯流排",
+  usb: "USB",
+  av_bus: "影音控制匯流排",
+  infrared: "紅外線",
+  near_field: "近場感應",
+  optical_signal: "光學訊號",
+  acoustic_signal: "聲學訊號",
+  visual_signal: "視覺訊號",
+  sensor_trigger: "感測觸發",
+  mechanical_actuation: "機械致動",
+  pneumatic: "氣壓",
+  hydraulic: "液壓",
+  magnetic: "磁性/霍爾",
+  barcode_qr: "條碼/QR",
+  paper_document: "紙本/文件",
+  manual_process: "人工流程",
+  physical_key: "實體鑰匙/鎖具",
   edge_compute: "邊緣運算",
   edge_ai: "邊緣 AI",
 })[medium] || String(medium || "").replaceAll("_", " ");
@@ -76,7 +94,8 @@ const zhCost = (value) => String(value || "")
   .replaceAll("subscription or message/device fees", "訂閱或按訊息/裝置計費")
   .replaceAll("platform/broker plus usage", "平台/訊息代理加用量計費")
   .replaceAll("high engineering/infrastructure", "高工程與基礎設施成本")
-  .replaceAll("hardware plus installation", "硬體加安裝成本");
+  .replaceAll("hardware plus installation", "硬體加安裝成本")
+  .replaceAll("hardware, fixture, or process-change cost", "硬體、治具或流程變更成本");
 
 const zhIndustries = (value) => String(value || "")
   .replaceAll("Utilities", "公用事業")
@@ -95,6 +114,20 @@ const zhIndustries = (value) => String(value || "")
   .replaceAll("Contact center", "客服中心")
   .replaceAll("Professional services", "專業服務")
   .replaceAll("Systems integration", "系統整合")
+  .replaceAll("Healthcare", "醫療")
+  .replaceAll("Field service", "現場服務")
+  .replaceAll("Maintenance", "維護")
+  .replaceAll("Manufacturing", "製造")
+  .replaceAll("Safety systems", "安全系統")
+  .replaceAll("Venues", "場館")
+  .replaceAll("Broadcast", "廣播/製播")
+  .replaceAll("Digital signage", "數位看板")
+  .replaceAll("Security", "保全")
+  .replaceAll("Access control", "門禁")
+  .replaceAll("Compliance", "合規")
+  .replaceAll("Heavy equipment", "重型設備")
+  .replaceAll("Senior care", "長照")
+  .replaceAll("Back office", "後勤辦公")
   .replaceAll("Enterprise", "企業")
   .replaceAll("SMB", "中小企業")
   .replaceAll("IoT", "物聯網");
@@ -115,8 +148,19 @@ const ALTS = alternatives.map((alt) => ({
 const CAT_FILTERS = [
   { id: "all", labelEn: "All", labelZh: "全部" },
   { id: "web", labelEn: "Web / API (cable)", labelZh: "網路 / API（有線）" },
-  { id: "non_web", labelEn: "Non-Web (wireless/radio)", labelZh: "非網路（無線/無線電）" },
+  { id: "non_web", labelEn: "Non-network / physical", labelZh: "非網路 / 實體媒介" },
 ];
+
+const mediumBadge = (alt) => {
+  if (alt.cat === "web") return "IP";
+  const medium = searchable(alt.medium);
+  if (/radio|wifi|cellular|satellite|dect|uwb|lpwan|near_field|rfid|nfc/.test(medium)) return "RF";
+  if (/serial|fieldbus|building_bus|board_bus|usb|av_bus|electrical|powerline|access_control/.test(medium)) return "WIRE";
+  if (/optical|visual|infrared/.test(medium)) return "OPT";
+  if (/acoustic|audio/.test(medium)) return "AUDIO";
+  if (/mechanical|pneumatic|hydraulic|magnetic|physical|manual|paper|barcode|qr|sensor/.test(medium)) return "PHYS";
+  return "ALT";
+};
 
 export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
@@ -214,8 +258,8 @@ export default function TechAlternativesPage() {
       <h2>{t("techAlternatives")}</h2>
       <p className="subtitle">
         {L === "en"
-          ? `Comprehensive catalog of alternatives to physical phone line command/trigger on edge devices. Covers ${ALTS.length} technologies across IP/API, brokered messaging, industrial, wired, wireless, cellular, satellite, serial, and electrical-contact media.`
-          : `實體電話線觸發/控制邊緣裝置的替代方案完整目錄。涵蓋 ${ALTS.length} 種技術，橫跨 IP/API、訊息佇列、工業、有線、無線、蜂巢、衛星、序列匯流排與電氣接點媒介。`}
+          ? `Comprehensive catalog of alternatives to physical phone line command/trigger on edge devices. Covers ${ALTS.length} technologies across IP/API, brokered messaging, industrial, wired, RF, cellular, satellite, serial, dry-contact, optical, acoustic, mechanical, pneumatic, hydraulic, QR/barcode, and human-workflow media.`
+          : `實體電話線觸發/控制邊緣裝置的替代方案完整目錄。涵蓋 ${ALTS.length} 種技術，橫跨 IP/API、訊息佇列、工業、有線、RF、蜂巢、衛星、序列匯流排、乾接點、光學、聲學、機械、氣壓、液壓、QR/條碼與人工流程媒介。`}
       </p>
 
       <div className="research-section">
@@ -334,7 +378,7 @@ export default function TechAlternativesPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
                 <strong style={{ fontSize: "0.95rem" }}>{alt.name}</strong>
-                <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{alt.cat === "web" ? "IP" : "RF"} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
+                <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{mediumBadge(alt)} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
                 {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}
