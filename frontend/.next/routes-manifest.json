@@ -2,15 +2,15 @@
   "version": 3,
   "pages404": true,
   "caseSensitive": false,
-  "basePath": "/pbx_estimation/en",
+  "basePath": "/pbx_estimation/zh",
   "redirects": [
     {
-      "source": "/pbx_estimation/en",
-      "destination": "/pbx_estimation/en/",
+      "source": "/pbx_estimation/zh",
+      "destination": "/pbx_estimation/zh/",
       "basePath": false,
       "internal": true,
       "statusCode": 308,
-      "regex": "^/pbx_estimation/en$"
+      "regex": "^/pbx_estimation/zh$"
     },
     {
       "source": "/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/",

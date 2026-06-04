@@ -22,6 +22,7 @@ DEFAULT_INCLUDE_DIRS = [
 ]
 DEFAULT_MANIFEST = ROOT / "rag_engine" / "dist" / "rag_assets_manifest.json"
 DEFAULT_NOTEBOOKLM_DIR = ROOT / "rag_engine" / "dist" / "notebooklm_sources"
+DEFAULT_HF_ASSET_DIR = ROOT / "rag_engine" / "dist" / "hf_assets"
 NOTEBOOKLM_EXTENSIONS = {".md", ".txt", ".csv", ".json", ".html", ".pdf"}
 NOTEBOOKLM_SOURCE_LIMIT = 50
 
@@ -144,6 +145,26 @@ def build_notebooklm_bundle(manifest: dict, output_dir: Path) -> dict:
     return source_manifest
 
 
+def build_hf_asset_bundle(manifest: dict, output_dir: Path) -> dict:
+    """Copy all RAG assets into a self-contained directory for HF Docker Spaces."""
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    copied = []
+    for asset in manifest["assets"]:
+        source = ROOT / asset["path"]
+        destination = output_dir / asset["key"]
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        copied.append({"key": asset["key"], "path": asset["path"]})
+
+    manifest_destination = output_dir / manifest["asset_prefix"] / "rag_engine" / "dist" / "rag_assets_manifest.json"
+    manifest_destination.parent.mkdir(parents=True, exist_ok=True)
+    manifest_destination.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+    return {"asset_count": len(copied), "asset_root": output_dir.as_posix(), "assets": copied}
+
+
 def upload_notebooklm(manifest: dict, endpoint: str, token: str, timeout: int) -> dict:
     """Upload sources to an unofficial NotebookLM-compatible ingestion endpoint.
 
@@ -186,6 +207,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--r2-pairs", type=Path, default=ROOT / "rag_engine" / "dist" / "rag_assets_r2.tsv")
     parser.add_argument("--notebooklm-dir", type=Path, default=DEFAULT_NOTEBOOKLM_DIR)
+    parser.add_argument("--hf-asset-dir", type=Path, default=DEFAULT_HF_ASSET_DIR)
     parser.add_argument("--include", action="append", type=Path, default=None)
     parser.add_argument("--notebooklm-upload-url", default=os.environ.get("NOTEBOOKLM_UPLOAD_URL", ""))
     parser.add_argument("--notebooklm-token", default=os.environ.get("NOTEBOOKLM_API_TOKEN", ""))
@@ -201,8 +223,10 @@ def main() -> None:
     write_manifest(manifest, args.manifest)
     write_r2_pairs(manifest, args.r2_pairs)
     notebooklm_manifest = build_notebooklm_bundle(manifest, args.notebooklm_dir)
+    hf_manifest = build_hf_asset_bundle(manifest, args.hf_asset_dir)
     print(f"Wrote {manifest['asset_count']} RAG assets to {args.manifest}")
     print(f"Wrote {notebooklm_manifest['source_count']} NotebookLM sources to {args.notebooklm_dir}")
+    print(f"Wrote {hf_manifest['asset_count']} Hugging Face Space assets to {args.hf_asset_dir}")
 
     if args.upload_notebooklm:
         if not args.notebooklm_upload_url:

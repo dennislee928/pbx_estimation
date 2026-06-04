@@ -143,6 +143,8 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
           NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
         run: |
           set -euo pipefail
           if [ -n "${CLOUDFLARE_API_TOKEN}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID}" ] && [ -n "${CLOUDFLARE_R2_BUCKET}" ]; then
@@ -154,6 +156,11 @@ jobs:
             echo "notebooklm_upload_enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "notebooklm_upload_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${HF_TOKEN}" ] && [ -n "${HF_SPACE_ID}" ]; then
+            echo "hf_space_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "hf_space_enabled=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload RAG assets to Cloudflare R2
@@ -175,6 +182,20 @@ jobs:
           NOTEBOOKLM_UPLOAD_URL: ${{ secrets.NOTEBOOKLM_UPLOAD_URL }}
           NOTEBOOKLM_API_TOKEN: ${{ secrets.NOTEBOOKLM_API_TOKEN }}
         run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}" --upload-notebooklm
+
+      - name: Deploy RAG engine to Hugging Face Docker Space
+        if: ${{ steps.rag_config.outputs.hf_space_enabled == 'true' }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade "huggingface_hub[cli]"
+          hf repos create "${HF_SPACE_ID}" --type space --space-sdk docker --exist-ok
+          hf upload "${HF_SPACE_ID}" rag_engine --type space \
+            --exclude ".wrangler/*" \
+            --exclude "node_modules/*" \
+            --commit-message "deploy rag engine"
 
       - name: Build bilingual frontend
         env:

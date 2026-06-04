@@ -131,6 +131,8 @@ Set these repository secrets for Cloudflare RAG:
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_R2_BUCKET` (default Worker binding expects `pbx-rag-assets`)
 
+Alternatively, the same self-developed RAG engine can run on Hugging Face Spaces as a Docker Space using the files in `rag_engine/`. Set `HF_TOKEN` and `HF_SPACE_ID` to let CI upload the Docker Space. Hugging Face's default CPU Basic Space is currently free and provides 2 vCPU, 16 GB RAM, and 50 GB non-persistent disk. The Space endpoint can also be used as `CLOUD_RAG_ENDPOINT`.
+
 The endpoint returns:
 
 ```json
@@ -210,6 +212,8 @@ jupyter notebook notebooks/
 技術替代方案頁面只在瀏覽器做快速關鍵字篩選，優先排序由 `rag_engine/` 的 Cloudflare Worker 回傳。CI 會將 `reports/`、`data/processed/`、`frontend/data/` 建成 RAG asset manifest，並在設定 Cloudflare secrets 後上傳到 Cloudflare R2 bucket，Worker 會從 bucket 讀取報告/資料證據。
 
 需要的 repository secrets：`CLOUD_RAG_ENDPOINT`、`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_R2_BUCKET`。
+
+也可以用 `rag_engine/` 的 Dockerfile 將同一套自研 RAG engine 部署到 Hugging Face Spaces。設定 `HF_TOKEN` 與 `HF_SPACE_ID` 後，CI 會上傳 Docker Space；Hugging Face CPU Basic Space 目前為免費方案，並提供 2 vCPU、16 GB RAM、50 GB 非持久磁碟。Space URL 也可作為 `CLOUD_RAG_ENDPOINT`。
 
 ### NotebookLM
 

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "build": "node --check src/worker.js",
+    "build": "node --check src/worker.js && node --check src/hf-space-server.js",
+    "start": "node src/hf-space-server.js",
     "dev": "npx wrangler dev",
     "deploy": "npx wrangler deploy"
   }

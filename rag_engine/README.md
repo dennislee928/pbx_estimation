@@ -1,6 +1,20 @@
+---
+title: PBX RAG Engine
+emoji: PBX
+colorFrom: teal
+colorTo: blue
+sdk: docker
+app_port: 7860
+---
+
 # PBX Cloud RAG Engine
 
-Cloud RAG endpoint for the PBX estimation frontend. It runs as a Cloudflare Worker, reads uploaded `reports/`, `data/processed/`, and `frontend/data/` assets from Cloudflare R2, and can also accept the catalog payload sent by the frontend:
+Cloud RAG endpoint for the PBX estimation frontend. It can run as either:
+
+- A Cloudflare Worker that reads uploaded `reports/`, `data/processed/`, and `frontend/data/` assets from Cloudflare R2.
+- A Hugging Face Docker Space that reads the same assets from `rag_engine/dist/hf_assets`.
+
+It can also accept the catalog payload sent by the frontend:
 
 ```http
 POST /
@@ -41,6 +55,8 @@ npm test
 
 ## Deploy
 
+### Cloudflare Worker
+
 ```bash
 npm run deploy
 ```
@@ -59,12 +75,37 @@ CLOUD_RAG_ENDPOINT=https://pbx-rag-engine.<your-account>.workers.dev/
 
 The existing GitHub Actions workflow passes that secret into the frontend build as `NEXT_PUBLIC_CLOUD_RAG_ENDPOINT`.
 
+### Hugging Face Docker Space
+
+Hugging Face Spaces can host this self-developed RAG engine for free on CPU Basic. The Space must use Docker SDK and listen on `0.0.0.0:7860`; this directory includes the required `Dockerfile` and README metadata.
+
+CI can upload this `rag_engine/` folder to a Space when these repository secrets are set:
+
+- `HF_TOKEN`
+- `HF_SPACE_ID`, for example `your-username/pbx-rag-engine`
+
+The CI asset step generates `rag_engine/dist/hf_assets/`, so the Space can serve RAG from local files without Cloudflare R2.
+
+Manual deploy:
+
+```bash
+hf repos create your-username/pbx-rag-engine --type space --space-sdk docker --exist-ok
+hf upload your-username/pbx-rag-engine rag_engine --type space --commit-message "deploy rag engine"
+```
+
+Then set:
+
+```text
+CLOUD_RAG_ENDPOINT=https://your-username-pbx-rag-engine.hf.space/
+```
+
 ## Configuration
 
 - `USE_WORKERS_AI=true`: use Cloudflare Workers AI for the final recommendation paragraph.
 - `USE_WORKERS_AI=false`: use only deterministic retrieval and extractive recommendation.
 - `ALLOWED_ORIGINS=*`: CORS allowlist. Use a comma-separated list for production domains.
-- `RAG_ASSET_PREFIX=latest`: R2 prefix where CI uploads the generated RAG assets.
+- `RAG_ASSET_PREFIX=latest`: R2 prefix for Cloudflare or local asset prefix for Hugging Face.
+- `HF_RAG_ASSET_ROOT=/app/dist/hf_assets`: local asset root inside the Hugging Face Docker container.
 
 ## CI Asset Upload
 
