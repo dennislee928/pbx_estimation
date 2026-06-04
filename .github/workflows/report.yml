@@ -87,8 +87,11 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Build research MCP service image
+        run: docker build -f services/research_mcp/Dockerfile -t pbx-research-mcp:ci .
+
       - name: Generate crawler seed context and shared research outputs
-        run: python scripts/generate_research_outputs.py
+        run: docker run --rm -v "$PWD:/workspace" -e PBX_WORKSPACE=/workspace pbx-research-mcp:ci generate
 
       - name: Commit crawler summary back to main
         if: ${{ github.event_name == 'schedule' || github.ref_name == 'main' }}
@@ -122,7 +125,7 @@ jobs:
           done
 
       - name: Refresh shared research outputs after notebooks
-        run: python scripts/generate_research_outputs.py
+        run: docker run --rm -v "$PWD:/workspace" -e PBX_WORKSPACE=/workspace pbx-research-mcp:ci generate
 
       - name: Convert notebooks to HTML and optional PDF
         run: |

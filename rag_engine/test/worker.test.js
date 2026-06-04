@@ -58,9 +58,15 @@ test("ranks matching alternatives and solutions", async () => {
   }, { USE_WORKERS_AI: "false" });
 
   assert.equal(result.alternatives[0].name, "Dry Contact / Relay Closure");
+  assert.ok(result.alternatives[0].suitability_percent >= 35);
+  assert.equal(result.alternatives[0].cost, "Very Low");
+  assert.ok(result.alternatives[0].risk_level);
+  assert.ok(Array.isArray(result.alternatives[0].pros));
+  assert.ok(Array.isArray(result.alternatives[0].cons));
   assert.ok(result.solutions.some((item) => item.name === "Grandstream UCM Series"));
   assert.equal(result.evidence.crawler_seed_counts.known_solution_count, 156);
   assert.match(result.recommendation, /hotel door relay low cost/);
+  assert.match(result.recommendation, /fit/);
 });
 
 test("empty scene returns empty ranks", async () => {

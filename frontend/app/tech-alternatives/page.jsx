@@ -7,7 +7,8 @@ import registry from "../../data/solution_registry.json";
 import crawlerSeed from "../../data/crawler_seed_context.json";
 
 const L = getLang();
-const CLOUD_RAG_ENDPOINT = process.env.NEXT_PUBLIC_CLOUD_RAG_ENDPOINT || "";
+const DEFAULT_CLOUD_RAG_ENDPOINT = "https://pbxanalyze.pcleegood.workers.dev/";
+const CLOUD_RAG_ENDPOINT = process.env.NEXT_PUBLIC_CLOUD_RAG_ENDPOINT || DEFAULT_CLOUD_RAG_ENDPOINT;
 
 const splitList = (value) => String(value || "").split("; ").filter(Boolean);
 const searchable = (value) => String(value || "").toLowerCase();
@@ -30,6 +31,13 @@ const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
       name: item.name || item.id || "",
       rank: Number(item.rank || index + 1),
       reason: item.reason || item.rationale || item.summary || "",
+      recommendation: item.recommendation || "",
+      suitability_percent: item.suitability_percent || item.suitability || "",
+      cost: item.cost || item.cost_model || item.cost_band || "",
+      risk_level: item.risk_level || item.risk || "",
+      risk_reasons: Array.isArray(item.risk_reasons) ? item.risk_reasons : [],
+      pros: Array.isArray(item.pros) ? item.pros : splitList(item.pros),
+      cons: Array.isArray(item.cons) ? item.cons : splitList(item.cons),
       excerpt: item.excerpt || "",
       key: item.key || "",
       score: item.score || "",
@@ -97,6 +105,11 @@ const zhCost = (value) => String(value || "")
   .replaceAll("hardware plus installation", "硬體加安裝成本")
   .replaceAll("hardware, fixture, or process-change cost", "硬體、治具或流程變更成本");
 
+const zhRisk = (value) => String(value || "")
+  .replaceAll("Low", "低")
+  .replaceAll("Medium", "中")
+  .replaceAll("High", "高");
+
 const zhIndustries = (value) => String(value || "")
   .replaceAll("Utilities", "公用事業")
   .replaceAll("Energy", "能源")
@@ -162,6 +175,31 @@ const mediumBadge = (alt) => {
   return "ALT";
 };
 
+const RecommendationCard = ({ item, type }) => (
+  <div className="ranked-solution">
+    <strong>#{item.rank} {item.name}</strong>
+    <span>{item.recommendation || item.reason}</span>
+    <small>
+      {L === "en" ? "Suitability" : "適合度"}: {item.suitability_percent || "-"}%
+      {" · "}
+      {L === "en" ? "Cost" : "成本"}: {L === "en" ? (item.cost || "-") : zhCost(item.cost || "-")}
+      {" · "}
+      {L === "en" ? "Risk" : "風險"}: {L === "en" ? (item.risk_level || "-") : zhRisk(item.risk_level || "-")}
+      {type && ` · ${type}`}
+    </small>
+    {item.risk_reasons.length > 0 && (
+      <small>{L === "en" ? "Risk reasons: " : "風險原因："}{item.risk_reasons.join(" / ")}</small>
+    )}
+    {item.pros.length > 0 && (
+      <small>{L === "en" ? "Pros: " : "優點："}{item.pros.slice(0, 3).join(" / ")}</small>
+    )}
+    {item.cons.length > 0 && (
+      <small>{L === "en" ? "Cons: " : "缺點："}{item.cons.slice(0, 3).join(" / ")}</small>
+    )}
+    {item.resource_url && <a href={item.resource_url} target="_blank" rel="noreferrer">{L === "en" ? "Source" : "來源"}</a>}
+  </div>
+);
+
 export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
   const [scene, setScene] = useState("");
@@ -192,7 +230,12 @@ export default function TechAlternativesPage() {
   const cloudRecommendation = cloudRag?.recommendation || cloudRag?.summary || "";
 
   async function askCloudRag() {
-    if (!scene.trim() || !CLOUD_RAG_ENDPOINT) return;
+    if (!scene.trim()) return;
+    if (!CLOUD_RAG_ENDPOINT) {
+      setCloudRagError("Cloud RAG endpoint is not configured.");
+      setCloudRagStatus("error");
+      return;
+    }
     setCloudRagStatus("loading");
     setCloudRagError("");
     try {
@@ -239,8 +282,28 @@ export default function TechAlternativesPage() {
           })),
           expected_response_schema: {
             recommendation: "short explanation",
-            alternatives: [{ name: "existing alternative name", rank: 1, reason: "why it fits" }],
-            solutions: [{ name: "existing solution name", rank: 1, reason: "why it fits" }],
+            alternatives: [{
+              name: "existing alternative name",
+              rank: 1,
+              suitability_percent: 85,
+              cost: "cost model",
+              risk_level: "Low/Medium/High",
+              risk_reasons: ["risk reason"],
+              pros: ["pro"],
+              cons: ["con"],
+              recommendation: "why this option fits",
+            }],
+            solutions: [{
+              name: "existing solution name",
+              rank: 1,
+              suitability_percent: 85,
+              cost: "cost band",
+              risk_level: "Low/Medium/High",
+              risk_reasons: ["risk reason"],
+              pros: ["pro"],
+              cons: ["con"],
+              recommendation: "why this option fits",
+            }],
           },
         }),
       });
@@ -276,26 +339,19 @@ export default function TechAlternativesPage() {
           />
           <small>
             {L === "en"
-              ? "Keyword filtering happens in the browser. Prioritization is requested from a cloud RAG endpoint configured by NEXT_PUBLIC_CLOUD_RAG_ENDPOINT."
-              : "瀏覽器只做關鍵字篩選；優先排序會送到 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 設定的雲端 RAG 端點處理。"}
+              ? `Keyword filtering happens in the browser. Cloud RAG endpoint: ${CLOUD_RAG_ENDPOINT}`
+              : `瀏覽器只做關鍵字篩選；雲端 RAG 端點：${CLOUD_RAG_ENDPOINT}`}
           </small>
           <button
             type="button"
             onClick={askCloudRag}
-            disabled={!scene.trim() || !CLOUD_RAG_ENDPOINT || cloudRagStatus === "loading"}
+            disabled={!scene.trim() || cloudRagStatus === "loading"}
             className="cloud-rag-button"
           >
             {cloudRagStatus === "loading"
               ? (L === "en" ? "Asking cloud RAG..." : "雲端 RAG 分析中...")
               : (L === "en" ? "Prioritize with Cloud RAG" : "使用雲端 RAG 優先排序")}
           </button>
-          {!CLOUD_RAG_ENDPOINT && (
-            <small className="cloud-rag-warning">
-              {L === "en"
-                ? "Set NEXT_PUBLIC_CLOUD_RAG_ENDPOINT at build time to enable cloud RAG."
-                : "建置時設定 NEXT_PUBLIC_CLOUD_RAG_ENDPOINT 才會啟用雲端 RAG。"}
-            </small>
-          )}
         </div>
         {(cloudRecommendation || cloudRagStatus === "error") && (
           <div className="rag-panel">
@@ -303,6 +359,16 @@ export default function TechAlternativesPage() {
             <p>
               {cloudRagStatus === "error" ? cloudRagError : cloudRecommendation}
             </p>
+            {cloudRagStatus !== "error" && (
+              <div className="ranked-solution-grid">
+                {normalizeCloudItems(cloudRag?.alternatives).slice(0, 3).map((item) => (
+                  <RecommendationCard item={item} type={L === "en" ? "Alternative" : "替代技術"} key={`alt-${item.rank}-${item.name}`} />
+                ))}
+                {normalizeCloudItems(cloudRag?.solutions).slice(0, 3).map((item) => (
+                  <RecommendationCard item={item} type={L === "en" ? "Solution" : "解決方案"} key={`sol-${item.rank}-${item.name}`} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

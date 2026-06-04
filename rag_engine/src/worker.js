@@ -184,19 +184,75 @@ function scoreRow(scene, row) {
   return score;
 }
 
+function splitList(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item)).filter(Boolean);
+  return String(value || "").split(";").map((item) => item.trim()).filter(Boolean);
+}
+
+function suitabilityPercent(score, rank) {
+  return Math.max(35, Math.min(98, Math.round(42 + score * 0.75 - (rank - 1) * 4)));
+}
+
+function riskProfile(row) {
+  const text = normalizeText(row);
+  const risks = [];
+  let level = "Low";
+  if (/physical security only|none natively|no native encryption|no identity/.test(text)) {
+    risks.push("Requires physical security, gateway authentication, or compensating controls.");
+    level = "Medium";
+  }
+  if (/high|very high|scada|private 5g|satellite|iec 61850|engineering/.test(text)) {
+    risks.push("Higher deployment complexity or specialist engineering may be required.");
+    level = "High";
+  }
+  if (/subscription|usage|carrier|roaming|message\/device/.test(text)) {
+    risks.push("Recurring service fees or provider coverage constraints may apply.");
+    if (level === "Low") level = "Medium";
+  }
+  if (/rf|radio|wifi|cellular|satellite|licensed spectrum|interference/.test(text)) {
+    risks.push("Wireless coverage, interference, or regulatory constraints must be validated on site.");
+    if (level === "Low") level = "Medium";
+  }
+  if (!risks.length) risks.push("Main risk is validating local device compatibility and operational monitoring.");
+  return { level, reasons: risks.slice(0, 3) };
+}
+
+function recommendationSummary(scene, row, kind, suitability, risk) {
+  const name = row.name || row.vendor || "option";
+  const cost = row.cost_model || row.cost_band || row.cost || "not specified";
+  const fit = row.industry_fit || row.typical_customers || "general deployments";
+  const useCase = row.use_case || row.description || "the requested scene";
+  return `${name} is a ${suitability}% fit for "${scene}" because it maps to ${useCase}. Cost profile: ${cost}. Best fit: ${fit}. Risk level: ${risk.level}.`;
+}
+
+function enrichRankedItem(scene, row, score, rank, kind) {
+  const risk = riskProfile(row);
+  const suitability = suitabilityPercent(score, rank);
+  const pros = splitList(row.pros).slice(0, 4);
+  const cons = splitList(row.cons).slice(0, 4);
+  return {
+    name: row.name,
+    rank,
+    score: Math.round(score),
+    suitability_percent: suitability,
+    cost: row.cost_model || row.cost_band || row.cost || "",
+    risk_level: risk.level,
+    risk_reasons: risk.reasons,
+    pros: pros.length ? pros : ["Matches retrieved catalog evidence for the requested scene."],
+    cons: cons.length ? cons : ["Requires validation against local device support, integration path, and operations."],
+    reason: makeReason(scene, row, kind),
+    recommendation: recommendationSummary(scene, row, kind, suitability, risk),
+    resource_url: row.resource_url || "",
+  };
+}
+
 function rankRows(scene, rows, kind) {
   return rows
     .map((row) => ({ row, score: scoreRow(scene, row) }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score || normalizeText(a.row.name).localeCompare(normalizeText(b.row.name)))
     .slice(0, TOP_K)
-    .map((item, index) => ({
-      name: item.row.name,
-      rank: index + 1,
-      score: Math.round(item.score),
-      reason: makeReason(scene, item.row, kind),
-      resource_url: item.row.resource_url || "",
-    }));
+    .map((item, index) => enrichRankedItem(scene, item.row, item.score, index + 1, kind));
 }
 
 function rankDocuments(scene, documents) {
@@ -237,9 +293,12 @@ function makeReason(scene, row, kind) {
 }
 
 function deterministicRecommendation(scene, alternatives, solutions) {
-  const altNames = alternatives.slice(0, 3).map((item) => item.name).join(", ") || "no strong alternative match";
-  const solNames = solutions.slice(0, 3).map((item) => item.name).join(", ") || "no strong solution match";
-  return `For "${scene}", prioritize alternatives: ${altNames}. Pair with solutions: ${solNames}. Ranking is based on retrieved protocol, use-case, industry, security, latency, and cost evidence from the submitted catalog.`;
+  const topAlt = alternatives[0];
+  const topSolution = solutions[0];
+  if (!topAlt && !topSolution) return `No strong match found for "${scene}". Add more scene detail such as site type, device count, latency, cost, and security needs.`;
+  const altText = topAlt ? `${topAlt.name} (${topAlt.suitability_percent}% fit, ${topAlt.risk_level} risk, cost: ${topAlt.cost || "not specified"})` : "no strong alternative match";
+  const solText = topSolution ? `${topSolution.name} (${topSolution.suitability_percent}% fit, ${topSolution.risk_level} risk, cost: ${topSolution.cost || "not specified"})` : "no strong solution match";
+  return `For "${scene}", recommended path: ${altText}. Pair with: ${solText}. Review the ranked pros, cons, cost profile, suitability percentage, and risk reasons before deployment.`;
 }
 
 function buildAiPrompt(scene, alternatives, solutions) {
