@@ -151,6 +151,8 @@ Then set GitHub repository variables:
 
 The workflow writes `site/CNAME` and builds frontend assets for root-domain hosting. Keep `NEXT_PUBLIC_SITE_BASE_PATH=/pbx_estimation` only for the default `https://dennislee928.github.io/pbx_estimation/` URL.
 
+See `docs/cloudflare_pages_dns.md` for the exact Cloudflare DNS records.
+
 The endpoint returns:
 
 ```json
