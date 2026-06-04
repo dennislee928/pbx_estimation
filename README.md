@@ -1,6 +1,6 @@
 # PBX Market Estimation & VoIP Trend Forecasting
 
-[![Report Generation](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml/badge.svg)](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml)
+[Report Generation](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml)
 
 ---
 
