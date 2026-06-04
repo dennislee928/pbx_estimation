@@ -268,6 +268,8 @@ jobs:
       - name: Build bilingual frontend
         env:
           NEXT_PUBLIC_CLOUD_RAG_ENDPOINT: ${{ secrets.CLOUD_RAG_ENDPOINT }}
+          NEXT_PUBLIC_SITE_BASE_PATH: ${{ vars.NEXT_PUBLIC_SITE_BASE_PATH || '/pbx_estimation' }}
+          PAGES_CUSTOM_DOMAIN: ${{ vars.PAGES_CUSTOM_DOMAIN }}
         run: |
           set -euo pipefail
           if [ -z "${NEXT_PUBLIC_CLOUD_RAG_ENDPOINT}" ]; then
@@ -291,6 +293,9 @@ jobs:
           cp -R reports/. site/zh/reports/
           cp -R reports/. site/en/reports/
           cp reports/index.html site/index.html
+          if [ -n "${PAGES_CUSTOM_DOMAIN}" ]; then
+            printf '%s\n' "${PAGES_CUSTOM_DOMAIN}" > site/CNAME
+          fi
           touch site/.nojekyll
 
       - name: Upload reports as workflow artifacts

@@ -1,5 +1,7 @@
 const LANG = process.env.NEXT_PUBLIC_LANG || "zh";
-const BASE = LANG === "en" ? "/pbx_estimation/en" : "/pbx_estimation/zh";
+const SITE_BASE_PATH = (process.env.NEXT_PUBLIC_SITE_BASE_PATH || "/pbx_estimation").replace(/\/$/, "");
+const BASE_PREFIX = SITE_BASE_PATH === "/" ? "" : SITE_BASE_PATH;
+const BASE = LANG === "en" ? `${BASE_PREFIX}/en` : `${BASE_PREFIX}/zh`;
 const CLOUD_RAG_ENDPOINT = process.env.NEXT_PUBLIC_CLOUD_RAG_ENDPOINT || "";
 
 /** @type {import('next').NextConfig} */
