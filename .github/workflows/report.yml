@@ -268,7 +268,7 @@ jobs:
       - name: Build bilingual frontend
         env:
           NEXT_PUBLIC_CLOUD_RAG_ENDPOINT: ${{ secrets.CLOUD_RAG_ENDPOINT }}
-          NEXT_PUBLIC_SITE_BASE_PATH: ${{ vars.NEXT_PUBLIC_SITE_BASE_PATH || '/pbx_estimation' }}
+          NEXT_PUBLIC_SITE_BASE_PATH: ${{ vars.NEXT_PUBLIC_SITE_BASE_PATH }}
           PAGES_CUSTOM_DOMAIN: ${{ vars.PAGES_CUSTOM_DOMAIN }}
         run: |
           set -euo pipefail
@@ -276,6 +276,15 @@ jobs:
             echo "CLOUD_RAG_ENDPOINT secret is empty; frontend Cloud RAG would be disabled."
             exit 1
           fi
+          if [ -z "${NEXT_PUBLIC_SITE_BASE_PATH}" ]; then
+            if [ -n "${PAGES_CUSTOM_DOMAIN}" ]; then
+              NEXT_PUBLIC_SITE_BASE_PATH="/"
+            else
+              NEXT_PUBLIC_SITE_BASE_PATH="/pbx_estimation"
+            fi
+          fi
+          export NEXT_PUBLIC_SITE_BASE_PATH
+          echo "Building frontend with NEXT_PUBLIC_SITE_BASE_PATH=${NEXT_PUBLIC_SITE_BASE_PATH}"
           rm -rf site frontend/public/reports
           mkdir -p site frontend/public/reports
           cp -R reports/. frontend/public/reports/
@@ -292,7 +301,18 @@ jobs:
           mkdir -p site/zh/reports site/en/reports
           cp -R reports/. site/zh/reports/
           cp -R reports/. site/en/reports/
-          cp reports/index.html site/index.html
+          if [ "${NEXT_PUBLIC_SITE_BASE_PATH}" = "/" ]; then
+            cat > site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta http-equiv="refresh" content="0; url=/zh/">
+          <script>location.replace("/zh/");</script>
+          <a href="/zh/">Open PBX Estimation</a>
+          EOF
+          else
+            cp reports/index.html site/index.html
+          fi
           if [ -n "${PAGES_CUSTOM_DOMAIN}" ]; then
             printf '%s\n' "${PAGES_CUSTOM_DOMAIN}" > site/CNAME
           fi
