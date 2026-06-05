@@ -18,7 +18,7 @@ countries:
 
 model:
   logistic_growth:
-    death_threshold: 0.05  # Market considered dead when P(t) < 5% of K
+    death_threshold: 0.3  # Market considered "dead" when penetration falls below 30% of its historical peak (≈70% decline = legacy PBX no longer the primary access tech). 0.05 (near-extinction) left too few events to identify the survival model and decoupled it from reality.
     initial_guess:
       K: 50
       r: 0.3
