@@ -1,6 +1,6 @@
 # PBX Market Estimation & VoIP Trend Forecasting
 
-[![Report Generation](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml/badge.svg)](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml)
+[Report Generation](https://github.com/dennis-lee/pbx_estimation/actions/workflows/report.yml)
 
 ---
 
@@ -298,7 +298,7 @@ MIT
 <!-- CICD_SUMMARY_START -->
 ## CI/CD Crawler Summary
 
-_Last generated: 2026-06-04_
+_Last generated: 2026-06-05_
 
 - 156 解決方案
 - 42 國家/地區
