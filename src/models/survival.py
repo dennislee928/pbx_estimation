@@ -119,7 +119,7 @@ def plot_survival_curves(
                 covs[k] = int(v)
 
         surv = model.predict_survival_function(
-            pd.DataFrame([covs]), times=time_points
+            pd.DataFrame([_standardize_covariates(model, covs)]), times=time_points
         )
         ax.step(
             time_points,
