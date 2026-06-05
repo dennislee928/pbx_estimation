@@ -52,23 +52,91 @@ def asset_key(path: Path, prefix: str) -> str:
     return f"{prefix.rstrip('/')}/{relative}"
 
 
+# Catalog files whose rows carry structured transport/metric metadata. The
+# manifest summarizes these so the RAG retriever can filter on transport
+# (e.g. exclude ethernet) and metrics, not just on filename.
+CATALOG_LABEL_FIELDS = {
+    "frontend/data/awesome_list.json": {
+        "transport_field": "medium",
+        "metric_fields": ["latency", "reliability", "security", "cost_model", "recommended_devices", "industry_fit"],
+    },
+    "frontend/data/solution_registry.json": {
+        "transport_field": "tags",
+        "metric_fields": ["vendor", "continent", "recommended_terminals", "cost_band", "industry_fit", "lifecycle_assigned"],
+    },
+}
+
+
+def classify_kind(rel_path: str) -> str:
+    """Coarse semantic kind used by the retriever to weight/scope a document."""
+    if rel_path.startswith("reports/"):
+        return "report"
+    if rel_path.startswith("data/processed/"):
+        return "data"
+    if rel_path.startswith("frontend/data/"):
+        return "catalog"
+    return "other"
+
+
+def build_labels(path: Path, rel_path: str) -> dict:
+    """Build a semantic label block for an asset.
+
+    For known catalog JSONs this includes the distinct transport mediums and the
+    metric fields present, so retrieval can apply transport exclusions and
+    metric filters. Failures degrade gracefully to the coarse ``kind`` label.
+    """
+    labels: dict = {"kind": classify_kind(rel_path)}
+    spec = CATALOG_LABEL_FIELDS.get(rel_path)
+    if spec is None:
+        return labels
+    try:
+        rows = json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return labels
+    if not isinstance(rows, list):
+        return labels
+    transport_field = spec["transport_field"]
+    transports = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        raw = str(row.get(transport_field, ""))
+        for token in re.split(r"[;,]\s*", raw):
+            token = token.strip()
+            if token:
+                transports.add(token)
+    labels["row_count"] = len(rows)
+    labels["transport_field"] = transport_field
+    labels["transport_values"] = sorted(transports)
+    labels["metric_fields"] = spec["metric_fields"]
+    return labels
+
+
 def build_manifest(paths: list[Path], prefix: str) -> dict:
     assets = []
     for path in iter_files(paths):
         mime_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        rel_path = path.relative_to(ROOT).as_posix()
         assets.append(
             {
-                "path": path.relative_to(ROOT).as_posix(),
+                "path": rel_path,
                 "key": asset_key(path, prefix),
                 "size": path.stat().st_size,
                 "sha256": sha256(path),
                 "content_type": mime_type,
+                "labels": build_labels(path, rel_path),
             }
         )
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "asset_prefix": prefix,
         "asset_count": len(assets),
+        "label_schema": {
+            "kind": "report | data | catalog | other",
+            "transport_field": "catalog field summarizing the transport medium",
+            "transport_values": "distinct transport mediums present in a catalog",
+            "metric_fields": "structured metric columns available for filtering",
+        },
         "assets": assets,
     }
 
