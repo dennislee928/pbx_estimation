@@ -48,6 +48,17 @@ def fit_cox_model(
     if model_data.empty:
         raise ValueError("No valid data after dropping missing values.")
 
+    # Standardize covariates to z-scores before fitting. Raw covariates here
+    # live on wildly different scales (gdp_per_capita ~3e4, urban_pop ~80,
+    # has_pstn_phaseout in {0,1}). Without standardization the Cox linear
+    # predictor is dominated by large-magnitude covariates and survival
+    # predictions saturate to 0% / 100% for any out-of-sample scenario. After
+    # standardization each hazard ratio is interpretable per +1 standard
+    # deviation, and scenario predictions stay numerically stable.
+    scaler_mean = model_data[covariates].mean()
+    scaler_std = model_data[covariates].std(ddof=0).replace(0, 1.0)
+    model_data[covariates] = (model_data[covariates] - scaler_mean) / scaler_std
+
     cph = CoxPHFitter(penalizer=penalizer)
     cph.fit(
         model_data,
@@ -55,7 +66,28 @@ def fit_cox_model(
         event_col=event_col,
     )
     cph.covariates_ = covariates
+    cph.scaler_mean_ = scaler_mean
+    cph.scaler_std_ = scaler_std
     return cph
+
+
+def _standardize_covariates(model: CoxPHFitter, covariates: dict) -> dict:
+    """Apply the model's stored z-score scaler to a raw covariate dict.
+
+    Falls back to the raw values if the model was not fitted with a scaler
+    (keeps backwards compatibility for externally-constructed models).
+    """
+    mean = getattr(model, "scaler_mean_", None)
+    std = getattr(model, "scaler_std_", None)
+    if mean is None or std is None:
+        return dict(covariates)
+    out = {}
+    for key, value in covariates.items():
+        if key in mean.index:
+            out[key] = (float(value) - float(mean[key])) / float(std[key])
+        else:
+            out[key] = value
+    return out
 
 
 def plot_survival_curves(
@@ -133,7 +165,7 @@ def predict_survival_probability(
                 stacklevel=2,
             )
 
-    df = pd.DataFrame([covariates])
+    df = pd.DataFrame([_standardize_covariates(model, covariates)])
     surv = model.predict_survival_function(df, times=[t])
     return float(surv.iloc[0, 0] if hasattr(surv, "iloc") else surv.values[0, 0])
 
