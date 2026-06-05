@@ -63,6 +63,31 @@ test("ranks matching alternatives and solutions", async () => {
   assert.match(result.recommendation, /hotel door relay low cost/);
 });
 
+test("excludes ethernet/IP transports when the scene forbids them", async () => {
+  const result = await handleRagRequest({
+    scene: "我有30台edge device跟5000台terminal device，不可以用乙太網路/乙太網路線/傳統類比電話線，對edge device下開關網路的命令",
+    alternatives,
+    solutions,
+  }, { USE_WORKERS_AI: "false" });
+
+  // No ethernet_ip alternative may survive the exclusion filter.
+  assert.equal(result.alternatives.some((item) => item.name === "MQTT (MQTT-SN)"), false);
+  // The dry-contact (electrical) option is still allowed.
+  assert.equal(result.alternatives.some((item) => item.name === "Dry Contact / Relay Closure"), true);
+  // The constraint is reported back in the evidence.
+  assert.ok(result.evidence.excluded_transport_tokens.includes("ethernet_ip"));
+  assert.ok(result.evidence.excluded_constraints.length > 0);
+});
+
+test("does not exclude transports that are merely mentioned positively", async () => {
+  const result = await handleRagRequest({
+    scene: "use ethernet IP for hotel door relay low cost",
+    alternatives,
+    solutions,
+  }, { USE_WORKERS_AI: "false" });
+  assert.equal(result.evidence.excluded_transport_tokens.length, 0);
+});
+
 test("empty scene returns empty ranks", async () => {
   const result = await handleRagRequest({ scene: "", alternatives, solutions }, { USE_WORKERS_AI: "false" });
   assert.deepEqual(result.alternatives, []);

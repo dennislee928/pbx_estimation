@@ -62,12 +62,29 @@ class TestFitCountry:
         result = fit_country(years, penetration)
         assert "converged" in result
 
-    def test_fit_death_year_computed(self):
+    def test_growth_only_has_no_death_year(self):
+        # A pure growth/saturating curve has not peaked-and-declined, so a
+        # death_year must NOT be invented; a saturation_year should exist.
         years = np.arange(2000, 2030)
         penetration = logistic(years, 40, 0.2, 2010)
         result = fit_country(years, penetration)
-        if result["converged"]:
-            assert not np.isnan(result.get("death_year", np.nan))
+        assert result["converged"]
+        assert result["phase"] in ("growing", "flat")
+        assert np.isnan(result.get("death_year", np.nan))
+        assert not np.isnan(result.get("saturation_year", np.nan))
+
+    def test_decline_death_year_in_decline_phase(self):
+        # Rise-then-fall series: death_year must land in the declining phase
+        # (after the observed peak), not on the way up.
+        rise = np.array([5, 12, 25, 40, 52, 58, 60], dtype=float)
+        fall = np.array([58, 50, 38, 25, 14, 7, 3], dtype=float)
+        penetration = np.concatenate([rise, fall])
+        years = np.arange(2000, 2000 + len(penetration), dtype=float)
+        result = fit_country(years, penetration, death_threshold=0.05)
+        assert result["converged"]
+        assert result["phase"] == "declining"
+        assert not np.isnan(result["death_year"])
+        assert result["death_year"] >= result["peak_year"]
 
 
 class TestFitAllCountries:

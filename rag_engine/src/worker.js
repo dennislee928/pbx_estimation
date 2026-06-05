@@ -54,6 +54,29 @@ const SCENE_EXPANSIONS = [
   },
 ];
 
+// Maps a constraint phrase (zh/en) to the canonical transport tokens that must
+// be excluded. Tokens are matched against a row's medium/protocols/standards/
+// description so "不可以用乙太網路" drops every ethernet/IP option, etc.
+const TRANSPORT_EXCLUSIONS = [
+  { keys: ["乙太網路線", "網路線", "ethernet cable", "ethernet wire", "rj45", "rj-45", "lan cable"], tokens: ["ethernet_wire", "ethernet", "rj45", "lan"] },
+  { keys: ["乙太網路", "ethernet", "ip網路", "ip network", "區域網路"], tokens: ["ethernet", "ethernet_ip", "ethernet_wire", "serial_ethernet", "lan"] },
+  { keys: ["類比電話線", "傳統電話線", "電話線", "類比線路", "analog phone", "analogue phone", "analog line", "pstn line", "copper line", "pots"], tokens: ["analog", "analogue", "pstn", "pots", "fxs", "fxo", "tdm", "copper", "phone_line"] },
+  { keys: ["pstn", "傳統電話網路", "public switched"], tokens: ["pstn", "pots", "tdm", "analog"] },
+  { keys: ["wifi", "wi-fi", "無線網路", "無線區域網路", "wlan"], tokens: ["wifi", "wifi_direct", "wlan", "802.11"] },
+  { keys: ["蜂巢", "行動網路", "cellular", "lte", "5g", "4g", "nb-iot", "lte-m", "sim卡"], tokens: ["cellular", "cellular_ip", "cellular_lpwans", "cellular_esim", "private_cellular", "cellular_broadcast", "lte", "5g", "nb-iot"] },
+  { keys: ["衛星", "satellite"], tokens: ["satellite", "satellite_navigation"] },
+  { keys: ["序列", "serial", "rs-232", "rs232", "rs-485", "rs485"], tokens: ["serial_wire", "serial_ethernet", "rs-232", "rs-485", "modbus"] },
+  { keys: ["藍牙", "bluetooth", "ble"], tokens: ["bluetooth", "ble", "radio_802_15_4"] },
+  { keys: ["紅外線", "infrared"], tokens: ["infrared", "optical_signal"] },
+];
+
+// Phrase fragments that signal a *negation* in the scene text. If one appears
+// within a short window before a transport keyword, that transport is excluded.
+const NEGATION_MARKERS = [
+  "不可以用", "不可以", "不能用", "不能", "不可", "不使用", "不要用", "不要", "不得", "禁用", "禁止", "避免", "排除", "無法使用", "沒有",
+  "cannot use", "can not use", "can't use", "cannot", "can't", "without", "no ", "not ", "avoid", "exclude", "excluding", "ban", "prohibit", "must not", "don't use", "do not use",
+];
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -105,6 +128,50 @@ function expandedQuery(scene) {
     }
   }
   return [...new Set([...base, ...tokenize(extra.join(" "))])];
+}
+
+// Parse negative transport constraints out of the scene text. Returns the set
+// of canonical transport tokens the user said NOT to use, plus the human-
+// readable constraint phrases for surfacing in the response evidence.
+function parseExclusions(scene) {
+  const text = normalizeText(scene);
+  const tokens = new Set();
+  const phrases = new Set();
+  for (const group of TRANSPORT_EXCLUSIONS) {
+    for (const key of group.keys) {
+      const needle = normalizeText(key);
+      let from = 0;
+      let idx = text.indexOf(needle, from);
+      while (idx !== -1) {
+        // Look back a small window for a negation marker. CJK has no spaces,
+        // so a 12-char window covers "不可以用乙太網路" style phrasing.
+        const windowStart = Math.max(0, idx - 12);
+        const before = text.slice(windowStart, idx);
+        if (NEGATION_MARKERS.some((marker) => before.includes(normalizeText(marker)))) {
+          group.tokens.forEach((token) => tokens.add(token));
+          phrases.add(key);
+          break;
+        }
+        from = idx + needle.length;
+        idx = text.indexOf(needle, from);
+      }
+    }
+  }
+  return { tokens: [...tokens], phrases: [...phrases] };
+}
+
+// True if a catalog row relies on an excluded transport. Checks the structured
+// transport fields first, then falls back to description text.
+function isExcludedRow(row, exclusionTokens) {
+  if (!exclusionTokens.length) return false;
+  const transportText = normalizeText([
+    row.medium,
+    row.protocols,
+    row.standards,
+    row.category,
+    row.description,
+  ].join(" "));
+  return exclusionTokens.some((token) => transportText.includes(normalizeText(token)));
 }
 
 function asRows(value, maxRows) {
@@ -184,8 +251,9 @@ function scoreRow(scene, row) {
   return score;
 }
 
-function rankRows(scene, rows, kind) {
+function rankRows(scene, rows, kind, exclusionTokens = []) {
   return rows
+    .filter((row) => !isExcludedRow(row, exclusionTokens))
     .map((row) => ({ row, score: scoreRow(scene, row) }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score || normalizeText(a.row.name).localeCompare(normalizeText(b.row.name)))
@@ -199,8 +267,9 @@ function rankRows(scene, rows, kind) {
     }));
 }
 
-function rankDocuments(scene, documents) {
+function rankDocuments(scene, documents, exclusionTokens = []) {
   return documents
+    .filter((document) => !isExcludedRow({ description: document.content, name: document.name }, exclusionTokens))
     .map((document) => ({
       document,
       score: scoreRow(scene, {
@@ -242,21 +311,24 @@ function deterministicRecommendation(scene, alternatives, solutions) {
   return `For "${scene}", prioritize alternatives: ${altNames}. Pair with solutions: ${solNames}. Ranking is based on retrieved protocol, use-case, industry, security, latency, and cost evidence from the submitted catalog.`;
 }
 
-function buildAiPrompt(scene, alternatives, solutions) {
+function buildAiPrompt(scene, alternatives, solutions, exclusions = { phrases: [] }) {
   const context = {
     scene,
+    excluded_constraints: exclusions.phrases,
     alternatives: alternatives.slice(0, 5),
     solutions: solutions.slice(0, 5),
   };
   return [
     "You are ranking PBX/UCaaS and PSTN replacement options for a deployment scene.",
     "Use only the retrieved JSON context. Do not invent products.",
+    "The context has already removed any option that uses an excluded transport.",
+    "NEVER recommend or mention any transport listed in excluded_constraints; if a candidate would require one, drop it.",
     "Return one concise paragraph in Traditional Chinese if the scene contains Chinese, otherwise English.",
     JSON.stringify(context),
   ].join("\n");
 }
 
-async function aiRecommendation(env, scene, alternatives, solutions) {
+async function aiRecommendation(env, scene, alternatives, solutions, exclusions = { phrases: [] }) {
   if (!env?.AI || String(env.USE_WORKERS_AI || "true") === "false") {
     return deterministicRecommendation(scene, alternatives, solutions);
   }
@@ -264,7 +336,7 @@ async function aiRecommendation(env, scene, alternatives, solutions) {
     const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
       messages: [
         { role: "system", content: "You are a concise cloud RAG recommender." },
-        { role: "user", content: buildAiPrompt(scene, alternatives, solutions) },
+        { role: "user", content: buildAiPrompt(scene, alternatives, solutions, exclusions) },
       ],
       max_tokens: 180,
     });
@@ -294,10 +366,11 @@ export async function handleRagRequest(payload, env = {}) {
     ? asRows(payload.documents, MAX_DOCUMENTS)
     : asRows(bucketContext.documents, MAX_DOCUMENTS);
   const crawlerSeed = payload?.crawler_seed_context || bucketContext.crawlerSeed || {};
-  const alternatives = rankRows(scene, alternativesInput, "alternative");
-  const solutions = rankRows(scene, solutionsInput, "solution");
-  const documents = rankDocuments(scene, documentsInput);
-  const recommendation = await aiRecommendation(env, scene, alternatives, solutions);
+  const exclusions = parseExclusions(scene);
+  const alternatives = rankRows(scene, alternativesInput, "alternative", exclusions.tokens);
+  const solutions = rankRows(scene, solutionsInput, "solution", exclusions.tokens);
+  const documents = rankDocuments(scene, documentsInput, exclusions.tokens);
+  const recommendation = await aiRecommendation(env, scene, alternatives, solutions, exclusions);
   return {
     recommendation,
     alternatives,
@@ -305,6 +378,8 @@ export async function handleRagRequest(payload, env = {}) {
     documents,
     evidence: {
       scene,
+      excluded_constraints: exclusions.phrases,
+      excluded_transport_tokens: exclusions.tokens,
       alternatives_considered: alternativesInput.length,
       solutions_considered: solutionsInput.length,
       documents_considered: documentsInput.length,
