@@ -4,6 +4,8 @@ Uses lifelines.CoxPHFitter to estimate product survival probability
 across different market conditions.
 """
 
+import warnings
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -117,6 +119,20 @@ def predict_survival_probability(
     Returns:
         Survival probability S(t)
     """
+    # Guard against silent extrapolation beyond the fitted baseline timeline.
+    # lifelines forward-fills the last baseline survival value for t past the
+    # largest observed duration, which understates uncertainty — warn so callers
+    # (and notebooks) treat far-horizon predictions as extrapolation.
+    baseline = getattr(model, "baseline_survival_", None)
+    if baseline is not None and len(baseline.index):
+        max_t = float(baseline.index.max())
+        if t > max_t:
+            warnings.warn(
+                f"predict_survival_probability: t={t} exceeds the fitted "
+                f"baseline horizon ({max_t:.0f}); result is extrapolated.",
+                stacklevel=2,
+            )
+
     df = pd.DataFrame([covariates])
     surv = model.predict_survival_function(df, times=[t])
     return float(surv.iloc[0, 0] if hasattr(surv, "iloc") else surv.values[0, 0])
