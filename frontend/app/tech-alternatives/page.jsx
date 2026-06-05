@@ -425,20 +425,55 @@ export default function TechAlternativesPage() {
         </div>
       </div>
 
-      {scene.trim() && (
-        <div className="research-section">
-          <h3>{L === "en" ? "Prioritized PBX/UCaaS Solutions" : "優先解決方案"}</h3>
+      <div className="research-section">
+        <h3>
+          {L === "en"
+            ? `Solution Catalog with scale & sources (${rankedSolutions.length})`
+            : `含規模建議與來源網址的方案目錄（${rankedSolutions.length}）`}
+        </h3>
+        <div className="solution-filter-bar" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14, alignItems: "flex-end" }}>
+          {SOL_FILTER_DEFS.map((def) => (
+            <label key={def.key} style={{ display: "flex", flexDirection: "column", fontSize: "0.72rem", color: "#555", gap: 3 }}>
+              {L === "en" ? def.labelEn : def.labelZh}
+              <select
+                value={solFilters[def.key]}
+                onChange={(event) => setSolFilters({ ...solFilters, [def.key]: event.target.value })}
+                style={{ padding: "5px 8px", borderRadius: 6, border: "1px solid #d0d8e8", fontSize: "0.78rem", maxWidth: 200 }}
+              >
+                <option value="all">{L === "en" ? "All" : "全部"}</option>
+                {SOL_FILTER_OPTIONS[def.key].map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+          ))}
+          {solFiltersActive && (
+            <button
+              type="button"
+              onClick={() => setSolFilters(emptySolutionFilters)}
+              style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid #d0d8e8", background: "#fff", cursor: "pointer", fontSize: "0.75rem" }}
+            >
+              {L === "en" ? "Reset filters" : "清除篩選"}
+            </button>
+          )}
+        </div>
+        {rankedSolutions.length === 0 ? (
+          <p style={{ fontSize: "0.82rem", color: "#888" }}>
+            {L === "en" ? "No solutions match the current filters." : "沒有符合目前篩選條件的方案。"}
+          </p>
+        ) : (
           <div className="ranked-solution-grid">
             {rankedSolutions.map((row) => (
               <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
                 <strong>{row.name}</strong>
                 <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
                 <small>{row.recommended_terminals} · {row.cost_band}</small>
+                <small style={{ color: "#2563eb" }}>{domainOf(row.resource_url) || "—"}</small>
               </a>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {cloudDocuments.length > 0 && (
         <div className="research-section">

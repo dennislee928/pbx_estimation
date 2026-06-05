@@ -44,3 +44,6 @@ auto_commit.sh
 # RAG asset staging
 rag_engine/dist/
 .env.example
+/frontend/.next
+/frontend/.next/cache
+/frontend/.next
