@@ -179,41 +179,50 @@ function parseExclusions(scene) {
 }
 
 // Solutions in solution_registry.json carry no explicit transport `medium`,
-// only category `tags`. Map those tags to the transport bearer(s) they imply so
-// the same exclusion logic can reach them (e.g. a cloud/SIP PBX rides ethernet/
-// IP; a TDM/FXS appliance rides analog; an eSIM/cellular gateway rides cellular).
-const TAG_TRANSPORT_MAP = {
-  cloud: ["ethernet_ip"], ucaas: ["ethernet_ip"], cpaas: ["ethernet_ip"], api: ["ethernet_ip"],
-  sip: ["ethernet_ip"], voip: ["ethernet_ip"], webrtc: ["ethernet_ip"], hosted: ["ethernet_ip"],
-  telco: ["ethernet_ip"], h323: ["ethernet_ip"], sbc: ["ethernet_ip"], ip_pbx: ["ethernet_ip"],
-  messaging: ["ethernet_ip"], wholesale: ["ethernet_ip"], workspace: ["ethernet_ip"],
-  tdm: ["analog"], digital: ["analog"], fxs: ["analog"], fxo: ["analog"], analog: ["analog"], pots: ["analog"], pstn: ["analog"],
-  esim: ["cellular"], cellular: ["cellular"], sms: ["cellular"], satellite: ["satellite"],
-};
+// only category `tags`. We classify those tags into:
+//   - IP-platform tags: the solution fundamentally requires IP/ethernet to run
+//     (cloud/SIP/UCaaS/PBX). Forbidden when ethernet is excluded.
+//   - analog tags: the solution rides the legacy TDM/analog network. Forbidden
+//     when analog/PSTN is excluded.
+//   - bearer tags: device-side non-ethernet connectivity (eSIM/cellular/
+//     satellite) that legitimately satisfies a "no ethernet" constraint and so
+//     RESCUES an otherwise IP-leaning solution.
+// "api"/"sms"/"voice" are deliberately neutral: every modern platform exposes an
+// API, and an incidental SMS channel does not make a cloud platform ethernet-free.
+const IP_PLATFORM_TAGS = new Set([
+  "cloud", "ucaas", "cpaas", "hosted", "ip_pbx", "sip", "voip", "webrtc",
+  "telco", "h323", "sbc", "wholesale", "workspace", "messaging",
+]);
+const ANALOG_TAGS = new Set(["tdm", "digital", "fxs", "fxo", "analog", "pots", "pstn"]);
+const BEARER_TRANSPORT = { esim: "cellular", cellular: "cellular", satellite: "satellite" };
 
-function impliedTransportsFromTags(tags) {
-  const result = new Set();
-  for (const tag of normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean)) {
-    for (const transport of TAG_TRANSPORT_MAP[tag] || []) result.add(transport);
-  }
-  return [...result];
+function tagSet(tags) {
+  return new Set(normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean));
 }
 
 // True if a catalog row relies on an excluded transport.
 // - Alternatives: authoritative explicit `medium`, then a text fallback.
-// - Solutions: tag-implied bearers — excluded only when EVERY implied bearer is
-//   forbidden (so a cellular/eSIM solution survives a "no ethernet" constraint
-//   even if it also exposes a cloud API).
+// - Solutions: classified from tags. A solution is excluded when its only
+//   transport family (IP platform and/or analog) is forbidden AND it has no
+//   allowed device-side bearer (cellular/eSIM/satellite) to fall back on.
 function isExcludedRow(row, exclusionTokens) {
   if (!exclusionTokens.length) return false;
   const hits = (text) => exclusionTokens.some((token) => normalizeText(text).includes(normalizeText(token)));
 
   if (row.medium && hits(row.medium)) return true;
 
-  const bearers = impliedTransportsFromTags(row.tags);
-  if (bearers.length) {
-    if (bearers.every((bearer) => hits(bearer))) return true;
-    if (bearers.some((bearer) => hits(bearer))) return false; // has an allowed bearer → keep
+  const tags = tagSet(row.tags);
+  if (tags.size) {
+    // A non-excluded device-side bearer rescues the solution.
+    const hasAllowedBearer = [...tags].some(
+      (tag) => BEARER_TRANSPORT[tag] && !hits(BEARER_TRANSPORT[tag]),
+    );
+    if (!hasAllowedBearer) {
+      const isIpPlatform = [...tags].some((tag) => IP_PLATFORM_TAGS.has(tag));
+      const isAnalog = [...tags].some((tag) => ANALOG_TAGS.has(tag));
+      if (isIpPlatform && (hits("ethernet") || hits("ethernet_ip"))) return true;
+      if (isAnalog && (hits("analog") || hits("pstn") || hits("tdm"))) return true;
+    }
   }
 
   // Fallback for rows without structured transport: scan remaining text fields.
