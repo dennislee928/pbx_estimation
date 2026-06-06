@@ -160,18 +160,47 @@ function parseExclusions(scene) {
   return { tokens: [...tokens], phrases: [...phrases] };
 }
 
-// True if a catalog row relies on an excluded transport. Checks the structured
-// transport fields first, then falls back to description text.
+// Solutions in solution_registry.json carry no explicit transport `medium`,
+// only category `tags`. Map those tags to the transport bearer(s) they imply so
+// the same exclusion logic can reach them (e.g. a cloud/SIP PBX rides ethernet/
+// IP; a TDM/FXS appliance rides analog; an eSIM/cellular gateway rides cellular).
+const TAG_TRANSPORT_MAP = {
+  cloud: ["ethernet_ip"], ucaas: ["ethernet_ip"], cpaas: ["ethernet_ip"], api: ["ethernet_ip"],
+  sip: ["ethernet_ip"], voip: ["ethernet_ip"], webrtc: ["ethernet_ip"], hosted: ["ethernet_ip"],
+  telco: ["ethernet_ip"], h323: ["ethernet_ip"], sbc: ["ethernet_ip"], ip_pbx: ["ethernet_ip"],
+  messaging: ["ethernet_ip"], wholesale: ["ethernet_ip"], workspace: ["ethernet_ip"],
+  tdm: ["analog"], digital: ["analog"], fxs: ["analog"], fxo: ["analog"], analog: ["analog"], pots: ["analog"], pstn: ["analog"],
+  esim: ["cellular"], cellular: ["cellular"], sms: ["cellular"], satellite: ["satellite"],
+};
+
+function impliedTransportsFromTags(tags) {
+  const result = new Set();
+  for (const tag of normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean)) {
+    for (const transport of TAG_TRANSPORT_MAP[tag] || []) result.add(transport);
+  }
+  return [...result];
+}
+
+// True if a catalog row relies on an excluded transport.
+// - Alternatives: authoritative explicit `medium`, then a text fallback.
+// - Solutions: tag-implied bearers — excluded only when EVERY implied bearer is
+//   forbidden (so a cellular/eSIM solution survives a "no ethernet" constraint
+//   even if it also exposes a cloud API).
 function isExcludedRow(row, exclusionTokens) {
   if (!exclusionTokens.length) return false;
-  const transportText = normalizeText([
-    row.medium,
-    row.protocols,
-    row.standards,
-    row.category,
-    row.description,
-  ].join(" "));
-  return exclusionTokens.some((token) => transportText.includes(normalizeText(token)));
+  const hits = (text) => exclusionTokens.some((token) => normalizeText(text).includes(normalizeText(token)));
+
+  if (row.medium && hits(row.medium)) return true;
+
+  const bearers = impliedTransportsFromTags(row.tags);
+  if (bearers.length) {
+    if (bearers.every((bearer) => hits(bearer))) return true;
+    if (bearers.some((bearer) => hits(bearer))) return false; // has an allowed bearer → keep
+  }
+
+  // Fallback for rows without structured transport: scan remaining text fields.
+  const transportText = [row.protocols, row.standards, row.category, row.description].join(" ");
+  return hits(transportText);
 }
 
 function asRows(value, maxRows) {
