@@ -75,8 +75,17 @@ const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
   .map((item, index) => {
     if (typeof item === "string") return { name: item, rank: index + 1, reason: "" };
     return {
+      type: item.type || "",
       name: item.name || item.id || "",
       rank: Number(item.rank || index + 1),
+      label: item.label || item.transport_label || "",
+      transport_label: item.transport_label || item.label || "",
+      transport_type: item.transport_type || "",
+      suitability_percent: item.suitability_percent || "",
+      cost: item.cost || "",
+      risk_level: item.risk_level || "",
+      pros: Array.isArray(item.pros) ? item.pros : splitList(item.pros),
+      cons: Array.isArray(item.cons) ? item.cons : splitList(item.cons),
       reason: item.reason || item.rationale || item.summary || "",
       excerpt: item.excerpt || "",
       key: item.key || "",
@@ -199,6 +208,37 @@ const CAT_FILTERS = [
   { id: "non_web", labelEn: "Non-network / physical", labelZh: "非網路 / 實體媒介" },
 ];
 
+const transportLabel = (row) => {
+  if (row?.transport_label || row?.label) return row.transport_label || row.label;
+  if (row?.transport_type === "non_network_physical" || row?.cat === "non_web" || row?.category === "non_web") {
+    return L === "en" ? "Non-network / physical" : "非網路 / 實體媒介";
+  }
+  return L === "en" ? "Web / API (cable)" : "網路 / API（有線）";
+};
+
+const transportClass = (row) => {
+  const label = transportLabel(row);
+  return row?.transport_type === "non_network_physical" || /非網路|non-network|physical/i.test(label)
+    ? "non-network"
+    : "network";
+};
+
+const cloudCategory = (row) => {
+  if (row.transport_type === "non_network_physical" || transportClass(row) === "non-network") return "non_web";
+  if (row.transport_type === "network_api_wired") return "web";
+  const alt = ALTS.find((item) => item.name === row.name);
+  return alt?.cat || "web";
+};
+
+const rowsForCloudTable = (cloudRag) => {
+  const explicit = cloudRag?.tables?.rag_response || cloudRag?.rag_response_table;
+  if (Array.isArray(explicit) && explicit.length) return normalizeCloudItems(explicit);
+  return [
+    ...normalizeCloudItems(cloudRag?.alternatives).map((row) => ({ ...row, type: row.type || "alternative" })),
+    ...normalizeCloudItems(cloudRag?.solutions).map((row) => ({ ...row, type: row.type || "solution" })),
+  ];
+};
+
 // --- Solution-catalog dropdown filters (vendor / region / category / scale /
 // cost / industry / source). Multi-value fields are split into discrete tokens.
 const domainOf = (url) => {
@@ -263,6 +303,8 @@ export default function TechAlternativesPage() {
   const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
   const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
   const cloudDocuments = normalizeCloudItems(cloudRag?.documents);
+  const cloudTableRows = rowsForCloudTable(cloudRag);
+  const visibleCloudTableRows = cloudTableRows.filter((row) => filter === "all" || cloudCategory(row) === filter);
   const exclusionTokens = parseExclusionTokens(scene);
   const filtered = ALTS
     .filter((a) => filter === "all" || a.cat === filter)
@@ -334,8 +376,9 @@ export default function TechAlternativesPage() {
           })),
           expected_response_schema: {
             recommendation: "short explanation",
-            alternatives: [{ name: "existing alternative name", rank: 1, reason: "why it fits" }],
-            solutions: [{ name: "existing solution name", rank: 1, reason: "why it fits" }],
+            alternatives: [{ name: "existing alternative name", rank: 1, transport_label: "網路 / API（有線） or 非網路 / 實體媒介", reason: "why it fits" }],
+            solutions: [{ name: "existing solution name", rank: 1, transport_label: "網路 / API（有線） or 非網路 / 實體媒介", reason: "why it fits" }],
+            rag_response_table: [{ type: "solution or alternative", rank: 1, name: "existing row name", label: "網路 / API（有線） or 非網路 / 實體媒介", suitability_percent: 90, cost: "cost profile", risk_level: "Low/Medium/High", pros: [], cons: [], reason: "why it fits", resource_url: "source URL" }],
           },
         }),
       });
