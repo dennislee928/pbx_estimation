@@ -195,9 +195,59 @@ const IP_PLATFORM_TAGS = new Set([
 ]);
 const ANALOG_TAGS = new Set(["tdm", "digital", "fxs", "fxo", "analog", "pots", "pstn"]);
 const BEARER_TRANSPORT = { esim: "cellular", cellular: "cellular", satellite: "satellite" };
+const TRANSPORT_LABELS = {
+  network_api_wired: "網路 / API（有線）",
+  non_network_physical: "非網路 / 實體媒介",
+};
+const NON_NETWORK_MEDIA = new Set([
+  "electrical_contact",
+  "dry_contact",
+  "relay",
+  "gpio",
+  "optical_signal",
+  "infrared",
+  "acoustic",
+  "audio",
+  "mechanical",
+  "pneumatic",
+  "hydraulic",
+  "visual_code",
+  "qr",
+  "magnetic",
+]);
 
 function tagSet(tags) {
   return new Set(normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean));
+}
+
+function transportClassification(row) {
+  const medium = normalizeText(row.medium);
+  const categoryTokens = tagSet(row.category);
+  const protocols = normalizeText(row.protocols);
+  const tags = tagSet(row.tags);
+  const text = normalizeText([row.name, row.medium, row.category, row.protocols, row.tags, row.description].join(" "));
+
+  const isPhysical =
+    categoryTokens.has("non_web") ||
+    [...NON_NETWORK_MEDIA].some((token) => medium.includes(token) || protocols.includes(token) || text.includes(token)) ||
+    /\b(contact|relay|gpio|dry contact|mechanical|pneumatic|hydraulic|optical|infrared|acoustic|qr|barcode)\b/.test(text);
+
+  const isNetworkOrApi =
+    categoryTokens.has("web") ||
+    /api|http|https|sip|graphql|webhook|webrtc|mqtt|amqp|tcp|ip|json|cloud|ucaas|cpaas|voice|subscription|callback/.test(text) ||
+    [...tags].some((tag) => IP_PLATFORM_TAGS.has(tag) || tag === "api");
+
+  if (isPhysical && !isNetworkOrApi) {
+    return {
+      transport_type: "non_network_physical",
+      transport_label: TRANSPORT_LABELS.non_network_physical,
+    };
+  }
+
+  return {
+    transport_type: "network_api_wired",
+    transport_label: TRANSPORT_LABELS.network_api_wired,
+  };
 }
 
 // True if a catalog row relies on an excluded transport.
@@ -318,9 +368,52 @@ function rankRows(scene, rows, kind, exclusionTokens = []) {
       name: item.row.name,
       rank: index + 1,
       score: Math.round(item.score),
+      ...transportClassification(item.row),
+      suitability_percent: suitabilityPercent(item.score),
+      cost: item.row.cost_model || item.row.cost_band || "",
+      risk_level: riskLevel(item.row),
+      pros: splitList(item.row.pros).slice(0, 4),
+      cons: splitList(item.row.cons).slice(0, 4),
       reason: makeReason(scene, item.row, kind),
       resource_url: item.row.resource_url || "",
     }));
+}
+
+function suitabilityPercent(score) {
+  return Math.max(55, Math.min(98, Math.round(58 + Math.sqrt(Math.max(0, score)) * 3.1)));
+}
+
+function riskLevel(row) {
+  const text = normalizeText([row.complexity, row.security, row.reliability, row.cons, row.tags, row.description].join(" "));
+  if (/high|complex|specialist|regulatory|coverage|not all|overkill|internet-dependent|implementation required/.test(text)) return "High";
+  if (/medium|subscription|usage|validation|varies|limited|cost extra|engineering/.test(text)) return "Medium";
+  return "Low";
+}
+
+function splitList(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean);
+  return String(value || "")
+    .split(/\s*(?:;|\||\n)\s*/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function tableRows(kind, rows) {
+  return rows.map((row) => ({
+    type: kind,
+    rank: row.rank,
+    name: row.name,
+    label: row.transport_label,
+    transport_type: row.transport_type,
+    suitability_percent: row.suitability_percent,
+    score: row.score,
+    cost: row.cost,
+    risk_level: row.risk_level,
+    pros: row.pros,
+    cons: row.cons,
+    reason: row.reason,
+    resource_url: row.resource_url,
+  }));
 }
 
 function rankDocuments(scene, documents, exclusionTokens = []) {
@@ -452,10 +545,18 @@ export async function handleRagRequest(payload, env = {}) {
   const solutions = rankRows(scene, solutionsInput, "solution", exclusions.tokens);
   const documents = rankDocuments(scene, documentsInput, exclusions.tokens);
   const recommendation = await aiRecommendation(env, scene, alternatives, solutions, exclusions, excludedNames);
+  const alternativesTable = tableRows("alternative", alternatives);
+  const solutionsTable = tableRows("solution", solutions);
   return {
     recommendation,
     alternatives,
     solutions,
+    rag_response_table: [...alternativesTable, ...solutionsTable],
+    tables: {
+      alternatives: alternativesTable,
+      solutions: solutionsTable,
+      rag_response: [...alternativesTable, ...solutionsTable],
+    },
     documents,
     evidence: {
       scene,

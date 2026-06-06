@@ -75,8 +75,17 @@ const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
   .map((item, index) => {
     if (typeof item === "string") return { name: item, rank: index + 1, reason: "" };
     return {
+      type: item.type || "",
       name: item.name || item.id || "",
       rank: Number(item.rank || index + 1),
+      label: item.label || item.transport_label || "",
+      transport_label: item.transport_label || item.label || "",
+      transport_type: item.transport_type || "",
+      suitability_percent: item.suitability_percent || "",
+      cost: item.cost || "",
+      risk_level: item.risk_level || "",
+      pros: Array.isArray(item.pros) ? item.pros : splitList(item.pros),
+      cons: Array.isArray(item.cons) ? item.cons : splitList(item.cons),
       reason: item.reason || item.rationale || item.summary || "",
       excerpt: item.excerpt || "",
       key: item.key || "",
@@ -199,6 +208,37 @@ const CAT_FILTERS = [
   { id: "non_web", labelEn: "Non-network / physical", labelZh: "非網路 / 實體媒介" },
 ];
 
+const transportLabel = (row) => {
+  if (row?.transport_label || row?.label) return row.transport_label || row.label;
+  if (row?.transport_type === "non_network_physical" || row?.cat === "non_web" || row?.category === "non_web") {
+    return L === "en" ? "Non-network / physical" : "非網路 / 實體媒介";
+  }
+  return L === "en" ? "Web / API (cable)" : "網路 / API（有線）";
+};
+
+const transportClass = (row) => {
+  const label = transportLabel(row);
+  return row?.transport_type === "non_network_physical" || /非網路|non-network|physical/i.test(label)
+    ? "non-network"
+    : "network";
+};
+
+const cloudCategory = (row) => {
+  if (row.transport_type === "non_network_physical" || transportClass(row) === "non-network") return "non_web";
+  if (row.transport_type === "network_api_wired") return "web";
+  const alt = ALTS.find((item) => item.name === row.name);
+  return alt?.cat || "web";
+};
+
+const rowsForCloudTable = (cloudRag) => {
+  const explicit = cloudRag?.tables?.rag_response || cloudRag?.rag_response_table;
+  if (Array.isArray(explicit) && explicit.length) return normalizeCloudItems(explicit);
+  return [
+    ...normalizeCloudItems(cloudRag?.alternatives).map((row) => ({ ...row, type: row.type || "alternative" })),
+    ...normalizeCloudItems(cloudRag?.solutions).map((row) => ({ ...row, type: row.type || "solution" })),
+  ];
+};
+
 // --- Solution-catalog dropdown filters (vendor / region / category / scale /
 // cost / industry / source). Multi-value fields are split into discrete tokens.
 const domainOf = (url) => {
@@ -263,6 +303,8 @@ export default function TechAlternativesPage() {
   const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
   const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
   const cloudDocuments = normalizeCloudItems(cloudRag?.documents);
+  const cloudTableRows = rowsForCloudTable(cloudRag);
+  const visibleCloudTableRows = cloudTableRows.filter((row) => filter === "all" || cloudCategory(row) === filter);
   const exclusionTokens = parseExclusionTokens(scene);
   const filtered = ALTS
     .filter((a) => filter === "all" || a.cat === filter)
@@ -334,8 +376,9 @@ export default function TechAlternativesPage() {
           })),
           expected_response_schema: {
             recommendation: "short explanation",
-            alternatives: [{ name: "existing alternative name", rank: 1, reason: "why it fits" }],
-            solutions: [{ name: "existing solution name", rank: 1, reason: "why it fits" }],
+            alternatives: [{ name: "existing alternative name", rank: 1, transport_label: "網路 / API（有線） or 非網路 / 實體媒介", reason: "why it fits" }],
+            solutions: [{ name: "existing solution name", rank: 1, transport_label: "網路 / API（有線） or 非網路 / 實體媒介", reason: "why it fits" }],
+            rag_response_table: [{ type: "solution or alternative", rank: 1, name: "existing row name", label: "網路 / API（有線） or 非網路 / 實體媒介", suitability_percent: 90, cost: "cost profile", risk_level: "Low/Medium/High", pros: [], cons: [], reason: "why it fits", resource_url: "source URL" }],
           },
         }),
       });
@@ -398,6 +441,68 @@ export default function TechAlternativesPage() {
             <p>
               {cloudRagStatus === "error" ? cloudRagError : cloudRecommendation}
             </p>
+          </div>
+        )}
+        {visibleCloudTableRows.length > 0 && (
+          <div className="rag-table-panel">
+            <div className="rag-table-header">
+              <strong>{L === "en" ? "RAG response table" : "RAG 回應表格"}</strong>
+              <span>
+                {L === "en"
+                  ? `${visibleCloudTableRows.length} ranked rows`
+                  : `${visibleCloudTableRows.length} 筆排序結果`}
+              </span>
+            </div>
+            <div className="rag-table-scroll">
+              <table className="rag-response-table">
+                <thead>
+                  <tr>
+                    <th>{L === "en" ? "Rank" : "排序"}</th>
+                    <th>{L === "en" ? "Type" : "類型"}</th>
+                    <th>{L === "en" ? "Name" : "名稱"}</th>
+                    <th>{L === "en" ? "Label" : "標記"}</th>
+                    <th>{L === "en" ? "Fit" : "適配"}</th>
+                    <th>{L === "en" ? "Cost / risk" : "成本 / 風險"}</th>
+                    <th>{L === "en" ? "Pros / cons" : "優缺點"}</th>
+                    <th>{L === "en" ? "Reason" : "原因"}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleCloudTableRows.map((row, index) => (
+                    <tr key={`${row.type || "rag"}-${row.rank}-${row.name}-${index}`}>
+                      <td>#{row.rank || index + 1}</td>
+                      <td>{row.type === "solution" ? (L === "en" ? "Solution" : "方案") : (L === "en" ? "Alternative" : "替代技術")}</td>
+                      <td>
+                        <strong>{row.name}</strong>
+                        {row.resource_url && (
+                          <a href={row.resource_url} target="_blank" rel="noreferrer">
+                            {domainOf(row.resource_url) || row.resource_url}
+                          </a>
+                        )}
+                      </td>
+                      <td>
+                        <span className={`transport-pill ${transportClass(row)}`}>
+                          {transportLabel(row)}
+                        </span>
+                      </td>
+                      <td>
+                        {row.suitability_percent ? `${row.suitability_percent}%` : row.score ? `Score ${row.score}` : "-"}
+                      </td>
+                      <td>
+                        <span>{row.cost || "-"}</span>
+                        {row.risk_level && <small>{L === "en" ? "Risk" : "風險"}: {row.risk_level}</small>}
+                      </td>
+                      <td>
+                        {[...row.pros.slice(0, 2), ...row.cons.slice(0, 1).map((item) => `${L === "en" ? "Con" : "缺點"}: ${item}`)]
+                          .filter(Boolean)
+                          .join(" / ") || "-"}
+                      </td>
+                      <td>{row.reason || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
@@ -465,6 +570,9 @@ export default function TechAlternativesPage() {
           <div className="ranked-solution-grid">
             {rankedSolutions.map((row) => (
               <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
+                <span className={`transport-pill ${transportClass(cloudSolutionRanks.get(row.name) || row)}`}>
+                  {transportLabel(cloudSolutionRanks.get(row.name) || row)}
+                </span>
                 <strong>{row.name}</strong>
                 <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
                 <small>{row.recommended_terminals} · {row.cost_band}</small>
@@ -509,6 +617,9 @@ export default function TechAlternativesPage() {
               <div>
                 <strong style={{ fontSize: "0.95rem" }}>{alt.name}</strong>
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{mediumBadge(alt)} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
+                <span className={`transport-pill ${transportClass(cloudAlternativeRanks.get(alt.name) || alt)}`}>
+                  {transportLabel(cloudAlternativeRanks.get(alt.name) || alt)}
+                </span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
                 {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}
