@@ -312,6 +312,247 @@ For CSV output, serialize multi-value fields with a documented delimiter. JSON s
 
 Update `scripts/sync_rag_assets.py` manifest metric fields and schema validation so enriched fields are included in the RAG asset bundle.
 
+## GitHub Actions, Crawler, and R2 Consistency Plan
+
+### Current workflow behavior
+
+`.github/workflows/report.yml` currently performs these relevant operations:
+
+1. Runs `scripts/generate_research_outputs.py` before notebooks.
+2. Commits the resulting `frontend/data/*.json`, processed CSV files, reports, and README summary back to `main`.
+3. Runs notebooks, including product research and technology alternatives.
+4. Runs `scripts/generate_research_outputs.py` a second time.
+5. Builds the RAG manifest from reports, processed data, and frontend data.
+6. Uploads every manifest asset to Cloudflare R2 under the `latest/` prefix.
+7. Builds the bilingual frontend from the second-pass local files.
+
+This creates a consistency risk: the committed frontend JSON can come from the first generation pass while R2 and GitHub Pages use the second pass. If notebooks, crawler context, or generation behavior changes data, the same Git commit can expose different classifications locally, on Pages, and through R2.
+
+### Required workflow invariant
+
+The following artifacts must be generated from the same classified dataset snapshot and must contain identical normalized transport values for each stable record identity:
+
+- `data/processed/solution_registry.csv`
+- `data/processed/awesome_list.csv`
+- `frontend/data/solution_registry.json`
+- `frontend/data/awesome_list.json`
+- generated reports that display transport fields
+- `rag_engine/dist/rag_assets_manifest.json`
+- objects uploaded to Cloudflare R2
+- Hugging Face asset bundle
+- files consumed by the bilingual frontend build
+
+No UI component, Worker, R2 manifest builder, or upload step may independently infer a contradictory transport label.
+
+### Authoritative classification boundary
+
+Transport classification must run inside `scripts/generate_research_outputs.py`, through the shared Python taxonomy module, after crawler/notebook data has been merged and immediately before CSV/JSON/report serialization.
+
+The generated normalized fields are authoritative. Downstream systems may translate enum values into localized text or style them, but must not reclassify them.
+
+The flow must become:
+
+```text
+crawler + static catalog + notebook outputs
+                  |
+                  v
+       shared transport taxonomy
+                  |
+                  v
+     validate normalized catalog snapshot
+                  |
+       +----------+-----------+
+       |          |           |
+       v          v           v
+ frontend JSON  processed CSV reports
+       |          |           |
+       +----------+-----------+
+                  |
+                  v
+      manifest + checksum parity gate
+                  |
+       +----------+-----------+
+       |                      |
+       v                      v
+ frontend build        R2 / HF publication
+```
+
+### `report.yml` patch requirements
+
+1. Do not commit the first-pass generated catalogs before notebooks if notebooks can affect the final dataset.
+2. Generate provisional outputs before notebooks only when notebooks require them as input.
+3. After notebooks, run one final canonical generation pass.
+4. Run `scripts/validate_transport_catalog.py` immediately after the final pass.
+5. Commit the final canonical files only after validation succeeds.
+6. Build the RAG asset manifest only from those validated files.
+7. Run a manifest/catalog parity verifier before any upload.
+8. Upload to R2 only after all classification and parity gates pass.
+9. Build the frontend from the same validated files used for the manifest.
+10. Upload a classification audit artifact for every scheduled or manually dispatched run.
+
+Recommended high-level step order:
+
+```yaml
+- Generate provisional research inputs
+- Run notebooks / crawler enrichment
+- Generate final canonical research outputs
+- Validate transport taxonomy and record identities
+- Commit final crawler/catalog snapshot
+- Build RAG manifest
+- Verify manifest and catalog checksums
+- Upload validated snapshot to R2
+- Build frontend from validated snapshot
+- Deploy Pages
+```
+
+### Crawler contract
+
+`src/research/solution_crawler.py` currently returns discovered records with tags but no explicit transport object. Update its `DiscoveredSolution` contract to accept transport evidence separately from product capabilities.
+
+Suggested fields:
+
+```python
+bearers: tuple[str, ...]
+control_interfaces: tuple[str, ...]
+transport_evidence: str
+transport_source_url: str
+```
+
+Requirements:
+
+- `api` remains a control interface, never a bearer.
+- `cellular` and `esim` are bearer evidence.
+- Cloud/UCaaS/CPaaS entries with no last-mile evidence use `cloud_or_platform` and `unknown` link mode.
+- New crawler records must either provide explicit evidence or be marked `unknown` with derived confidence.
+- The crawler must not emit localized UI labels.
+- Taxonomy validation must reject unrecognized bearer enum values.
+
+### R2 manifest schema v2
+
+`scripts/sync_rag_assets.py` currently summarizes solution transport using the raw `tags` field. That repeats the same conceptual error because tags mix bearer, product category, lifecycle, and capability.
+
+Change `CATALOG_LABEL_FIELDS` to summarize normalized fields instead:
+
+```python
+"frontend/data/solution_registry.json": {
+    "transport_fields": [
+        "primary_bearer",
+        "bearer_family",
+        "link_mode",
+        "network_type",
+        "control_interfaces",
+    ],
+    "schema_version_field": "transport_schema_version",
+}
+```
+
+Manifest-level requirements:
+
+- Add `transport_schema_version`.
+- Add distinct `bearer_families`, `link_modes`, `network_types`, and `control_interfaces` per catalog asset.
+- Add catalog content SHA-256 values, already available at asset level, to a dedicated `catalog_snapshot` block.
+- Add record counts and stable identity checksum.
+- Add validation status and unknown/hybrid counts.
+- Remove the claim that solution `tags` are the transport field.
+
+Suggested manifest fragment:
+
+```json
+{
+  "transport_schema_version": 2,
+  "catalog_snapshot": {
+    "solution_registry_sha256": "...",
+    "awesome_list_sha256": "...",
+    "solution_record_count": 156,
+    "alternative_record_count": 131,
+    "classification_valid": true,
+    "unknown_solution_count": 0,
+    "unknown_alternative_count": 0
+  }
+}
+```
+
+### Exact UI/R2 logic requirement
+
+“Exact same label logic” must mean:
+
+- R2 stores canonical enum fields and optional centrally generated bilingual display labels.
+- The UI reads those fields directly from the same generated JSON snapshot.
+- The RAG Worker reads the R2 copy of that snapshot and returns the same fields without reclassification.
+- UI localization maps canonical enums to text through one versioned label dictionary.
+- A label-dictionary version is included in generated assets when display strings are serialized.
+
+It must not mean copying the same regex implementation into Python, Worker JavaScript, and React. Duplicate implementations will drift as new crawler context is added.
+
+### Atomic R2 publication
+
+Uploading directly into `latest/` object by object can expose a partially updated dataset. Use an immutable run prefix and promote a pointer only after successful upload and verification.
+
+Recommended layout:
+
+```text
+snapshots/<github_run_id>/frontend/data/solution_registry.json
+snapshots/<github_run_id>/frontend/data/awesome_list.json
+snapshots/<github_run_id>/rag_engine/dist/rag_assets_manifest.json
+latest-pointer.json
+```
+
+Publication sequence:
+
+1. Upload all assets to `snapshots/<github_run_id>/`.
+2. Verify remote object size/checksum for both catalogs and manifest.
+3. Upload `latest-pointer.json` containing the immutable prefix, schema version, commit SHA, and catalog checksums.
+4. Make the Worker resolve the pointer once per request or cache interval.
+5. Retain previous snapshots for rollback.
+
+If the current `latest/` layout must remain temporarily, upload catalogs first, manifest last, and make the Worker reject a manifest whose catalog checksums do not match fetched objects. Immutable snapshots are still the preferred final design.
+
+### CI parity verifier
+
+Add `scripts/verify_transport_snapshot.py` with these checks:
+
+- JSON and processed CSV record counts match.
+- Stable record identities match across representations.
+- Normalized transport fields match across CSV and JSON.
+- Generated reports use only recognized label mappings.
+- Manifest checksums match local files.
+- R2 pair list contains both catalogs and the manifest.
+- Frontend build input checksums equal manifest catalog checksums.
+- No source contains the deprecated `network_api_wired` value after migration completion.
+- No solution with `bearer_family=cellular` has `link_mode=wired` unless explicitly hybrid.
+
+The script should emit a machine-readable report such as:
+
+`rag_engine/dist/transport_snapshot_validation.json`
+
+Upload this report as a workflow artifact and include it in R2 snapshots.
+
+### R2 upload verification
+
+For both Wrangler and S3 upload paths:
+
+- fail on missing source files,
+- verify expected object count,
+- verify catalog and manifest checksums,
+- record Git commit SHA and GitHub run ID,
+- do not update the latest pointer after any failed upload,
+- preserve the previous latest pointer for rollback.
+
+### Runtime consistency checks
+
+The Worker response evidence should include:
+
+```json
+{
+  "transport_schema_version": 2,
+  "catalog_snapshot_id": "<github-run-id-or-sha>",
+  "catalog_manifest_sha256": "...",
+  "label_dictionary_version": 2
+}
+```
+
+The frontend may log or display these values in a diagnostics area. This makes a stale frontend/R2 mismatch observable instead of silently displaying conflicting labels.
+
 ## Backend Patch Plan
 
 ### `rag_engine/src/worker.js`
@@ -477,6 +718,17 @@ Add a generated validation summary with these gates:
 - 0 known media resolve to `unknown`.
 - All `unknown` solution rows are listed for manual review.
 
+### Workflow and R2 tests
+
+- A workflow fixture that adds a new cellular/eSIM crawler record produces `link_mode=wireless` in processed CSV, frontend JSON, manifest labels, R2 snapshot content, Worker output, and UI rendering.
+- A workflow fixture that adds an API-only cloud platform with no bearer evidence produces `link_mode=unknown`, never wired.
+- The first and final generation passes cannot publish different catalog snapshots under the same snapshot ID.
+- CI fails when frontend JSON checksums differ from the catalog checksums recorded in the R2 manifest.
+- CI fails when a generated record contains an unknown bearer enum without an explicit `confidence=unknown` classification.
+- R2 latest-pointer promotion is skipped when any object upload or checksum verification fails.
+- The Worker rejects or reports an unhealthy catalog snapshot when the manifest and fetched catalog checksums differ.
+- Both Wrangler and S3 upload paths publish the same object set and metadata.
+
 ## Acceptance Criteria
 
 The patch is complete only when all of the following are proven:
@@ -490,6 +742,11 @@ The patch is complete only when all of the following are proven:
 7. Backend and frontend test matrices cover wired IP, wireless IP, wired non-IP, physical, manual, hybrid, and unknown cases.
 8. Regenerated assets and reports contain the normalized fields.
 9. Desktop and mobile UI verification confirms readable, non-overlapping badges and tables.
+10. `.github/workflows/report.yml` validates the final post-notebook catalog snapshot before commit, R2 upload, and frontend build.
+11. Frontend build inputs and R2 catalog objects have matching SHA-256 values recorded in the manifest.
+12. New crawler context cannot be published without normalized transport fields or an explicit unknown classification.
+13. R2 publication is atomic through an immutable snapshot plus latest pointer, or an equivalent verified promotion mechanism.
+14. Worker responses expose the transport schema version and catalog snapshot identity used for classification.
 
 ## Recommended Implementation Order
 
