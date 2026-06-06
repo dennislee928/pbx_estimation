@@ -443,6 +443,68 @@ export default function TechAlternativesPage() {
             </p>
           </div>
         )}
+        {visibleCloudTableRows.length > 0 && (
+          <div className="rag-table-panel">
+            <div className="rag-table-header">
+              <strong>{L === "en" ? "RAG response table" : "RAG 回應表格"}</strong>
+              <span>
+                {L === "en"
+                  ? `${visibleCloudTableRows.length} ranked rows`
+                  : `${visibleCloudTableRows.length} 筆排序結果`}
+              </span>
+            </div>
+            <div className="rag-table-scroll">
+              <table className="rag-response-table">
+                <thead>
+                  <tr>
+                    <th>{L === "en" ? "Rank" : "排序"}</th>
+                    <th>{L === "en" ? "Type" : "類型"}</th>
+                    <th>{L === "en" ? "Name" : "名稱"}</th>
+                    <th>{L === "en" ? "Label" : "標記"}</th>
+                    <th>{L === "en" ? "Fit" : "適配"}</th>
+                    <th>{L === "en" ? "Cost / risk" : "成本 / 風險"}</th>
+                    <th>{L === "en" ? "Pros / cons" : "優缺點"}</th>
+                    <th>{L === "en" ? "Reason" : "原因"}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleCloudTableRows.map((row, index) => (
+                    <tr key={`${row.type || "rag"}-${row.rank}-${row.name}-${index}`}>
+                      <td>#{row.rank || index + 1}</td>
+                      <td>{row.type === "solution" ? (L === "en" ? "Solution" : "方案") : (L === "en" ? "Alternative" : "替代技術")}</td>
+                      <td>
+                        <strong>{row.name}</strong>
+                        {row.resource_url && (
+                          <a href={row.resource_url} target="_blank" rel="noreferrer">
+                            {domainOf(row.resource_url) || row.resource_url}
+                          </a>
+                        )}
+                      </td>
+                      <td>
+                        <span className={`transport-pill ${transportClass(row)}`}>
+                          {transportLabel(row)}
+                        </span>
+                      </td>
+                      <td>
+                        {row.suitability_percent ? `${row.suitability_percent}%` : row.score ? `Score ${row.score}` : "-"}
+                      </td>
+                      <td>
+                        <span>{row.cost || "-"}</span>
+                        {row.risk_level && <small>{L === "en" ? "Risk" : "風險"}: {row.risk_level}</small>}
+                      </td>
+                      <td>
+                        {[...row.pros.slice(0, 2), ...row.cons.slice(0, 1).map((item) => `${L === "en" ? "Con" : "缺點"}: ${item}`)]
+                          .filter(Boolean)
+                          .join(" / ") || "-"}
+                      </td>
+                      <td>{row.reason || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="research-section">
@@ -508,6 +570,9 @@ export default function TechAlternativesPage() {
           <div className="ranked-solution-grid">
             {rankedSolutions.map((row) => (
               <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
+                <span className={`transport-pill ${transportClass(cloudSolutionRanks.get(row.name) || row)}`}>
+                  {transportLabel(cloudSolutionRanks.get(row.name) || row)}
+                </span>
                 <strong>{row.name}</strong>
                 <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
                 <small>{row.recommended_terminals} · {row.cost_band}</small>
@@ -552,6 +617,9 @@ export default function TechAlternativesPage() {
               <div>
                 <strong style={{ fontSize: "0.95rem" }}>{alt.name}</strong>
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{mediumBadge(alt)} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
+                <span className={`transport-pill ${transportClass(cloudAlternativeRanks.get(alt.name) || alt)}`}>
+                  {transportLabel(cloudAlternativeRanks.get(alt.name) || alt)}
+                </span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
                 {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}
