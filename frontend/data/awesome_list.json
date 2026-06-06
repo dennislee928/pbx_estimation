@@ -19,7 +19,31 @@
     "pros": "Leverages existing VoIP/PBX infrastructure already deployed; Standards-based (RFC 3261, RFC 2976); Low latency on managed networks; Works through SBCs and firewalls with proper SIP ALG",
     "cons": "Requires SIP stack on edge device; Network QoS essential for reliability; SIP ALG/firewall traversal can be brittle; Limited data payload per message",
     "standards": "RFC 3261; RFC 2976; RFC 3515",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc2976"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc2976",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "name": "REST API (HTTP/HTTPS)",
@@ -41,7 +65,34 @@
     "pros": "Ubiquitous protocol, any modern device supports HTTP; Simple to implement and debug (curl, Postman); Secure with HTTPS + API keys; Language-agnostic: any PBX or automation platform can call REST endpoints",
     "cons": "Edge device must be IP-reachable; HTTP overhead for very constrained devices; Stateless; requires polling or webhook pattern for events; Not real-time for <10ms requirements",
     "standards": "RFC 7230; RFC 8446",
-    "resource_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+    "resource_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "WebSocket (wss://)",
@@ -63,7 +114,25 @@
     "pros": "Full-duplex persistent connection; Low latency, suitable for real-time control; Supports binary and text payloads; Widely supported in modern edge computing platforms",
     "cons": "Requires persistent TCP connection; Edge device must support WebSocket stack; Proxy/firewall may block WebSocket upgrade; Connection state management complexity at scale",
     "standards": "RFC 6455; RFC 7692",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc6455"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc6455",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "MQTT (MQTT-SN)",
@@ -85,7 +154,34 @@
     "pros": "Extremely lightweight; designed for IoT/edge; Pub/sub decouples sender and receiver; Three QoS levels (at most once, at least once, exactly once); Last Will & Testament for device failure detection; Very mature ecosystem (AWS IoT, Azure IoT Hub, EMQX, Mosquitto)",
     "cons": "Requires MQTT broker (single point of failure without clustering); Not real-time enough for sub-10ms control loops; TCP-based; MQTT-SN adds non-IP support but less mature; Broker discovery and topic governance needed at scale",
     "standards": "OASIS MQTT 3.1.1; OASIS MQTT 5.0; ISO/IEC 20922",
-    "resource_url": "https://mqtt.org/"
+    "resource_url": "https://mqtt.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip",
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "SIP",
+      "訊息傳遞"
+    ]
   },
   {
     "name": "WebRTC Data Channel",
@@ -107,7 +203,25 @@
     "pros": "Mandatory encryption (no option for plaintext); Built-in NAT traversal via ICE/STUN/TURN; Low latency, suitable for real-time control; Can operate peer-to-peer without intermediate server",
     "cons": "High complexity to implement; TURN server needed for symmetric NAT scenarios; Not all embedded platforms have WebRTC stack; Overkill for simple trigger/command use cases",
     "standards": "W3C WebRTC; RFC 8831; RFC 8832",
-    "resource_url": "https://www.w3.org/TR/webrtc/"
+    "resource_url": "https://www.w3.org/TR/webrtc/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "gRPC (HTTP/2)",
@@ -129,7 +243,34 @@
     "pros": "Binary encoding (Protocol Buffers) is efficient; Strong typing with .proto schema; Bidirectional streaming built-in; Excellent performance and tooling (protoc, code generation)",
     "cons": "HTTP/2 requirement may not suit very constrained MCUs; gRPC-Web has limitations vs native gRPC; Protocol Buffers schema management overhead; Steeper learning curve than REST",
     "standards": "gRPC 1.x; HTTP/2 (RFC 7540); Protocol Buffers",
-    "resource_url": "https://grpc.io/docs/"
+    "resource_url": "https://grpc.io/docs/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "CoAP (Constrained Application Protocol)",
@@ -151,7 +292,25 @@
     "pros": "UDP-based, no TCP overhead; Very small header (4 bytes); Built-in resource discovery; Observations (pub/sub over UDP)",
     "cons": "UDP may be blocked in some networks; Less mature ecosystem than MQTT; Reliability is best-effort without CON mode; Not suitable for large payloads",
     "standards": "RFC 7252; RFC 7641; RFC 8613",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc7252"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc7252",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "GraphQL API / Subscriptions",
@@ -173,7 +332,37 @@
     "pros": "Strong schema contracts for frontend and backend teams; Subscriptions support live state updates; Good aggregation layer when multiple device APIs differ",
     "cons": "Adds an API gateway layer; Resolver authorization must be designed carefully; Less suitable for tiny microcontrollers than REST or CoAP",
     "standards": "GraphQL Specification; RFC 8446",
-    "resource_url": "https://graphql.org/"
+    "resource_url": "https://graphql.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest",
+      "graphql"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API",
+      "GraphQL"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API",
+      "GraphQL"
+    ]
   },
   {
     "name": "Webhook Callback",
@@ -195,7 +384,34 @@
     "pros": "Simple cloud integration pattern; No polling when source system supports events; Works well with serverless queues and audit logs",
     "cons": "Receiver must be internet reachable; Retries can duplicate actions unless idempotency is implemented; Vendor webhook schemas vary",
     "standards": "HTTP; JSON Web Signature patterns; RFC 8446",
-    "resource_url": "https://github.com/standard-webhooks/standard-webhooks"
+    "resource_url": "https://github.com/standard-webhooks/standard-webhooks",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "AMQP / RabbitMQ",
@@ -217,7 +433,31 @@
     "pros": "Durable queues and acknowledgements; Dead-letter queues expose failed device commands; Mature operations model",
     "cons": "Broker infrastructure required; Not ideal for battery-powered devices; Queue design affects ordering and fanout",
     "standards": "AMQP 0-9-1; AMQP 1.0",
-    "resource_url": "https://www.rabbitmq.com/tutorials/amqp-concepts"
+    "resource_url": "https://www.rabbitmq.com/tutorials/amqp-concepts",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "NATS / JetStream",
@@ -239,7 +479,31 @@
     "pros": "Very low latency and simple clients; Request/reply and pub/sub in one protocol; Persistence available when needed",
     "cons": "Smaller enterprise PBX ecosystem than MQTT or AMQP; Requires subject naming discipline; Native clients may be unavailable on constrained legacy devices",
     "standards": "NATS Protocol",
-    "resource_url": "https://docs.nats.io/"
+    "resource_url": "https://docs.nats.io/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "OPC UA",
@@ -261,7 +525,34 @@
     "pros": "Vendor-neutral industrial data model; Strong built-in security model; Widely supported by automation vendors",
     "cons": "Overkill for simple office relay control; Certificate lifecycle adds operational work; Industrial expertise needed",
     "standards": "IEC 62541",
-    "resource_url": "https://opcfoundation.org/about/opc-technologies/opc-ua/"
+    "resource_url": "https://opcfoundation.org/about/opc-technologies/opc-ua/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "Modbus TCP",
@@ -283,7 +574,34 @@
     "pros": "Extremely common in PLC and I/O devices; Simple register model; Low-cost hardware modules are widely available",
     "cons": "No native authentication or encryption; Flat register maps can be error-prone; Needs network isolation",
     "standards": "Modbus Application Protocol",
-    "resource_url": "https://modbus.org/specs.php"
+    "resource_url": "https://modbus.org/specs.php",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "relay",
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Relay",
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "繼電器",
+      "序列協定"
+    ]
   },
   {
     "name": "LoRaWAN",
@@ -305,7 +623,25 @@
     "pros": "Exceptional range (kilometers) with very low power; No cellular subscription needed (ISM band); Excellent building penetration; Bi-directional downlink for command/control; Open standard, multi-vendor ecosystem (TTN, Helium, AWS IoT)",
     "cons": "Very low data rate (not for large payloads); Duty-cycle restrictions in EU (868 MHz); Class A devices cannot receive downlink until they send uplink; Latency too high for real-time control",
     "standards": "LoRaWAN L2 1.0.4; ETSI EN 300 220; FCC Part 15",
-    "resource_url": "https://lora-alliance.org/about-lorawan/"
+    "resource_url": "https://lora-alliance.org/about-lorawan/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SMS / GSM AT Commands",
@@ -327,7 +663,31 @@
     "pros": "Works anywhere there is cellular coverage; GSM modules are cheap and widely available; Simple AT command interface; SMS is store-and-forward (device can receive when offline); Bidirectional (2-way SMS)",
     "cons": "SMS latency varies (1-30s typical, can be hours); SMS is not end-to-end encrypted by default; SS7 vulnerabilities allow SMS interception; Per-message cost at scale; 2G/3G sunsetting reduces GSM availability in some regions",
     "standards": "GSM 03.38; GSM 07.07; 3GPP TS 23.040",
-    "resource_url": "https://www.3gpp.org/"
+    "resource_url": "https://www.3gpp.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "Z-Wave / Zigbee",
@@ -349,7 +709,31 @@
     "pros": "Mature ecosystem with thousands of interoperable devices; Mesh topology extends range across buildings; Low power (battery for sensors); Z-Wave S2 has strong security (mandatory since 2017); Direct integration with home/office automation hubs",
     "cons": "Short range per node without mesh; Z-Wave and Zigbee are different ecosystems (no interoperability); Requires hub/controller for PBX integration; Limited to building-scale; not for outdoor/long-range; Z-Wave chips supply constraints historically",
     "standards": "Z-Wave (ITU-T G.9959); Zigbee 3.0 (IEEE 802.15.4); Matter (as converged transport)",
-    "resource_url": "https://csa-iot.org/all-solutions/zigbee/"
+    "resource_url": "https://csa-iot.org/all-solutions/zigbee/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "Radio Broadcast (FSK / DTMF over RF)",
@@ -371,7 +755,25 @@
     "pros": "Works where no IP or cellular exists; Proven in industrial SCADA for decades; Licensed spectrum provides interference protection; Range up to 50km line-of-sight",
     "cons": "Requires radio license in most countries; License spectrum costs and regulatory paperwork; No inherent security; encryption adds cost and complexity; Susceptible to interference, weather, multi-path; Low data rate (voice-band FSK)",
     "standards": "ETSI EN 300 113; FCC Part 90; ITU-R SM.328",
-    "resource_url": "https://www.itu.int/rec/R-REC-SM.328/"
+    "resource_url": "https://www.itu.int/rec/R-REC-SM.328/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Satellite IoT (Iridium SBD, Globalstar, Starlink Direct-to-Cell)",
@@ -393,7 +795,25 @@
     "pros": "True global coverage (Iridium covers poles); No terrestrial infrastructure needed; Ideal for remote monitoring and command; New LEO services (Starlink D2C) will reduce latency and cost",
     "cons": "High per-message cost for traditional satellite IoT; Iridium SBD has 10-60 second latency; Requires clear sky view (not for indoor); Module cost higher than cellular/LoRaWAN; Bandwidth extremely limited",
     "standards": "Iridium SBD (9602/9603); 3GPP Rel-17 NTN; ITU-R M.1850",
-    "resource_url": "https://www.iridium.com/services/iridium-sbd/"
+    "resource_url": "https://www.iridium.com/services/iridium-sbd/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "satellite",
+    "bearer_family": "satellite",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "satellite"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Satellite (wireless)",
+    "transport_label_zh": "衛星（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Ethernet P2P (Broadcast / UDP Multicast)",
@@ -415,7 +835,25 @@
     "pros": "Lowest possible latency on Ethernet (<1ms); Broadcast reaches all devices on subnet simultaneously; No IP configuration needed (raw Ethernet frames); Works on the most basic microcontrollers with Ethernet PHY",
     "cons": "No delivery guarantee (UDP best-effort); Broadcast storms can impact network performance; No security or authentication by default; Does not route across subnets; Very implementation-specific; no standard API",
     "standards": "IEEE 802.3; RFC 768 (UDP)",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc768"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc768",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "DTMF over VoIP (RFC 4733)",
@@ -437,7 +875,34 @@
     "pros": "Piggybacks on existing SIP/VoIP infrastructure; Industry standard for DTMF transport over IP; Backward compatible with older PSTN DTMF patterns; Out-of-band avoids voice codec distortion",
     "cons": "Edge device must be an RTP endpoint or media proxy; Requires active SIP call/session to send DTMF; Limited command vocabulary (0-9, *, #); Not for high-frequency commands (single DTMF per packet)",
     "standards": "RFC 4733; RFC 2833",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc4733"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc4733",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip",
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "SIP",
+      "繼電器"
+    ]
   },
   {
     "name": "DNP3 / IEC 61850 (for utility/SCADA)",
@@ -459,7 +924,31 @@
     "pros": "Industrial-grade reliability and determinism; Time-stamped events for post-incident analysis; Standard in utility industry worldwide; Secure authentication profiles available (SAv5)",
     "cons": "Very high complexity and engineering cost; Not designed for commercial/office environment; Overkill for simple relay/command use cases; Requires trained SCADA engineers; IEC 61850 requires specific Ethernet switches (GOOSE messaging)",
     "standards": "IEEE 1815 (DNP3); IEC 61850; IEC 62351; IEEE C37.118",
-    "resource_url": "https://www.dnp.org/About/Overview-of-DNP3-Protocol"
+    "resource_url": "https://www.dnp.org/About/Overview-of-DNP3-Protocol",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定"
+    ]
   },
   {
     "name": "NB-IoT / LTE-M",
@@ -481,7 +970,31 @@
     "pros": "Carrier-managed licensed spectrum; Better building penetration than classic LTE; Lower power than full cellular modems",
     "cons": "Coverage varies by country and operator; Downlink latency can be variable; Requires SIM/eSIM lifecycle management",
     "standards": "3GPP LTE Cat-M1; 3GPP NB-IoT; LwM2M",
-    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/internet-of-things/narrow-band-internet-of-things-nb-iot/"
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/internet-of-things/narrow-band-internet-of-things-nb-iot/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "eSIM / Remote SIM Provisioning for IoT",
@@ -503,7 +1016,34 @@
     "pros": "No truck roll for physical SIM swaps; Supports carrier failover and regional profile changes; API-managed fleet lifecycle",
     "cons": "Device modem/eUICC compatibility must be verified; Carrier roaming and permanent-roaming rules vary by country; Voice/SMS support differs from data-only IoT plans",
     "standards": "GSMA SGP.02; GSMA SGP.22; GSMA SGP.32",
-    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/esim/"
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/esim/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "Private LTE / Private 5G",
@@ -525,7 +1065,40 @@
     "pros": "Controlled RF and QoS; Mobility support beyond Wi-Fi; Can carry voice, video, and control traffic",
     "cons": "Spectrum and core-network expertise required; High deployment cost; Regulatory model differs by country",
     "standards": "3GPP 4G LTE; 3GPP 5G NR",
-    "resource_url": "https://www.3gpp.org/technologies/private-networks"
+    "resource_url": "https://www.3gpp.org/technologies/private-networks",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest",
+      "sip",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API",
+      "SIP",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API",
+      "SIP",
+      "訊息傳遞"
+    ]
   },
   {
     "name": "Matter over Thread",
@@ -547,7 +1120,25 @@
     "pros": "Modern multi-vendor smart-building standard; IP-based, unlike many older home automation stacks; Strong onboarding and attestation model",
     "cons": "Still maturing in commercial deployments; Needs border routers; Device-class coverage is not universal",
     "standards": "Matter 1.x; Thread 1.3; IEEE 802.15.4",
-    "resource_url": "https://csa-iot.org/all-solutions/matter/"
+    "resource_url": "https://csa-iot.org/all-solutions/matter/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Bluetooth LE / BLE Mesh",
@@ -569,7 +1160,25 @@
     "pros": "Available in phones and low-cost microcontrollers; Good for provisioning and local control; BLE Mesh supports managed building-scale networks",
     "cons": "2.4GHz interference; Range is limited without mesh; Gateway needed for remote PBX integration",
     "standards": "Bluetooth Core; Bluetooth Mesh Profile",
-    "resource_url": "https://www.bluetooth.com/learn-about-bluetooth/feature-enhancements/mesh/"
+    "resource_url": "https://www.bluetooth.com/learn-about-bluetooth/feature-enhancements/mesh/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Wi-Fi HaLow (802.11ah)",
@@ -591,7 +1200,37 @@
     "pros": "Native IP model like Wi-Fi; Better range and wall penetration than 2.4GHz Wi-Fi; Supports many IoT devices per access point",
     "cons": "Ecosystem is younger than Wi-Fi 6/7 or LoRaWAN; Regional sub-GHz spectrum differs; Client hardware choices are narrower",
     "standards": "IEEE 802.11ah",
-    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-halow"
+    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-halow",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API",
+      "訊息傳遞"
+    ]
   },
   {
     "name": "RS-485 / Modbus RTU",
@@ -613,7 +1252,31 @@
     "pros": "Very cheap and rugged; Long cable runs; Huge ecosystem of relay and sensor modules",
     "cons": "No native encryption or authentication; Bus termination and addressing must be correct; Gateway needed for IP/cloud integration",
     "standards": "TIA/EIA-485; Modbus RTU",
-    "resource_url": "https://modbus.org/specs.php"
+    "resource_url": "https://modbus.org/specs.php",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "serial",
+    "bearer_family": "serial",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "serial"
+    ],
+    "control_interfaces": [
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Serial line (wired, non-IP)",
+    "transport_label_zh": "序列線路（有線、非 IP）",
+    "capability_labels_en": [
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定"
+    ]
   },
   {
     "name": "Dry Contact / Relay Closure",
@@ -635,7 +1298,34 @@
     "pros": "Universally understood by legacy equipment; No protocol compatibility issue; Fails visibly and is easy to test with a meter",
     "cons": "No identity, encryption, or audit trail by itself; Only carries simple binary state; Requires local wiring and electrical protection",
     "standards": "IEC relay practice; GPIO vendor specs",
-    "resource_url": "https://en.wikipedia.org/wiki/Dry_contact"
+    "resource_url": "https://en.wikipedia.org/wiki/Dry_contact",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "gpio",
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "GPIO",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "GPIO",
+      "繼電器"
+    ]
   },
   {
     "name": "Power Line Communication (PLC)",
@@ -657,7 +1347,25 @@
     "pros": "Uses existing power wiring; Useful in dense retrofit environments; Mature in smart-meter deployments",
     "cons": "Noise and phase coupling affect reliability; Installation rules vary by electrical system; Not a good fit for life-safety triggers without engineering",
     "standards": "G3-PLC; PRIME; HomePlug Green PHY",
-    "resource_url": "https://www.itu.int/en/ITU-T/studygroups/2017-2020/15/Pages/g.hn.aspx"
+    "resource_url": "https://www.itu.int/en/ITU-T/studygroups/2017-2020/15/Pages/g.hn.aspx",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "powerline",
+    "bearer_family": "powerline",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "powerline"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Power line (wired)",
+    "transport_label_zh": "電力線（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SIP NOTIFY / SUBSCRIBE events",
@@ -679,7 +1387,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SIP; SUBSCRIBE; NOTIFY",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc6665"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc6665",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "name": "SIP MESSAGE instant command",
@@ -701,7 +1433,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SIP MESSAGE; CPIM",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc3428"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc3428",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip",
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "SIP",
+      "訊息傳遞"
+    ]
   },
   {
     "name": "SIP KPML digit events",
@@ -723,7 +1482,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SIP; KPML; XML",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc4730"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc4730",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "name": "RTP audio tone detection",
@@ -745,7 +1528,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RTP; DSP; Goertzel",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc3550"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc3550",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SRTP-secured media command channel",
@@ -767,7 +1568,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SRTP; RTP; SIP",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc3711"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc3711",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "name": "XMPP PubSub",
@@ -789,7 +1614,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "XMPP; PubSub; TLS",
-    "resource_url": "https://xmpp.org/extensions/xep-0060.html"
+    "resource_url": "https://xmpp.org/extensions/xep-0060.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Redis Streams",
@@ -811,7 +1654,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Redis; Streams; TLS",
-    "resource_url": "https://redis.io/docs/latest/develop/data-types/streams/"
+    "resource_url": "https://redis.io/docs/latest/develop/data-types/streams/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Apache Kafka",
@@ -833,7 +1694,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Kafka; TLS; SASL",
-    "resource_url": "https://kafka.apache.org/documentation/"
+    "resource_url": "https://kafka.apache.org/documentation/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Pulsar topics",
@@ -855,7 +1734,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Apache Pulsar; TLS",
-    "resource_url": "https://pulsar.apache.org/docs/"
+    "resource_url": "https://pulsar.apache.org/docs/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "ZeroMQ command sockets",
@@ -877,7 +1774,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "ZeroMQ; TCP; CurveZMQ",
-    "resource_url": "https://zeromq.org/"
+    "resource_url": "https://zeromq.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "DDS / RTPS",
@@ -899,7 +1814,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "DDS; RTPS",
-    "resource_url": "https://www.omg.org/spec/DDS/"
+    "resource_url": "https://www.omg.org/spec/DDS/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "LwM2M device management",
@@ -921,7 +1854,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "LwM2M; CoAP; DTLS",
-    "resource_url": "https://omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/"
+    "resource_url": "https://omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "OMA DM legacy device management",
@@ -943,7 +1894,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "OMA DM; HTTPS",
-    "resource_url": "https://omaspecworks.org/what-is-oma-specworks/device-management/"
+    "resource_url": "https://omaspecworks.org/what-is-oma-specworks/device-management/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "SNMP SET command",
@@ -965,7 +1943,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SNMPv3; UDP",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc3411"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc3411",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "NETCONF over SSH",
@@ -987,7 +1983,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "NETCONF; SSH; YANG",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc6241"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc6241",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "RESTCONF",
@@ -1009,7 +2023,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RESTCONF; YANG; HTTPS",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc8040"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc8040",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "OpenFlow SDN control",
@@ -1031,7 +2072,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "OpenFlow; TLS",
-    "resource_url": "https://opennetworking.org/sdn-resources/openflow/"
+    "resource_url": "https://opennetworking.org/sdn-resources/openflow/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "BACnet/IP",
@@ -1053,7 +2112,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "BACnet/IP; UDP",
-    "resource_url": "https://bacnet.org/"
+    "resource_url": "https://bacnet.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "KNXnet/IP",
@@ -1075,7 +2152,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "KNX; KNXnet/IP",
-    "resource_url": "https://www.knx.org/knx-en/for-professionals/What-is-KNX/"
+    "resource_url": "https://www.knx.org/knx-en/for-professionals/What-is-KNX/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "DALI-2 lighting control",
@@ -1097,7 +2198,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "DALI-2; IEC 62386",
-    "resource_url": "https://www.dali-alliance.org/dali/"
+    "resource_url": "https://www.dali-alliance.org/dali/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "DMX512 / RDM",
@@ -1119,7 +2238,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "DMX512; RDM; RS-485",
-    "resource_url": "https://tsp.esta.org/tsp/documents/published_docs.php"
+    "resource_url": "https://tsp.esta.org/tsp/documents/published_docs.php",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "serial",
+    "bearer_family": "serial",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "serial"
+    ],
+    "control_interfaces": [
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Serial line (wired, non-IP)",
+    "transport_label_zh": "序列線路（有線、非 IP）",
+    "capability_labels_en": [
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定"
+    ]
   },
   {
     "name": "CAN bus / CANopen",
@@ -1141,7 +2284,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "CAN; CANopen",
-    "resource_url": "https://www.can-cia.org/can-knowledge/canopen"
+    "resource_url": "https://www.can-cia.org/can-knowledge/canopen",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "J1939 vehicle bus",
@@ -1163,7 +2330,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SAE J1939; CAN",
-    "resource_url": "https://www.sae.org/standards/content/j1939_202208/"
+    "resource_url": "https://www.sae.org/standards/content/j1939_202208/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "PROFINET IO",
@@ -1185,7 +2376,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "PROFINET; Industrial Ethernet",
-    "resource_url": "https://www.profibus.com/technology/profinet"
+    "resource_url": "https://www.profibus.com/technology/profinet",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "PROFIBUS DP",
@@ -1207,7 +2422,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "PROFIBUS DP; RS-485",
-    "resource_url": "https://www.profibus.com/technology/profibus"
+    "resource_url": "https://www.profibus.com/technology/profibus",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [
+      "serial_protocol",
+      "fieldbus_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [
+      "Serial protocol",
+      "Fieldbus protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定",
+      "工業匯流排協定"
+    ]
   },
   {
     "name": "EtherNet/IP CIP",
@@ -1229,7 +2471,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "EtherNet/IP; CIP",
-    "resource_url": "https://www.odva.org/technology-standards/key-technologies/ethernet-ip/"
+    "resource_url": "https://www.odva.org/technology-standards/key-technologies/ethernet-ip/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "EtherCAT",
@@ -1251,7 +2511,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "EtherCAT",
-    "resource_url": "https://www.ethercat.org/en/technology.html"
+    "resource_url": "https://www.ethercat.org/en/technology.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SERCOS III",
@@ -1273,7 +2551,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SERCOS III",
-    "resource_url": "https://www.sercos.org/technology/sercos-iii/"
+    "resource_url": "https://www.sercos.org/technology/sercos-iii/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "IO-Link",
@@ -1295,7 +2591,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "IO-Link; IEC 61131-9",
-    "resource_url": "https://io-link.com/en/Technology/what_is_IO-Link.php"
+    "resource_url": "https://io-link.com/en/Technology/what_is_IO-Link.php",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "1-Wire control bus",
@@ -1317,7 +2631,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "1-Wire",
-    "resource_url": "https://www.analog.com/en/resources/technical-articles/guide-to-1wire-communication.html"
+    "resource_url": "https://www.analog.com/en/resources/technical-articles/guide-to-1wire-communication.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "serial",
+    "bearer_family": "serial",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "serial"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Serial line (wired, non-IP)",
+    "transport_label_zh": "序列線路（有線、非 IP）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "I2C local device bus",
@@ -1339,7 +2671,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "I2C",
-    "resource_url": "https://www.nxp.com/docs/en/user-guide/UM10204.pdf"
+    "resource_url": "https://www.nxp.com/docs/en/user-guide/UM10204.pdf",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SPI local device bus",
@@ -1361,7 +2711,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SPI",
-    "resource_url": "https://developer.arm.com/documentation/102159/0100/Serial-Peripheral-Interface--SPI-"
+    "resource_url": "https://developer.arm.com/documentation/102159/0100/Serial-Peripheral-Interface--SPI-",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "GPIO direct digital output",
@@ -1383,7 +2751,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "GPIO",
-    "resource_url": "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html"
+    "resource_url": "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "gpio"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "GPIO"
+    ],
+    "capability_labels_zh": [
+      "GPIO"
+    ]
   },
   {
     "name": "Open collector / open drain output",
@@ -1405,7 +2797,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Open collector; Open drain",
-    "resource_url": "https://en.wikipedia.org/wiki/Open_collector"
+    "resource_url": "https://en.wikipedia.org/wiki/Open_collector",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Wiegand access-control interface",
@@ -1427,7 +2837,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Wiegand",
-    "resource_url": "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/"
+    "resource_url": "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "OSDP secure access control",
@@ -1449,7 +2877,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "OSDP; RS-485; AES",
-    "resource_url": "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/"
+    "resource_url": "https://www.securityindustry.org/industry-standards/open-supervised-device-protocol/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定"
+    ]
   },
   {
     "name": "Alarm Contact ID over IP gateway",
@@ -1471,7 +2923,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SIA DC-09; Contact ID",
-    "resource_url": "https://www.siaonline.org/what-we-do/standards/"
+    "resource_url": "https://www.siaonline.org/what-we-do/standards/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "SIA DC-09 alarm signaling",
@@ -1493,7 +2969,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SIA DC-09; TCP; UDP",
-    "resource_url": "https://www.siaonline.org/what-we-do/standards/"
+    "resource_url": "https://www.siaonline.org/what-we-do/standards/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "CAP common alerting protocol",
@@ -1515,7 +3009,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "CAP; XML; HTTPS",
-    "resource_url": "https://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html"
+    "resource_url": "https://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   },
   {
     "name": "EAS / SAME alert relay",
@@ -1537,7 +3058,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SAME; EAS",
-    "resource_url": "https://www.weather.gov/nwr/same"
+    "resource_url": "https://www.weather.gov/nwr/same",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "POCSAG paging",
@@ -1559,7 +3104,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "POCSAG",
-    "resource_url": "https://www.etsi.org/deliver/etsi_en/300200_300299/300224/"
+    "resource_url": "https://www.etsi.org/deliver/etsi_en/300200_300299/300224/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "FLEX paging",
@@ -1581,7 +3144,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "FLEX",
-    "resource_url": "https://www.etsi.org/"
+    "resource_url": "https://www.etsi.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "TETRA SDS messaging",
@@ -1603,7 +3184,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "TETRA; SDS",
-    "resource_url": "https://www.etsi.org/technologies/tetra"
+    "resource_url": "https://www.etsi.org/technologies/tetra",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "DMR data / text messaging",
@@ -1625,7 +3230,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "DMR; ETSI TS 102 361",
-    "resource_url": "https://www.etsi.org/technologies/digital-mobile-radio"
+    "resource_url": "https://www.etsi.org/technologies/digital-mobile-radio",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "P25 data messaging",
@@ -1647,7 +3276,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Project 25; P25",
-    "resource_url": "https://www.apcointl.org/spectrum-management/p25/"
+    "resource_url": "https://www.apcointl.org/spectrum-management/p25/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "Wi-SUN FAN",
@@ -1669,7 +3322,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Wi-SUN; IPv6; 6LoWPAN",
-    "resource_url": "https://wi-sun.org/technology/"
+    "resource_url": "https://wi-sun.org/technology/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "6LoWPAN mesh",
@@ -1691,7 +3362,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "6LoWPAN; IPv6",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc4944"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc4944",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Wireless M-Bus",
@@ -1713,7 +3402,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Wireless M-Bus; EN 13757",
-    "resource_url": "https://www.oms-group.org/en/about-oms/technology/"
+    "resource_url": "https://www.oms-group.org/en/about-oms/technology/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Sigfox / ultra-narrowband IoT",
@@ -1735,7 +3442,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Sigfox; UNB",
-    "resource_url": "https://build.sigfox.com/"
+    "resource_url": "https://build.sigfox.com/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Mioty telegram splitting",
@@ -1757,7 +3482,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "mioty; TS-UNB",
-    "resource_url": "https://mioty-alliance.com/technology/"
+    "resource_url": "https://mioty-alliance.com/technology/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "DECT-ULE",
@@ -1779,7 +3522,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "DECT-ULE",
-    "resource_url": "https://www.ulealliance.org/"
+    "resource_url": "https://www.ulealliance.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Wi-Fi Aware / NAN",
@@ -1801,7 +3562,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Wi-Fi Aware; NAN",
-    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-aware"
+    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-aware",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "wifi",
+    "bearer_family": "wifi",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "wifi"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Wi-Fi / IP (wireless)",
+    "transport_label_zh": "Wi-Fi / IP（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Wi-Fi Direct",
@@ -1823,7 +3602,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Wi-Fi Direct",
-    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-direct"
+    "resource_url": "https://www.wi-fi.org/discover-wi-fi/wi-fi-direct",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "wifi",
+    "bearer_family": "wifi",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "wifi"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Wi-Fi / IP (wireless)",
+    "transport_label_zh": "Wi-Fi / IP（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "NFC tap trigger",
@@ -1845,7 +3642,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "NFC; ISO 14443",
-    "resource_url": "https://nfc-forum.org/learn/specifications/"
+    "resource_url": "https://nfc-forum.org/learn/specifications/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "RFID reader event trigger",
@@ -1867,7 +3682,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RFID; EPC Gen2",
-    "resource_url": "https://www.gs1.org/standards/epc-rfid"
+    "resource_url": "https://www.gs1.org/standards/epc-rfid",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "UWB ranging trigger",
@@ -1889,7 +3722,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "UWB; IEEE 802.15.4z",
-    "resource_url": "https://www.firaconsortium.org/discover/specifications"
+    "resource_url": "https://www.firaconsortium.org/discover/specifications",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "radio",
+    "bearer_family": "radio",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "radio"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Radio / LPWAN (wireless)",
+    "transport_label_zh": "無線電 / LPWAN（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "GNSS geofence trigger",
@@ -1911,7 +3762,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "GNSS; GPS",
-    "resource_url": "https://www.gps.gov/systems/gps/"
+    "resource_url": "https://www.gps.gov/systems/gps/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "satellite",
+    "bearer_family": "satellite",
+    "link_mode": "wireless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "satellite"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Satellite (wireless)",
+    "transport_label_zh": "衛星（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Cell broadcast command alert",
@@ -1933,7 +3802,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Cell Broadcast; 3GPP",
-    "resource_url": "https://www.3gpp.org/specifications-technologies/specifications-by-series"
+    "resource_url": "https://www.3gpp.org/specifications-technologies/specifications-by-series",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "USSD session command",
@@ -1955,7 +3842,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "USSD; GSM",
-    "resource_url": "https://www.3gpp.org/"
+    "resource_url": "https://www.3gpp.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "IMS data channel",
@@ -1977,7 +3882,34 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "IMS; RCS; SIP",
-    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/"
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "sip",
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "SIP",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "SIP",
+      "訊息傳遞"
+    ]
   },
   {
     "name": "RCS business messaging trigger",
@@ -1999,7 +3931,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RCS; RBM",
-    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/"
+    "resource_url": "https://www.gsma.com/solutions-and-impact/technologies/networks/rcs/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cellular (wireless)",
+    "transport_label_zh": "蜂巢網路（無線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "Email-to-command parser",
@@ -2021,7 +3977,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SMTP; IMAP; DKIM",
-    "resource_url": "https://www.rfc-editor.org/rfc/rfc5321"
+    "resource_url": "https://www.rfc-editor.org/rfc/rfc5321",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "virtual",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "SFTP drop-file command",
@@ -2043,7 +4017,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "SFTP; SSH",
-    "resource_url": "https://www.openssh.com/manual.html"
+    "resource_url": "https://www.openssh.com/manual.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "MQTT over WebSocket",
@@ -2065,7 +4057,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "MQTT; WebSocket",
-    "resource_url": "https://mqtt.org/"
+    "resource_url": "https://mqtt.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "OPC UA PubSub over MQTT",
@@ -2087,7 +4103,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "OPC UA PubSub; MQTT",
-    "resource_url": "https://opcfoundation.org/about/opc-technologies/opc-ua/"
+    "resource_url": "https://opcfoundation.org/about/opc-technologies/opc-ua/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "messaging"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞"
+    ]
   },
   {
     "name": "Digital input over IP I/O module",
@@ -2109,7 +4149,37 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "HTTP; Modbus TCP; SNMP",
-    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os"
+    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest",
+      "serial_protocol"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "REST API",
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API",
+      "序列協定"
+    ]
   },
   {
     "name": "USB HID control relay",
@@ -2131,7 +4201,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "USB HID",
-    "resource_url": "https://www.usb.org/hid"
+    "resource_url": "https://www.usb.org/hid",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Serial RS-232 command",
@@ -2153,7 +4247,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RS-232",
-    "resource_url": "https://tiaonline.org/what-we-do/standards/"
+    "resource_url": "https://tiaonline.org/what-we-do/standards/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "serial",
+    "bearer_family": "serial",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "serial"
+    ],
+    "control_interfaces": [
+      "serial_protocol"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Serial line (wired, non-IP)",
+    "transport_label_zh": "序列線路（有線、非 IP）",
+    "capability_labels_en": [
+      "Serial protocol"
+    ],
+    "capability_labels_zh": [
+      "序列協定"
+    ]
   },
   {
     "name": "HDMI-CEC device command",
@@ -2175,7 +4293,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "HDMI-CEC",
-    "resource_url": "https://hdmi.org/spec/index"
+    "resource_url": "https://hdmi.org/spec/index",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Infrared blaster",
@@ -2197,7 +4333,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "IR; NEC; RC-5",
-    "resource_url": "https://en.wikipedia.org/wiki/Consumer_IR"
+    "resource_url": "https://en.wikipedia.org/wiki/Consumer_IR",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "optical",
+    "bearer_family": "optical",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "optical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Optical / infrared signal",
+    "transport_label_zh": "光學 / 紅外線訊號",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Visible/audible tone sensor",
@@ -2219,7 +4373,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Audio; Optical",
-    "resource_url": "https://www.iso.org/standard/72361.html"
+    "resource_url": "https://www.iso.org/standard/72361.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "visual_code",
+    "bearer_family": "visual_code",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "visual_code"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Visual code / sensor trigger",
+    "transport_label_zh": "視覺碼 / 感測觸發",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Opto-isolated digital input",
@@ -2241,7 +4413,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Optocoupler; Digital input",
-    "resource_url": "https://en.wikipedia.org/wiki/Opto-isolator"
+    "resource_url": "https://en.wikipedia.org/wiki/Opto-isolator",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Solenoid actuator trigger",
@@ -2263,7 +4453,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Solenoid; Relay driver",
-    "resource_url": "https://en.wikipedia.org/wiki/Solenoid"
+    "resource_url": "https://en.wikipedia.org/wiki/Solenoid",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Pneumatic actuator command",
@@ -2285,7 +4499,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Pneumatic valve; Solenoid valve",
-    "resource_url": "https://www.emerson.com/en/final-control/products/eim-ehp"
+    "resource_url": "https://www.emerson.com/en/final-control/products/eim-ehp",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Hydraulic actuator command",
@@ -2307,7 +4539,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Hydraulic valve; Solenoid valve",
-    "resource_url": "https://www.parker.com/us/en/divisions/hydraulic-valve-division.html"
+    "resource_url": "https://www.parker.com/us/en/divisions/hydraulic-valve-division.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Optical fiber contact closure extender",
@@ -2329,7 +4579,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Fiber I/O; Optical isolation",
-    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers"
+    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "optical",
+    "bearer_family": "optical",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "optical"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Optical / infrared signal",
+    "transport_label_zh": "光學 / 紅外線訊號",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Laser or photocell beam-break trigger",
@@ -2351,7 +4625,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Photoelectric sensor; Beam break",
-    "resource_url": "https://www.bannerengineering.com/us/en/products/sensors/photoelectric-sensors.html"
+    "resource_url": "https://www.bannerengineering.com/us/en/products/sensors/photoelectric-sensors.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "optical",
+    "bearer_family": "optical",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "optical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Optical / infrared signal",
+    "transport_label_zh": "光學 / 紅外線訊號",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Stack-light or strobe sensor trigger",
@@ -2373,7 +4665,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Photodiode; Light sensor",
-    "resource_url": "https://www.analog.com/en/resources/technical-articles/photodiode-signal-conditioning.html"
+    "resource_url": "https://www.analog.com/en/resources/technical-articles/photodiode-signal-conditioning.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "visual_code",
+    "bearer_family": "visual_code",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "visual_code"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Visual code / sensor trigger",
+    "transport_label_zh": "視覺碼 / 感測觸發",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Acoustic siren or buzzer classifier",
@@ -2395,7 +4705,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Microphone; DSP",
-    "resource_url": "https://www.analog.com/en/resources/technical-articles/sensor-signal-chain-design-for-audio.html"
+    "resource_url": "https://www.analog.com/en/resources/technical-articles/sensor-signal-chain-design-for-audio.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "acoustic",
+    "bearer_family": "acoustic",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "acoustic"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Acoustic / audio signal",
+    "transport_label_zh": "聲學 / 音訊訊號",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Vibration or tamper sensor trigger",
@@ -2417,7 +4745,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Accelerometer; Piezo",
-    "resource_url": "https://www.analog.com/en/product-category/accelerometers.html"
+    "resource_url": "https://www.analog.com/en/product-category/accelerometers.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "visual_code",
+    "bearer_family": "visual_code",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "visual_code"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Visual code / sensor trigger",
+    "transport_label_zh": "視覺碼 / 感測觸發",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Magnetic reed or Hall sensor trigger",
@@ -2439,7 +4785,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Reed switch; Hall sensor",
-    "resource_url": "https://www.ti.com/sensors/magnetic-sensors/overview.html"
+    "resource_url": "https://www.ti.com/sensors/magnetic-sensors/overview.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Physical key switch interlock",
@@ -2461,7 +4825,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Key switch; Interlock",
-    "resource_url": "https://en.wikipedia.org/wiki/Interlock_(engineering)"
+    "resource_url": "https://en.wikipedia.org/wiki/Interlock_(engineering)",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Emergency-stop safety relay chain",
@@ -2483,7 +4865,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "E-stop; Safety relay",
-    "resource_url": "https://www.pilz.com/en-US/products/safety-relays"
+    "resource_url": "https://www.pilz.com/en-US/products/safety-relays",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Foot pedal or pushbutton station",
@@ -2505,7 +4911,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Pushbutton; Foot switch",
-    "resource_url": "https://en.wikipedia.org/wiki/Push-button"
+    "resource_url": "https://en.wikipedia.org/wiki/Push-button",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "mechanical",
+    "bearer_family": "mechanical",
+    "link_mode": "physical",
+    "network_type": "physical_signal",
+    "bearers": [
+      "mechanical"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Mechanical / fluid actuation",
+    "transport_label_zh": "機械 / 流體致動",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "QR code scan workflow",
@@ -2527,7 +4951,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "QR Code; Barcode scanner",
-    "resource_url": "https://www.gs1.org/standards/barcodes/2d-barcodes"
+    "resource_url": "https://www.gs1.org/standards/barcodes/2d-barcodes",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "visual_code",
+    "bearer_family": "visual_code",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "visual_code"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Visual code / sensor trigger",
+    "transport_label_zh": "視覺碼 / 感測觸發",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Barcode scanner wedge command",
@@ -2549,7 +4991,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Barcode; USB HID keyboard",
-    "resource_url": "https://www.gs1.org/standards/barcodes"
+    "resource_url": "https://www.gs1.org/standards/barcodes",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "visual_code",
+    "bearer_family": "visual_code",
+    "link_mode": "contactless",
+    "network_type": "physical_signal",
+    "bearers": [
+      "visual_code"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Visual code / sensor trigger",
+    "transport_label_zh": "視覺碼 / 感測觸發",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Paper job ticket scan-to-trigger",
@@ -2571,7 +5031,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "OCR; Document scan",
-    "resource_url": "https://www.iso.org/standard/75818.html"
+    "resource_url": "https://www.iso.org/standard/75818.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "manual_process",
+    "bearer_family": "manual_process",
+    "link_mode": "manual",
+    "network_type": "manual",
+    "bearers": [
+      "manual_process"
+    ],
+    "control_interfaces": [
+      "manual"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Manual / document process",
+    "transport_label_zh": "人工 / 文件流程",
+    "capability_labels_en": [
+      "Manual operation"
+    ],
+    "capability_labels_zh": [
+      "人工操作"
+    ]
   },
   {
     "name": "Manual SOP escalation",
@@ -2593,7 +5077,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Runbook; Checklist",
-    "resource_url": "https://www.iso.org/standard/70017.html"
+    "resource_url": "https://www.iso.org/standard/70017.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "manual_process",
+    "bearer_family": "manual_process",
+    "link_mode": "manual",
+    "network_type": "manual",
+    "bearers": [
+      "manual_process"
+    ],
+    "control_interfaces": [
+      "manual"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Manual / document process",
+    "transport_label_zh": "人工 / 文件流程",
+    "capability_labels_en": [
+      "Manual operation"
+    ],
+    "capability_labels_zh": [
+      "人工操作"
+    ]
   },
   {
     "name": "Operator tablet local USB command",
@@ -2615,7 +5123,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "USB CDC; USB HID",
-    "resource_url": "https://www.usb.org/"
+    "resource_url": "https://www.usb.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "MIDI control surface trigger",
@@ -2637,7 +5163,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "MIDI",
-    "resource_url": "https://www.midi.org/specifications"
+    "resource_url": "https://www.midi.org/specifications",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "usb_local_bus",
+    "bearer_family": "usb_local_bus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "usb_local_bus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Local device bus (wired)",
+    "transport_label_zh": "本地裝置匯流排（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "GPIO over PoE I/O appliance",
@@ -2659,7 +5203,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "GPIO; PoE",
-    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os"
+    "resource_url": "https://www.moxa.com/en/products/industrial-edge-connectivity/controllers-and-ios/universal-controllers-and-i-os",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "gpio"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "GPIO"
+    ],
+    "capability_labels_zh": [
+      "GPIO"
+    ]
   },
   {
     "name": "Current-loop 4-20mA threshold trigger",
@@ -2681,7 +5249,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "4-20mA; Analog input",
-    "resource_url": "https://www.analog.com/en/resources/technical-articles/4-20-ma-sensor-transmitters.html"
+    "resource_url": "https://www.analog.com/en/resources/technical-articles/4-20-ma-sensor-transmitters.html",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "fieldbus",
+    "bearer_family": "fieldbus",
+    "link_mode": "wired",
+    "network_type": "non_ip_digital",
+    "bearers": [
+      "fieldbus"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Fieldbus (wired, non-IP)",
+    "transport_label_zh": "工業匯流排（有線、非 IP）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Thermostat or HVAC contact trigger",
@@ -2703,7 +5289,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Thermostat contact; 24VAC",
-    "resource_url": "https://www.ashrae.org/technical-resources/standards-and-guidelines"
+    "resource_url": "https://www.ashrae.org/technical-resources/standards-and-guidelines",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Fire alarm NAC or auxiliary relay monitor",
@@ -2725,7 +5335,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "NAC; Aux relay",
-    "resource_url": "https://www.nfpa.org/codes-and-standards/nfpa-72-standard-development/72"
+    "resource_url": "https://www.nfpa.org/codes-and-standards/nfpa-72-standard-development/72",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Nurse-call dry-contact bridge",
@@ -2747,7 +5381,31 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Nurse call; Dry contact",
-    "resource_url": "https://www.nfpa.org/codes-and-standards/nfpa-99-standard-development/99"
+    "resource_url": "https://www.nfpa.org/codes-and-standards/nfpa-99-standard-development/99",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "繼電器"
+    ]
   },
   {
     "name": "Elevator controller discrete input",
@@ -2769,7 +5427,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Discrete input; Interlock",
-    "resource_url": "https://www.asme.org/codes-standards/find-codes-standards/a17-1-csa-b44-safety-code-elevators-escalators"
+    "resource_url": "https://www.asme.org/codes-standards/find-codes-standards/a17-1-csa-b44-safety-code-elevators-escalators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "electrical_contact",
+    "bearer_family": "electrical_contact",
+    "link_mode": "wired",
+    "network_type": "physical_signal",
+    "bearers": [
+      "electrical_contact"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Dry contact / relay (physical wired)",
+    "transport_label_zh": "乾接點 / 繼電器（實體有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Computer vision event trigger",
@@ -2791,7 +5467,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "RTSP; ONVIF; AI inference",
-    "resource_url": "https://www.onvif.org/profiles/profile-t/"
+    "resource_url": "https://www.onvif.org/profiles/profile-t/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "virtual",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "ONVIF event service",
@@ -2813,7 +5507,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "ONVIF; SOAP; WS-Eventing",
-    "resource_url": "https://www.onvif.org/profiles/profile-t/"
+    "resource_url": "https://www.onvif.org/profiles/profile-t/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "PTP time-synchronized command",
@@ -2835,7 +5547,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "IEEE 1588 PTP",
-    "resource_url": "https://standards.ieee.org/ieee/1588/6825/"
+    "resource_url": "https://standards.ieee.org/ieee/1588/6825/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "TSN scheduled Ethernet control",
@@ -2857,7 +5587,25 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "TSN; IEEE 802.1Qbv",
-    "resource_url": "https://1.ieee802.org/tsn/"
+    "resource_url": "https://1.ieee802.org/tsn/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "name": "Edge rules engine",
@@ -2879,6 +5627,33 @@
     "pros": "Broadens migration options beyond PSTN and classic PBX lines; Can be selected by site constraints, latency, and available infrastructure; Integrates with gateways, edge controllers, or automation middleware",
     "cons": "Requires validation against local device support and regulations; Operational tooling and monitoring differ by protocol; May need a gateway layer to connect with PBX or UCaaS events",
     "standards": "Node-RED; Rules engine; HTTPS",
-    "resource_url": "https://nodered.org/"
+    "resource_url": "https://nodered.org/",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "virtual",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "rest"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "explicit",
+    "transport_classification_source": "medium_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "REST API"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "REST API"
+    ]
   }
 ]

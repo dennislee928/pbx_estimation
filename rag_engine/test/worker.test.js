@@ -58,8 +58,8 @@ test("ranks matching alternatives and solutions", async () => {
   }, { USE_WORKERS_AI: "false" });
 
   assert.equal(result.alternatives[0].name, "Dry Contact / Relay Closure");
-  assert.equal(result.alternatives[0].transport_label, "非網路 / 實體媒介");
-  assert.equal(result.alternatives[0].transport_type, "non_network_physical");
+  assert.equal(result.alternatives[0].transport_label, "乾接點 / 繼電器（實體有線）");
+  assert.equal(result.alternatives[0].primary_bearer, "electrical_contact");
   assert.ok(result.solutions.some((item) => item.name === "Grandstream UCM Series"));
   assert.ok(result.solutions.every((item) => item.transport_label));
   assert.ok(result.rag_response_table.some((item) => item.type === "alternative" && item.name === "Dry Contact / Relay Closure"));
@@ -79,7 +79,7 @@ test("excludes ethernet/IP transports when the scene forbids them", async () => 
   assert.equal(result.alternatives.some((item) => item.name === "MQTT (MQTT-SN)"), false);
   // The dry-contact (electrical) option is still allowed.
   assert.equal(result.alternatives.some((item) => item.name === "Dry Contact / Relay Closure"), true);
-  assert.equal(result.alternatives.find((item) => item.name === "Dry Contact / Relay Closure").transport_label, "非網路 / 實體媒介");
+  assert.equal(result.alternatives.find((item) => item.name === "Dry Contact / Relay Closure").transport_label, "乾接點 / 繼電器（實體有線）");
   // The constraint is reported back in the evidence.
   assert.ok(result.evidence.excluded_transport_tokens.includes("ethernet_ip"));
   assert.ok(result.evidence.excluded_constraints.length > 0);
@@ -130,6 +130,31 @@ test("does not exclude transports that are merely mentioned positively", async (
     solutions,
   }, { USE_WORKERS_AI: "false" });
   assert.equal(result.evidence.excluded_transport_tokens.length, 0);
+});
+
+test("keeps API capability separate from an eSIM wireless bearer", async () => {
+  const esim = [{
+    name: "1NCE IoT eSIM",
+    tags: "iot, esim, api, cellular",
+    description: "IoT cellular connectivity and eSIM fleet management.",
+    primary_bearer: "cellular_esim",
+    bearer_family: "cellular",
+    link_mode: "wireless",
+    network_type: "ip",
+    bearers: ["cellular_esim"],
+    control_interfaces: ["api"],
+    api_capable: true,
+    hybrid: false,
+    transport_schema_version: 2,
+    transport_label_en: "Cellular / eSIM (wireless)",
+    transport_label_zh: "蜂巢 / eSIM（無線）",
+    capability_labels_en: ["API management"],
+    capability_labels_zh: ["API 管理"],
+  }];
+  const result = await handleRagRequest({ scene: "IoT eSIM API device fleet", alternatives: [], solutions: esim }, { USE_WORKERS_AI: "false" });
+  assert.equal(result.solutions[0].link_mode, "wireless");
+  assert.equal(result.solutions[0].transport_label, "蜂巢 / eSIM（無線）");
+  assert.deepEqual(result.solutions[0].control_interfaces, ["api"]);
 });
 
 test("empty scene returns empty ranks", async () => {
@@ -185,4 +210,28 @@ test("loads catalog and documents from bucket context", async () => {
   assert.equal(result.documents[0].name, "reports/global_research_report_zh.md");
   assert.equal(result.evidence.asset_manifest_count, 4);
   assert.equal(result.evidence.crawler_seed_counts.known_vendor_count, 126);
+});
+
+test("resolves an immutable catalog snapshot through latest-pointer.json", async () => {
+  const objects = new Map([
+    ["latest-pointer.json", { asset_prefix: "snapshots/run-42", catalog_snapshot_id: "run-42" }],
+    ["snapshots/run-42/rag_engine/dist/rag_assets_manifest.json", { transport_schema_version: 2, catalog_snapshot_id: "run-42", asset_count: 2, assets: [] }],
+    ["snapshots/run-42/frontend/data/awesome_list.json", alternatives],
+    ["snapshots/run-42/frontend/data/solution_registry.json", solutions],
+    ["snapshots/run-42/frontend/data/crawler_seed_context.json", {}],
+  ]);
+  const env = {
+    USE_WORKERS_AI: "false",
+    RAG_ASSET_PREFIX: "latest",
+    RAG_ASSETS: {
+      async get(key) {
+        const value = objects.get(key);
+        if (value === undefined) return null;
+        return { async json() { return value; }, async text() { return JSON.stringify(value); } };
+      },
+    },
+  };
+  const result = await handleRagRequest({ scene: "hotel door relay" }, env);
+  assert.equal(result.evidence.catalog_snapshot_id, "run-42");
+  assert.equal(result.evidence.transport_schema_version, 2);
 });

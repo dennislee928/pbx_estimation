@@ -23,6 +23,7 @@ DEFAULT_INCLUDE_DIRS = [
 DEFAULT_MANIFEST = ROOT / "rag_engine" / "dist" / "rag_assets_manifest.json"
 DEFAULT_NOTEBOOKLM_DIR = ROOT / "rag_engine" / "dist" / "notebooklm_sources"
 DEFAULT_HF_ASSET_DIR = ROOT / "rag_engine" / "dist" / "hf_assets"
+DEFAULT_POINTER = ROOT / "rag_engine" / "dist" / "latest-pointer.json"
 NOTEBOOKLM_EXTENSIONS = {".md", ".txt", ".csv", ".json", ".html", ".pdf"}
 NOTEBOOKLM_SOURCE_LIMIT = 50
 
@@ -57,11 +58,11 @@ def asset_key(path: Path, prefix: str) -> str:
 # (e.g. exclude ethernet) and metrics, not just on filename.
 CATALOG_LABEL_FIELDS = {
     "frontend/data/awesome_list.json": {
-        "transport_field": "medium",
+        "transport_fields": ["primary_bearer", "bearer_family", "link_mode", "network_type", "control_interfaces"],
         "metric_fields": ["latency", "reliability", "security", "cost_model", "recommended_devices", "industry_fit"],
     },
     "frontend/data/solution_registry.json": {
-        "transport_field": "tags",
+        "transport_fields": ["primary_bearer", "bearer_family", "link_mode", "network_type", "control_interfaces"],
         "metric_fields": ["vendor", "continent", "recommended_terminals", "cost_band", "industry_fit", "lifecycle_assigned"],
     },
 }
@@ -95,19 +96,20 @@ def build_labels(path: Path, rel_path: str) -> dict:
         return labels
     if not isinstance(rows, list):
         return labels
-    transport_field = spec["transport_field"]
-    transports = set()
+    values = {field: set() for field in spec["transport_fields"]}
     for row in rows:
         if not isinstance(row, dict):
             continue
-        raw = str(row.get(transport_field, ""))
-        for token in re.split(r"[;,]\s*", raw):
-            token = token.strip()
-            if token:
-                transports.add(token)
+        for field in spec["transport_fields"]:
+            raw = row.get(field, "")
+            items = raw if isinstance(raw, list) else re.split(r"[;,]\s*", str(raw))
+            values[field].update(str(item).strip() for item in items if str(item).strip())
     labels["row_count"] = len(rows)
-    labels["transport_field"] = transport_field
-    labels["transport_values"] = sorted(transports)
+    labels["transport_schema_version"] = max((int(row.get("transport_schema_version", 0)) for row in rows if isinstance(row, dict)), default=0)
+    labels["transport_fields"] = spec["transport_fields"]
+    labels["transport_values"] = {field: sorted(field_values) for field, field_values in values.items()}
+    labels["unknown_count"] = sum(1 for row in rows if row.get("transport_confidence") == "unknown")
+    labels["hybrid_count"] = sum(1 for row in rows if row.get("hybrid") is True)
     labels["metric_fields"] = spec["metric_fields"]
     return labels
 
@@ -127,14 +129,29 @@ def build_manifest(paths: list[Path], prefix: str) -> dict:
                 "labels": build_labels(path, rel_path),
             }
         )
+    catalogs = {asset["path"]: asset for asset in assets if asset["path"] in CATALOG_LABEL_FIELDS}
+    solution = catalogs.get("frontend/data/solution_registry.json", {})
+    alternatives = catalogs.get("frontend/data/awesome_list.json", {})
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "asset_prefix": prefix,
         "asset_count": len(assets),
+        "transport_schema_version": 2,
+        "catalog_snapshot_id": os.environ.get("GITHUB_RUN_ID") or os.environ.get("GITHUB_SHA") or sha256(ROOT / "frontend/data/solution_registry.json")[:16],
+        "git_commit_sha": os.environ.get("GITHUB_SHA", ""),
+        "catalog_snapshot": {
+            "solution_registry_sha256": solution.get("sha256", ""),
+            "awesome_list_sha256": alternatives.get("sha256", ""),
+            "solution_record_count": solution.get("labels", {}).get("row_count", 0),
+            "alternative_record_count": alternatives.get("labels", {}).get("row_count", 0),
+            "unknown_solution_count": solution.get("labels", {}).get("unknown_count", 0),
+            "unknown_alternative_count": alternatives.get("labels", {}).get("unknown_count", 0),
+            "classification_valid": bool(solution and alternatives),
+        },
         "label_schema": {
             "kind": "report | data | catalog | other",
-            "transport_field": "catalog field summarizing the transport medium",
-            "transport_values": "distinct transport mediums present in a catalog",
+            "transport_fields": "canonical catalog fields summarizing bearer, link mode, network type, and interfaces",
+            "transport_values": "distinct canonical values present in a catalog",
             "metric_fields": "structured metric columns available for filtering",
         },
         "assets": assets,
@@ -151,6 +168,20 @@ def write_r2_pairs(manifest: dict, output: Path) -> None:
     with output.open("w") as handle:
         for asset in manifest["assets"]:
             handle.write(f"{asset['key']}\t{asset['path']}\n")
+
+
+def write_latest_pointer(manifest: dict, output: Path) -> dict:
+    pointer = {
+        "asset_prefix": manifest["asset_prefix"],
+        "catalog_snapshot_id": manifest["catalog_snapshot_id"],
+        "transport_schema_version": manifest["transport_schema_version"],
+        "git_commit_sha": manifest.get("git_commit_sha", ""),
+        "manifest_key": f"{manifest['asset_prefix']}/rag_engine/dist/rag_assets_manifest.json",
+        "catalog_snapshot": manifest["catalog_snapshot"],
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(pointer, ensure_ascii=False, indent=2) + "\n")
+    return pointer
 
 
 def slug(value: str) -> str:
@@ -230,6 +261,13 @@ def build_hf_asset_bundle(manifest: dict, output_dir: Path) -> dict:
     manifest_destination = output_dir / manifest["asset_prefix"] / "rag_engine" / "dist" / "rag_assets_manifest.json"
     manifest_destination.parent.mkdir(parents=True, exist_ok=True)
     manifest_destination.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+    (output_dir / "latest-pointer.json").write_text(json.dumps({
+        "asset_prefix": manifest["asset_prefix"],
+        "catalog_snapshot_id": manifest["catalog_snapshot_id"],
+        "transport_schema_version": manifest["transport_schema_version"],
+        "manifest_key": f"{manifest['asset_prefix']}/rag_engine/dist/rag_assets_manifest.json",
+        "catalog_snapshot": manifest["catalog_snapshot"],
+    }, ensure_ascii=False, indent=2) + "\n")
     return {"asset_count": len(copied), "asset_root": output_dir.as_posix(), "assets": copied}
 
 
@@ -276,6 +314,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--r2-pairs", type=Path, default=ROOT / "rag_engine" / "dist" / "rag_assets_r2.tsv")
     parser.add_argument("--notebooklm-dir", type=Path, default=DEFAULT_NOTEBOOKLM_DIR)
     parser.add_argument("--hf-asset-dir", type=Path, default=DEFAULT_HF_ASSET_DIR)
+    parser.add_argument("--pointer", type=Path, default=DEFAULT_POINTER)
     parser.add_argument("--include", action="append", type=Path, default=None)
     parser.add_argument("--notebooklm-upload-url", default=os.environ.get("NOTEBOOKLM_UPLOAD_URL", ""))
     parser.add_argument("--notebooklm-token", default=os.environ.get("NOTEBOOKLM_API_TOKEN", ""))
@@ -290,6 +329,7 @@ def main() -> None:
     manifest = build_manifest(include_paths, args.prefix)
     write_manifest(manifest, args.manifest)
     write_r2_pairs(manifest, args.r2_pairs)
+    write_latest_pointer(manifest, args.pointer)
     notebooklm_manifest = build_notebooklm_bundle(manifest, args.notebooklm_dir)
     hf_manifest = build_hf_asset_bundle(manifest, args.hf_asset_dir)
     print(f"Wrote {manifest['asset_count']} RAG assets to {args.manifest}")

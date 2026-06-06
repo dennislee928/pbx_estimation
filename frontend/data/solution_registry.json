@@ -18,7 +18,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -39,7 +63,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -60,7 +108,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -81,7 +153,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -102,7 +198,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -123,7 +243,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -144,7 +288,26 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -165,7 +328,32 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -186,7 +374,25 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -207,7 +413,25 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -228,7 +452,32 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; Hospitality; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Hospitality; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -249,7 +498,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -270,7 +543,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -291,7 +588,26 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -312,7 +628,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -333,7 +667,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -354,7 +712,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -375,7 +757,32 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -396,7 +803,26 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -417,7 +843,34 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "relay"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "繼電器"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -438,7 +891,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -459,7 +936,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -480,7 +981,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -501,7 +1020,34 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -522,7 +1068,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Healthcare; Professional services; Distributed offices"
+    "industry_fit": "Healthcare; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -543,7 +1113,26 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -564,7 +1153,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -585,7 +1192,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -606,7 +1237,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -627,7 +1282,34 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -648,7 +1330,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -669,7 +1375,25 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Hospitality; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Hospitality; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -690,7 +1414,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -711,7 +1459,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -732,7 +1504,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -753,7 +1549,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -774,7 +1594,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -795,7 +1633,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -816,7 +1678,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -837,7 +1723,26 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -858,7 +1763,26 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -879,7 +1803,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -900,7 +1842,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -921,7 +1887,26 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -942,7 +1927,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -963,7 +1972,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -984,7 +2017,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -1005,7 +2056,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1026,7 +2101,26 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -1047,7 +2141,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -1068,7 +2186,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1089,7 +2231,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1110,7 +2276,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1131,7 +2321,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1152,7 +2366,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -1173,7 +2411,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1194,7 +2450,25 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1215,7 +2489,34 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "relay"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "繼電器"
+    ]
   },
   {
     "continent": "americas",
@@ -1236,7 +2537,34 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "relay"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "繼電器"
+    ]
   },
   {
     "continent": "americas",
@@ -1257,7 +2585,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1278,7 +2630,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1299,7 +2675,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Healthcare; Professional services; Distributed offices"
+    "industry_fit": "Healthcare; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -1320,7 +2720,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1341,7 +2765,32 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1362,7 +2811,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1383,7 +2850,26 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1404,7 +2890,25 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1425,7 +2929,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1446,7 +2974,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1467,7 +3013,31 @@
     "discovery_query": "",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -1488,7 +3058,31 @@
     "discovery_query": "",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1509,7 +3103,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1530,7 +3148,25 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1551,7 +3187,25 @@
     "discovery_query": "",
     "recommended_terminals": "8-300 legacy extensions",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -1572,7 +3226,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "africa",
@@ -1593,7 +3271,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "africa",
@@ -1614,7 +3316,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "africa",
@@ -1635,7 +3361,25 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low capex sunk cost; high maintenance/migration risk",
-    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Government; Education; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "analog_tdm",
+    "bearer_family": "analog_tdm",
+    "link_mode": "wired",
+    "network_type": "analog",
+    "bearers": [
+      "analog_tdm"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Analog / TDM (wired)",
+    "transport_label_zh": "類比 / TDM（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "africa",
@@ -1656,7 +3400,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "africa",
@@ -1677,7 +3445,31 @@
     "discovery_query": "",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "middle_east",
@@ -1698,7 +3490,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "middle_east",
@@ -1719,7 +3535,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices"
+    "industry_fit": "Healthcare; Government; Education; Hospitality; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "middle_east",
@@ -1740,7 +3580,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "middle_east",
@@ -1761,7 +3625,31 @@
     "discovery_query": "",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1782,7 +3670,34 @@
     "discovery_query": "Microsoft Microsoft Teams Phone official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -1803,7 +3718,34 @@
     "discovery_query": "Zoom Zoom Phone official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "relay"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "繼電器"
+    ]
   },
   {
     "continent": "americas",
@@ -1824,7 +3766,34 @@
     "discovery_query": "RingCentral RingCentral RingEX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "americas",
@@ -1845,7 +3814,31 @@
     "discovery_query": "8x8 8x8 Work official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -1866,7 +3859,31 @@
     "discovery_query": "Dialpad Dialpad Ai Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -1887,7 +3904,25 @@
     "discovery_query": "Nextiva NextivaONE official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -1908,7 +3943,31 @@
     "discovery_query": "Aircall Aircall official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -1929,28 +3988,34 @@
     "discovery_query": "GoTo GoTo Connect official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "25-5,000 agents",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
-  },
-  {
-    "continent": "americas",
-    "country_code": "us",
-    "name": "Cisco Webex Calling",
-    "vendor": "Cisco",
-    "lifecycle_assigned": "cutting_edge",
-    "lifecycle_original": "cutting_edge",
-    "eol_status": "",
-    "eol_year": "",
-    "generation": "cloud",
-    "tags": "cloud, ucaas, sip, enterprise",
-    "description": "Cisco cloud calling service for Webex with enterprise voice migration paths.",
-    "pros": "Cisco enterprise voice heritage; Hybrid migration options; Strong device ecosystem",
-    "cons": "Licensing and admin model can be complex; Best with Cisco ecosystem; Migration planning required",
-    "typical_customers": "Enterprise, government",
-    "resource_url": "https://www.webex.com/suite/cloud-calling.html",
-    "discovery_query": "Cisco Cisco Webex Calling official cloud PBX VoIP API eSIM UCaaS",
-    "recommended_terminals": "500-50,000 seats/devices",
-    "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "messaging",
+      "relay"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "Messaging",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "訊息傳遞",
+      "繼電器"
+    ]
   },
   {
     "continent": "europe",
@@ -1971,7 +4036,25 @@
     "discovery_query": "NFON NFON Cloudya official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -1992,7 +4075,31 @@
     "discovery_query": "Gamma Gamma Horizon official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2013,7 +4120,31 @@
     "discovery_query": "MaxoTel MaxoTel Hosted PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2034,7 +4165,31 @@
     "discovery_query": "2talk 2talk Cloud PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2055,7 +4210,25 @@
     "discovery_query": "Globe Telecom Globe Business Cloud Phone official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -2076,7 +4249,25 @@
     "discovery_query": "TIME dotCom TIME Voice Cloud PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -2097,7 +4288,25 @@
     "discovery_query": "AIS AIS Business Cloud PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -2118,7 +4327,31 @@
     "discovery_query": "Masvoz Masvoz Cloud PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2139,7 +4372,31 @@
     "discovery_query": "CloudTalk CloudTalk official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "middle_east",
@@ -2160,7 +4417,25 @@
     "discovery_query": "stc stc business voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "africa",
@@ -2181,7 +4456,25 @@
     "discovery_query": "Safaricom Safaricom Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "africa",
@@ -2202,7 +4495,31 @@
     "discovery_query": "Telecom Egypt Telecom Egypt Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2223,7 +4540,34 @@
     "discovery_query": "Twilio Twilio Programmable Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2244,7 +4588,34 @@
     "discovery_query": "Vonage Vonage Voice API official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2265,7 +4636,34 @@
     "discovery_query": "Telnyx Telnyx Voice API official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2286,7 +4684,37 @@
     "discovery_query": "Bandwidth Bandwidth Voice API official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2307,7 +4735,34 @@
     "discovery_query": "Plivo Plivo Voice API official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api",
+      "sip"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management",
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2328,7 +4783,34 @@
     "discovery_query": "Sinch Sinch Voice API official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "europe",
@@ -2349,7 +4831,34 @@
     "discovery_query": "Bird Bird Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "messaging"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Messaging"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "訊息傳遞"
+    ]
   },
   {
     "continent": "europe",
@@ -2370,7 +4879,31 @@
     "discovery_query": "Infobip Infobip Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -2391,7 +4924,31 @@
     "discovery_query": "Sangoma / Open Source Asterisk official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2412,7 +4969,31 @@
     "discovery_query": "Sangoma / Open Source FreePBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2433,7 +5014,31 @@
     "discovery_query": "SignalWire / Open Source FreeSWITCH official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2454,7 +5059,31 @@
     "discovery_query": "FusionPBX FusionPBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2475,7 +5104,31 @@
     "discovery_query": "Wazo Wazo Platform official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -2496,7 +5149,31 @@
     "discovery_query": "VitalPBX VitalPBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2517,7 +5194,31 @@
     "discovery_query": "Issabel Issabel PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "SMB; Enterprise; Systems integrators"
+    "industry_fit": "SMB; Enterprise; Systems integrators",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2538,7 +5239,31 @@
     "discovery_query": "Twilio Twilio Super SIM / IoT SIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -2559,7 +5284,31 @@
     "discovery_query": "1NCE 1NCE IoT eSIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -2580,7 +5329,31 @@
     "discovery_query": "emnify emnify IoT eSIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2601,7 +5374,31 @@
     "discovery_query": "SORACOM SORACOM Air for Cellular official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -2622,7 +5419,31 @@
     "discovery_query": "KORE Wireless KORE OmniSIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -2643,7 +5464,25 @@
     "discovery_query": "Eseye Eseye AnyNet+ eSIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -2664,7 +5503,31 @@
     "discovery_query": "Hologram Hologram Hyper SIM official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Low-Medium: per SIM/device subscription",
-    "industry_fit": "IoT; Utilities; Logistics; Manufacturing"
+    "industry_fit": "IoT; Utilities; Logistics; Manufacturing",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cellular_esim",
+    "bearer_family": "cellular",
+    "link_mode": "wireless",
+    "network_type": "ip",
+    "bearers": [
+      "cellular_esim"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cellular / eSIM (wireless)",
+    "transport_label_zh": "蜂巢 / eSIM（無線）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -2685,7 +5548,25 @@
     "discovery_query": "Ooma Ooma Office official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -2706,7 +5587,25 @@
     "discovery_query": "Intermedia Intermedia Unite official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "25-5,000 agents",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -2727,7 +5626,25 @@
     "discovery_query": "Mitel Mitel MiCloud Connect / Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -2748,7 +5665,25 @@
     "discovery_query": "Alcatel-Lucent Enterprise Alcatel-Lucent Rainbow Office official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Government; Education; Professional services; Distributed offices"
+    "industry_fit": "Government; Education; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -2769,7 +5704,25 @@
     "discovery_query": "Wildix Wildix UCaaS official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -2790,7 +5743,31 @@
     "discovery_query": "Yeastar Yeastar P-Series PBX official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities"
+    "industry_fit": "Healthcare; Hospitality; Professional services; Distributed offices; SMB retrofit; Retail branches; Legacy facilities",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "asia_pacific",
@@ -2811,7 +5788,32 @@
     "discovery_query": "Grandstream Grandstream UCM Series official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Hospitality"
+    "industry_fit": "Hospitality",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "hybrid",
+    "bearer_family": "hybrid",
+    "link_mode": "hybrid",
+    "network_type": "mixed",
+    "bearers": [
+      "analog_tdm",
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": true,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Hybrid transport",
+    "transport_label_zh": "混合承載",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "americas",
@@ -2832,7 +5834,31 @@
     "discovery_query": "Sangoma Sangoma PBXact official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "5-500 seats",
     "cost_band": "Low license cost; medium engineering/ops cost",
-    "industry_fit": "Contact center; Retail; Financial services"
+    "industry_fit": "Contact center; Retail; Financial services",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "middle_east",
@@ -2853,7 +5879,31 @@
     "discovery_query": "AudioCodes AudioCodes Live Cloud official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2874,7 +5924,31 @@
     "discovery_query": "Colt Colt Cloud Communications official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -2895,7 +5969,25 @@
     "discovery_query": "Placetel Placetel Cloud Telephone System official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -2916,7 +6008,25 @@
     "discovery_query": "Daktela Daktela Contact Center official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "25-5,000 agents",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -2937,7 +6047,31 @@
     "discovery_query": "Zenvia Zenvia Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "americas",
@@ -2958,7 +6092,31 @@
     "discovery_query": "Suma Movil Suma Móvil / VoIP enterprise official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "africa",
@@ -2979,7 +6137,25 @@
     "discovery_query": "inwi inwi Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "africa",
@@ -3000,7 +6176,25 @@
     "discovery_query": "MTN Ghana MTN Business Voice Ghana official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "middle_east",
@@ -3021,7 +6215,25 @@
     "discovery_query": "Ooredoo Ooredoo Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -3042,7 +6254,25 @@
     "discovery_query": "Viettel Viettel Cloud PBX / Business Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -3063,7 +6293,25 @@
     "discovery_query": "HKT HKT Cloud Communications official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -3084,7 +6332,25 @@
     "discovery_query": "Far EasTone 遠傳企業雲端總機 official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "asia_pacific",
@@ -3105,7 +6371,25 @@
     "discovery_query": "Taiwan Mobile 台灣大哥大企業語音服務 official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -3126,7 +6410,25 @@
     "discovery_query": "Google Google Voice for Google Workspace official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -3147,7 +6449,34 @@
     "discovery_query": "AWS Amazon Connect official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api",
+      "relay"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management",
+      "Relay"
+    ],
+    "capability_labels_zh": [
+      "API 管理",
+      "繼電器"
+    ]
   },
   {
     "continent": "americas",
@@ -3168,7 +6497,25 @@
     "discovery_query": "Genesys Genesys Cloud CX Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium-High: per seat plus add-ons",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "americas",
@@ -3189,7 +6536,31 @@
     "discovery_query": "Five9 Five9 VoiceStream / Cloud Contact Center official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "100-100,000+ API endpoints/devices",
     "cost_band": "Usage-based: per minute/API event",
-    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices"
+    "industry_fit": "Contact center; Retail; Financial services; Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [
+      "api"
+    ],
+    "api_capable": true,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [
+      "API management"
+    ],
+    "capability_labels_zh": [
+      "API 管理"
+    ]
   },
   {
     "continent": "europe",
@@ -3210,7 +6581,31 @@
     "discovery_query": "Deutsche Telekom Deutsche Telekom CompanyFlex official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "ethernet",
+    "bearer_family": "ethernet",
+    "link_mode": "wired",
+    "network_type": "ip",
+    "bearers": [
+      "ethernet"
+    ],
+    "control_interfaces": [
+      "sip"
+    ],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Ethernet / IP (wired)",
+    "transport_label_zh": "乙太網路 / IP（有線）",
+    "capability_labels_en": [
+      "SIP"
+    ],
+    "capability_labels_zh": [
+      "SIP"
+    ]
   },
   {
     "continent": "europe",
@@ -3231,7 +6626,25 @@
     "discovery_query": "BT BT Cloud Voice official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -3252,7 +6665,25 @@
     "discovery_query": "KPN KPN EEN / Cloud communications official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "10-2,000 seats",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   },
   {
     "continent": "europe",
@@ -3273,6 +6704,24 @@
     "discovery_query": "Telia Telia Touchpoint Plus official cloud PBX VoIP API eSIM UCaaS",
     "recommended_terminals": "500-50,000 seats/devices",
     "cost_band": "Medium: monthly per-seat subscription",
-    "industry_fit": "Professional services; Distributed offices"
+    "industry_fit": "Professional services; Distributed offices",
+    "transport_schema_version": 2,
+    "label_dictionary_version": 2,
+    "primary_bearer": "cloud_or_platform",
+    "bearer_family": "cloud_or_platform",
+    "link_mode": "unknown",
+    "network_type": "ip",
+    "bearers": [
+      "cloud_or_platform"
+    ],
+    "control_interfaces": [],
+    "api_capable": false,
+    "hybrid": false,
+    "transport_confidence": "derived",
+    "transport_classification_source": "tag_rule",
+    "transport_label_en": "Cloud platform (bearer unspecified)",
+    "transport_label_zh": "雲端平台（承載未指定）",
+    "capability_labels_en": [],
+    "capability_labels_zh": []
   }
 ]

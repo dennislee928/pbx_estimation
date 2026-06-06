@@ -3,6 +3,8 @@ import numpy as np
 from pathlib import Path
 from typing import Optional
 
+from src.research.transport_taxonomy import classify_alternative, serialize_for_csv
+
 # --- PSTN-alternative catalog ---
 # Each entry: alternative to using a physical phone line to trigger/send a command to an edge device
 
@@ -878,7 +880,7 @@ def enrich_registry(
     df["security_score"] = df.apply(score_security_posture, axis=1)
     if output_path is not None and len(df):
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(output_path, index=False)
+        df.map(serialize_for_csv).to_csv(output_path, index=False)
     return df
 
 
@@ -1132,8 +1134,7 @@ def generate_awesome_list(
     all_alts = PSTN_ALTERNATIVES_CABLE + PSTN_ALTERNATIVES_WIRELESS + _expanded_alternatives()
     rows = []
     for alt in all_alts:
-        rows.append(
-            {
+        row = {
                 "name": alt["name"],
                 "category": alt["category"],
                 "medium": alt["medium"],
@@ -1155,7 +1156,8 @@ def generate_awesome_list(
                 "standards": "; ".join(alt["standards"]),
                 "resource_url": alt.get("resource_url") or ALT_RESOURCE_URLS.get(alt["name"], ""),
             }
-        )
+        row.update(classify_alternative(row))
+        rows.append(row)
     df = pd.DataFrame(rows)
     if output_path is not None and len(df):
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
