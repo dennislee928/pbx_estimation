@@ -100,6 +100,23 @@ test("falls back to deterministic prose if the LLM names an excluded product", a
   assert.equal(result.alternatives.some((item) => item.name === "MQTT (MQTT-SN)"), false);
 });
 
+test("excludes analog/TDM solutions even on truncated/partial phrasing (類比電話)", async () => {
+  const legacy = [
+    { name: "Nortel BCM / CS1000", vendor: "Avaya", tags: "tdm, digital, fxs", description: "Legacy TDM PBX." },
+    { name: "emnify IoT eSIM", vendor: "emnify", tags: "iot, esim, api, cellular", description: "Cellular IoT connectivity." },
+  ];
+  const result = await handleRagRequest({
+    // Note: truncated like the UI ("傳統類比電話", no 線) and a forbidden ethernet too.
+    scene: "5000 edge devices 不可以用乙太網路/傳統類比電話 下命令",
+    alternatives,
+    solutions: legacy,
+  }, { USE_WORKERS_AI: "false" });
+  assert.ok(result.evidence.excluded_transport_tokens.includes("analog"));
+  assert.equal(result.solutions.some((s) => s.name === "Nortel BCM / CS1000"), false);
+  // The cellular IoT solution is still allowed.
+  assert.equal(result.solutions.some((s) => s.name === "emnify IoT eSIM"), true);
+});
+
 test("does not exclude transports that are merely mentioned positively", async () => {
   const result = await handleRagRequest({
     scene: "use ethernet IP for hotel door relay low cost",

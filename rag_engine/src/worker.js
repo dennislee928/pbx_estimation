@@ -60,7 +60,7 @@ const SCENE_EXPANSIONS = [
 const TRANSPORT_EXCLUSIONS = [
   { keys: ["乙太網路線", "網路線", "ethernet cable", "ethernet wire", "rj45", "rj-45", "lan cable"], tokens: ["ethernet_wire", "ethernet", "rj45", "lan"] },
   { keys: ["乙太網路", "ethernet", "ip網路", "ip network", "區域網路"], tokens: ["ethernet", "ethernet_ip", "ethernet_wire", "serial_ethernet", "lan"] },
-  { keys: ["類比電話線", "傳統電話線", "電話線", "類比線路", "analog phone", "analogue phone", "analog line", "pstn line", "copper line", "pots"], tokens: ["analog", "analogue", "pstn", "pots", "fxs", "fxo", "tdm", "copper", "phone_line"] },
+  { keys: ["類比電話線", "傳統電話線", "傳統電話", "類比電話", "類比線路", "類比", "電話線", "市話", "analog phone", "analogue phone", "analog line", "analog", "analogue", "pstn line", "copper line", "pots", "landline"], tokens: ["analog", "analogue", "pstn", "pots", "fxs", "fxo", "tdm", "copper", "phone_line"] },
   { keys: ["pstn", "傳統電話網路", "public switched"], tokens: ["pstn", "pots", "tdm", "analog"] },
   { keys: ["wifi", "wi-fi", "無線網路", "無線區域網路", "wlan"], tokens: ["wifi", "wifi_direct", "wlan", "802.11"] },
   { keys: ["蜂巢", "行動網路", "cellular", "lte", "5g", "4g", "nb-iot", "lte-m", "sim卡"], tokens: ["cellular", "cellular_ip", "cellular_lpwans", "cellular_esim", "private_cellular", "cellular_broadcast", "lte", "5g", "nb-iot"] },
