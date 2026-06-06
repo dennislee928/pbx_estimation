@@ -311,36 +311,57 @@ function deterministicRecommendation(scene, alternatives, solutions) {
   return `For "${scene}", prioritize alternatives: ${altNames}. Pair with solutions: ${solNames}. Ranking is based on retrieved protocol, use-case, industry, security, latency, and cost evidence from the submitted catalog.`;
 }
 
-function buildAiPrompt(scene, alternatives, solutions, exclusions = { phrases: [] }) {
+function buildAiPrompt(scene, alternatives, solutions, exclusions = { phrases: [] }, excludedNames = []) {
+  const allowedNames = alternatives.map((item) => item.name);
   const context = {
     scene,
     excluded_constraints: exclusions.phrases,
+    allowed_alternative_names: allowedNames,
+    forbidden_product_names: excludedNames.slice(0, 30),
     alternatives: alternatives.slice(0, 5),
     solutions: solutions.slice(0, 5),
   };
   return [
     "You are ranking PBX/UCaaS and PSTN replacement options for a deployment scene.",
-    "Use only the retrieved JSON context. Do not invent products.",
-    "The context has already removed any option that uses an excluded transport.",
-    "NEVER recommend or mention any transport listed in excluded_constraints; if a candidate would require one, drop it.",
+    "Use ONLY the products in allowed_alternative_names and solutions; do not invent products.",
+    "The context already removed every option that uses an excluded transport.",
+    "HARD RULE: never name, recommend, or mention anything in forbidden_product_names or any transport in excluded_constraints (e.g. ethernet, IP-over-ethernet, analog/PSTN). Examples of forbidden items here include SIP, GraphQL, KPML and other IP/ethernet options when ethernet is excluded.",
+    "Do not invent match percentages or specs that are not in the context.",
     "Return one concise paragraph in Traditional Chinese if the scene contains Chinese, otherwise English.",
     JSON.stringify(context),
   ].join("\n");
 }
 
-async function aiRecommendation(env, scene, alternatives, solutions, exclusions = { phrases: [] }) {
+// True if generated prose names any excluded product (the LLM's main failure
+// mode: re-introducing forbidden options from its own training knowledge).
+function mentionsExcludedNames(text, excludedNames) {
+  const haystack = normalizeText(text);
+  return excludedNames.some((name) => {
+    const needle = normalizeText(name).trim();
+    return needle.length >= 3 && haystack.includes(needle);
+  });
+}
+
+async function aiRecommendation(env, scene, alternatives, solutions, exclusions = { phrases: [] }, excludedNames = []) {
   if (!env?.AI || String(env.USE_WORKERS_AI || "true") === "false") {
     return deterministicRecommendation(scene, alternatives, solutions);
   }
   try {
     const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
       messages: [
-        { role: "system", content: "You are a concise cloud RAG recommender." },
-        { role: "user", content: buildAiPrompt(scene, alternatives, solutions, exclusions) },
+        { role: "system", content: "You are a concise cloud RAG recommender that strictly obeys exclusion constraints." },
+        { role: "user", content: buildAiPrompt(scene, alternatives, solutions, exclusions, excludedNames) },
       ],
       max_tokens: 180,
     });
-    return result?.response || result?.result?.response || deterministicRecommendation(scene, alternatives, solutions);
+    const text = result?.response || result?.result?.response || "";
+    // Guard: if the model hallucinated an excluded product, discard its prose
+    // and fall back to the deterministic recommendation (built only from the
+    // already-filtered allowed list).
+    if (!text || mentionsExcludedNames(text, excludedNames)) {
+      return deterministicRecommendation(scene, alternatives, solutions);
+    }
+    return text;
   } catch (error) {
     return `${deterministicRecommendation(scene, alternatives, solutions)} Workers AI fallback reason: ${error.message}`;
   }
@@ -367,10 +388,14 @@ export async function handleRagRequest(payload, env = {}) {
     : asRows(bucketContext.documents, MAX_DOCUMENTS);
   const crawlerSeed = payload?.crawler_seed_context || bucketContext.crawlerSeed || {};
   const exclusions = parseExclusions(scene);
+  const excludedNames = [...alternativesInput, ...solutionsInput]
+    .filter((row) => isExcludedRow(row, exclusions.tokens))
+    .map((row) => row.name)
+    .filter(Boolean);
   const alternatives = rankRows(scene, alternativesInput, "alternative", exclusions.tokens);
   const solutions = rankRows(scene, solutionsInput, "solution", exclusions.tokens);
   const documents = rankDocuments(scene, documentsInput, exclusions.tokens);
-  const recommendation = await aiRecommendation(env, scene, alternatives, solutions, exclusions);
+  const recommendation = await aiRecommendation(env, scene, alternatives, solutions, exclusions, excludedNames);
   return {
     recommendation,
     alternatives,
