@@ -38,7 +38,7 @@ def _empty_result(death_threshold: float, warning: str) -> dict:
         "death_year": np.nan, "saturation_year": np.nan,
         "peak_year": np.nan, "peak_value": np.nan, "phase": "unknown",
         "r_squared": np.nan, "fitted": None, "rmse": np.nan,
-        "n_points": 0, "decline_r": np.nan,
+        "n_points": 0, "decline_K": np.nan, "decline_r": np.nan, "decline_t0": np.nan,
         "converged": False, "fit_warning": warning,
         "death_threshold": death_threshold,
     }
@@ -60,18 +60,23 @@ def _classify_phase(years: np.ndarray, values: np.ndarray, peak_idx: int) -> str
 
 def _fit_decline(years: np.ndarray, values: np.ndarray, peak_idx: int,
                  peak_value: float, death_threshold: float) -> tuple:
-    """Fit the post-peak decline; return (decline_r, t0, death_year) or NaNs."""
+    """Fit the post-peak decline.
+
+    Returns (decline_K, decline_r, decline_t0, death_year) or NaNs. The three
+    curve parameters let callers project penetration forward to any future year
+    via ``logistic_decline(year, decline_K, decline_r, decline_t0)``.
+    """
     yd = years[peak_idx:].astype(float)
     pd_ = values[peak_idx:].astype(float)
     if len(yd) < 4:
-        return np.nan, np.nan, np.nan
+        return np.nan, np.nan, np.nan, np.nan
     p0 = (peak_value, 0.3, float(np.median(yd)))
     bounds = ((peak_value * 0.5, 0.0, yd.min() - 5.0),
               (peak_value * 1.5, 2.0, yd.max() + 50.0))
     try:
         popt, _ = curve_fit(logistic_decline, yd, pd_, p0=p0, bounds=bounds, maxfev=10000)
     except (RuntimeError, ValueError):
-        return np.nan, np.nan, np.nan
+        return np.nan, np.nan, np.nan, np.nan
     K_d, r_d, t0_d = popt
     death_year = np.nan
     death_val = death_threshold * peak_value
@@ -79,7 +84,7 @@ def _fit_decline(years: np.ndarray, values: np.ndarray, peak_idx: int,
         t_death = t0_d + np.log(K_d / death_val - 1.0) / r_d
         if np.isfinite(t_death) and t_death > 1900:
             death_year = t_death
-    return r_d, t0_d, death_year
+    return K_d, r_d, t0_d, death_year
 
 
 def fit_country(
@@ -135,10 +140,10 @@ def fit_country(
             saturation_year = t_sat
 
     # Death milestone (decline concept): only meaningful once the market peaks.
-    decline_r, decline_t0, death_year = np.nan, np.nan, np.nan
+    decline_K, decline_r, decline_t0, death_year = np.nan, np.nan, np.nan, np.nan
     warning = ""
     if phase == "declining":
-        decline_r, decline_t0, death_year = _fit_decline(
+        decline_K, decline_r, decline_t0, death_year = _fit_decline(
             y, p, peak_idx, peak_value, death_threshold
         )
         if np.isnan(death_year):
@@ -151,7 +156,8 @@ def fit_country(
         "death_year": death_year, "saturation_year": saturation_year,
         "peak_year": peak_year, "peak_value": peak_value, "phase": phase,
         "r_squared": r_sq, "fitted": fitted, "rmse": rmse,
-        "n_points": int(len(y)), "decline_r": decline_r,
+        "n_points": int(len(y)),
+        "decline_K": decline_K, "decline_r": decline_r, "decline_t0": decline_t0,
         "converged": True, "fit_warning": warning,
         "death_threshold": death_threshold,
     }
