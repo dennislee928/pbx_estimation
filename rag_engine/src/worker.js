@@ -130,31 +130,49 @@ function expandedQuery(scene) {
   return [...new Set([...base, ...tokenize(extra.join(" "))])];
 }
 
+// Clause boundary: a negation's scope ends at the next sentence/clause break.
+const CLAUSE_BOUNDARY = /[，,。.!！?？;；:：\n]/;
+// How far forward a negation can reach when no boundary is hit first.
+const NEGATION_FORWARD_WINDOW = 60;
+
 // Parse negative transport constraints out of the scene text. Returns the set
 // of canonical transport tokens the user said NOT to use, plus the human-
 // readable constraint phrases for surfacing in the response evidence.
+//
+// A negation governs the whole following clause, so a *list* like
+// "不可以用 乙太網路/乙太網路線/傳統類比電話線" excludes ALL three items — not just
+// the one nearest the marker. We therefore scan forward from each negation
+// marker to the next clause boundary and match every transport keyword inside.
 function parseExclusions(scene) {
   const text = normalizeText(scene);
   const tokens = new Set();
   const phrases = new Set();
-  for (const group of TRANSPORT_EXCLUSIONS) {
-    for (const key of group.keys) {
-      const needle = normalizeText(key);
-      let from = 0;
-      let idx = text.indexOf(needle, from);
-      while (idx !== -1) {
-        // Look back a small window for a negation marker. CJK has no spaces,
-        // so a 12-char window covers "不可以用乙太網路" style phrasing.
-        const windowStart = Math.max(0, idx - 12);
-        const before = text.slice(windowStart, idx);
-        if (NEGATION_MARKERS.some((marker) => before.includes(normalizeText(marker)))) {
-          group.tokens.forEach((token) => tokens.add(token));
-          phrases.add(key);
-          break;
-        }
-        from = idx + needle.length;
-        idx = text.indexOf(needle, from);
+
+  for (const marker of NEGATION_MARKERS) {
+    const needle = normalizeText(marker);
+    let from = 0;
+    let idx = text.indexOf(needle, from);
+    while (idx !== -1) {
+      const start = idx + needle.length;
+      let end = start;
+      while (
+        end < text.length &&
+        end - start < NEGATION_FORWARD_WINDOW &&
+        !CLAUSE_BOUNDARY.test(text[end])
+      ) {
+        end += 1;
       }
+      const clause = text.slice(start, end);
+      for (const group of TRANSPORT_EXCLUSIONS) {
+        for (const key of group.keys) {
+          if (clause.includes(normalizeText(key))) {
+            group.tokens.forEach((token) => tokens.add(token));
+            phrases.add(key);
+          }
+        }
+      }
+      from = idx + needle.length;
+      idx = text.indexOf(needle, from);
     }
   }
   return { tokens: [...tokens], phrases: [...phrases] };
