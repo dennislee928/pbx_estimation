@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.research.solution_crawler import discover_solution_catalog
+from src.research.transport_taxonomy import classify_solution as classify_transport, serialize_for_csv
 
 # --- Lifecycle classification logic ---
 
@@ -283,6 +284,7 @@ def analyze_registry(
     rows = []
     for sol in solutions:
         tags = sol.get("tags", [])
+        transport = classify_transport(sol)
         predicted = classify_solution(
             name=sol.get("name", ""),
             vendor=sol.get("vendor", ""),
@@ -326,12 +328,15 @@ def analyze_registry(
                     sol.get("description", ""),
                     sol.get("typical_customers", ""),
                 ),
+                **transport,
             }
         )
     df = pd.DataFrame(rows)
+    if len(df):
+        df = df.drop_duplicates(subset=["vendor", "name", "country_code"], keep="first").reset_index(drop=True)
     if output_path and len(df):
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(output_path, index=False)
+        df.map(serialize_for_csv).to_csv(output_path, index=False)
     return df
 
 

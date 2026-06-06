@@ -1,8 +1,10 @@
 {
-  "known_solution_count": 156,
+  "known_solution_count": 155,
   "known_country_region_count": 42,
   "known_alternative_count": 131,
   "known_vendor_count": 126,
+  "transport_schema_version": 2,
+  "label_dictionary_version": 2,
   "existing_solution_names": [
     "1NCE IoT eSIM",
     "2talk Cloud PBX",

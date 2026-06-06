@@ -195,59 +195,55 @@ const IP_PLATFORM_TAGS = new Set([
 ]);
 const ANALOG_TAGS = new Set(["tdm", "digital", "fxs", "fxo", "analog", "pots", "pstn"]);
 const BEARER_TRANSPORT = { esim: "cellular", cellular: "cellular", satellite: "satellite" };
-const TRANSPORT_LABELS = {
-  network_api_wired: "網路 / API（有線）",
-  non_network_physical: "非網路 / 實體媒介",
-};
-const NON_NETWORK_MEDIA = new Set([
-  "electrical_contact",
-  "dry_contact",
-  "relay",
-  "gpio",
-  "optical_signal",
-  "infrared",
-  "acoustic",
-  "audio",
-  "mechanical",
-  "pneumatic",
-  "hydraulic",
-  "visual_code",
-  "qr",
-  "magnetic",
-]);
 
 function tagSet(tags) {
   return new Set(normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean));
 }
 
+function arrayField(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string" && value.trim().startsWith("[")) {
+    try { return JSON.parse(value); } catch { return []; }
+  }
+  return value ? String(value).split(/\s*[;,]\s*/).filter(Boolean) : [];
+}
+
 function transportClassification(row) {
-  const medium = normalizeText(row.medium);
-  const categoryTokens = tagSet(row.category);
-  const protocols = normalizeText(row.protocols);
-  const tags = tagSet(row.tags);
-  const text = normalizeText([row.name, row.medium, row.category, row.protocols, row.tags, row.description].join(" "));
-
-  const isPhysical =
-    categoryTokens.has("non_web") ||
-    [...NON_NETWORK_MEDIA].some((token) => medium.includes(token) || protocols.includes(token) || text.includes(token)) ||
-    /\b(contact|relay|gpio|dry contact|mechanical|pneumatic|hydraulic|optical|infrared|acoustic|qr|barcode)\b/.test(text);
-
-  const isNetworkOrApi =
-    categoryTokens.has("web") ||
-    /api|http|https|sip|graphql|webhook|webrtc|mqtt|amqp|tcp|ip|json|cloud|ucaas|cpaas|voice|subscription|callback/.test(text) ||
-    [...tags].some((tag) => IP_PLATFORM_TAGS.has(tag) || tag === "api");
-
-  if (isPhysical && !isNetworkOrApi) {
+  if (row.primary_bearer && row.link_mode) {
+    const capabilities = arrayField(row.control_interfaces);
     return {
-      transport_type: "non_network_physical",
-      transport_label: TRANSPORT_LABELS.non_network_physical,
+      transport_schema_version: Number(row.transport_schema_version || 2),
+      label_dictionary_version: Number(row.label_dictionary_version || 2),
+      primary_bearer: row.primary_bearer,
+      bearer_family: row.bearer_family || "unknown",
+      link_mode: row.link_mode,
+      network_type: row.network_type || "unknown",
+      bearers: arrayField(row.bearers),
+      control_interfaces: capabilities,
+      api_capable: row.api_capable === true || row.api_capable === "true" || capabilities.includes("api"),
+      hybrid: row.hybrid === true || row.hybrid === "true",
+      transport_confidence: row.transport_confidence || "derived",
+      transport_classification_source: row.transport_classification_source || "catalog",
+      transport_label: row.transport_label_zh || row.transport_label_en || "承載未指定",
+      transport_label_en: row.transport_label_en || "Bearer unspecified",
+      transport_label_zh: row.transport_label_zh || "承載未指定",
+      capability_labels_en: arrayField(row.capability_labels_en),
+      capability_labels_zh: arrayField(row.capability_labels_zh),
     };
   }
 
-  return {
-    transport_type: "network_api_wired",
-    transport_label: TRANSPORT_LABELS.network_api_wired,
-  };
+  const tags = tagSet(row.tags);
+  const medium = normalizeText(row.medium);
+  const protocols = normalizeText(row.protocols);
+  const interfaces = tags.has("api") || /api|http|graphql|webhook/.test(protocols) ? ["api"] : [];
+  if (tags.has("esim") || tags.has("cellular")) {
+    return { transport_schema_version: 1, primary_bearer: tags.has("esim") ? "cellular_esim" : "cellular", bearer_family: "cellular", link_mode: "wireless", network_type: "ip", bearers: [tags.has("esim") ? "cellular_esim" : "cellular"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: tags.has("esim") ? "蜂巢 / eSIM（無線）" : "蜂巢網路（無線）" };
+  }
+  if (/ethernet/.test(medium)) return { transport_schema_version: 1, primary_bearer: "ethernet", bearer_family: "ethernet", link_mode: "wired", network_type: "ip", bearers: ["ethernet"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "乙太網路 / IP（有線）" };
+  if (/electrical_contact|relay|gpio/.test(`${medium} ${protocols}`)) return { transport_schema_version: 1, primary_bearer: "electrical_contact", bearer_family: "electrical_contact", link_mode: "wired", network_type: "physical_signal", bearers: ["electrical_contact"], control_interfaces: /relay/.test(protocols) ? ["relay"] : [], api_capable: false, hybrid: false, transport_confidence: "derived", transport_label: "乾接點 / 繼電器（實體有線）" };
+  if ([...tags].some((tag) => ANALOG_TAGS.has(tag))) return { transport_schema_version: 1, primary_bearer: "analog_tdm", bearer_family: "analog_tdm", link_mode: "wired", network_type: "analog", bearers: ["analog_tdm"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "類比 / TDM（有線）" };
+  if ([...tags].some((tag) => IP_PLATFORM_TAGS.has(tag)) || tags.has("api")) return { transport_schema_version: 1, primary_bearer: "cloud_or_platform", bearer_family: "cloud_or_platform", link_mode: "unknown", network_type: "ip", bearers: ["cloud_or_platform"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "雲端平台（承載未指定）" };
+  return { transport_schema_version: 1, primary_bearer: "unknown", bearer_family: "unknown", link_mode: "unknown", network_type: "unknown", bearers: [], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "unknown", transport_label: "承載未指定" };
 }
 
 // True if a catalog row relies on an excluded transport.
@@ -258,6 +254,21 @@ function transportClassification(row) {
 function isExcludedRow(row, exclusionTokens) {
   if (!exclusionTokens.length) return false;
   const hits = (text) => exclusionTokens.some((token) => normalizeText(text).includes(normalizeText(token)));
+
+  if (row.primary_bearer || row.bearer_family) {
+    const transport = transportClassification(row);
+    const blocked = (bearer) => {
+      if (bearer === "ethernet") return hits("ethernet") || hits("ethernet_ip");
+      if (bearer === "analog_tdm") return hits("analog") || hits("pstn") || hits("tdm");
+      if (["cellular", "cellular_esim"].includes(bearer)) return hits("cellular") || hits("cellular_ip");
+      if (bearer === "satellite") return hits("satellite");
+      if (bearer === "wifi") return hits("wifi") || hits("wlan");
+      if (bearer === "serial") return hits("serial_wire") || hits("rs-232") || hits("rs-485");
+      return hits(bearer);
+    };
+    const bearers = transport.bearers.length ? transport.bearers : [transport.primary_bearer];
+    return bearers.length > 0 && bearers.every(blocked);
+  }
 
   if (row.medium && hits(row.medium)) return true;
 
@@ -304,7 +315,12 @@ async function readTextAsset(env, key, maxChars = 8000) {
 }
 
 async function loadBucketContext(env) {
-  const prefix = assetPrefix(env);
+  let prefix = assetPrefix(env);
+  let pointer;
+  if (prefix === "latest") {
+    pointer = await readJsonAsset(env, "latest-pointer.json");
+    if (pointer?.asset_prefix) prefix = String(pointer.asset_prefix).replace(/^\/+|\/+$/g, "");
+  }
   const manifest = await readJsonAsset(env, `${prefix}/rag_engine/dist/rag_assets_manifest.json`);
   const alternatives = await readJsonAsset(env, `${prefix}/frontend/data/awesome_list.json`);
   const solutions = await readJsonAsset(env, `${prefix}/frontend/data/solution_registry.json`);
@@ -328,7 +344,7 @@ async function loadBucketContext(env) {
       });
     }
   }
-  return { manifest, alternatives, solutions, crawlerSeed, documents };
+  return { manifest, pointer, prefix, alternatives, solutions, crawlerSeed, documents };
 }
 
 function weightedText(row) {
@@ -404,7 +420,20 @@ function tableRows(kind, rows) {
     rank: row.rank,
     name: row.name,
     label: row.transport_label,
-    transport_type: row.transport_type,
+    transport_label: row.transport_label,
+    transport_label_en: row.transport_label_en,
+    transport_label_zh: row.transport_label_zh,
+    transport_schema_version: row.transport_schema_version,
+    primary_bearer: row.primary_bearer,
+    bearer_family: row.bearer_family,
+    link_mode: row.link_mode,
+    network_type: row.network_type,
+    bearers: row.bearers,
+    control_interfaces: row.control_interfaces,
+    api_capable: row.api_capable,
+    hybrid: row.hybrid,
+    capability_labels_en: row.capability_labels_en,
+    capability_labels_zh: row.capability_labels_zh,
     suitability_percent: row.suitability_percent,
     score: row.score,
     cost: row.cost,
@@ -572,6 +601,10 @@ export async function handleRagRequest(payload, env = {}) {
         known_alternative_count: crawlerSeed.known_alternative_count,
         known_vendor_count: crawlerSeed.known_vendor_count,
       },
+      transport_schema_version: bucketContext.manifest?.transport_schema_version || alternatives[0]?.transport_schema_version || solutions[0]?.transport_schema_version,
+      catalog_snapshot_id: bucketContext.manifest?.catalog_snapshot_id || bucketContext.pointer?.catalog_snapshot_id,
+      catalog_manifest_sha256: bucketContext.pointer?.catalog_snapshot?.solution_registry_sha256,
+      label_dictionary_version: alternatives[0]?.label_dictionary_version || solutions[0]?.label_dictionary_version || 2,
     },
   };
 }
@@ -588,7 +621,12 @@ export default {
     }
 
     if (request.method === "GET" && url.pathname === "/assets/manifest") {
-      const manifest = await readJsonAsset(env, `${assetPrefix(env)}/rag_engine/dist/rag_assets_manifest.json`);
+      let prefix = assetPrefix(env);
+      if (prefix === "latest") {
+        const pointer = await readJsonAsset(env, "latest-pointer.json");
+        if (pointer?.asset_prefix) prefix = pointer.asset_prefix;
+      }
+      const manifest = await readJsonAsset(env, `${prefix}/rag_engine/dist/rag_assets_manifest.json`);
       return jsonResponse(manifest || { assets: [], asset_count: 0 }, 200, env, request);
     }
 

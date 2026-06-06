@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT))
 from src.research.product_researcher import analyze_registry, summarize_registry
 from src.research.solution_crawler import discover_solution_catalog
 from src.research.tech_researcher import generate_awesome_list
+from src.research.transport_taxonomy import TRANSPORT_SCHEMA_VERSION, LABEL_DICTIONARY_VERSION
 
 
 PROCESSED = ROOT / "data" / "processed"
@@ -84,6 +85,8 @@ def _crawler_context(registry: pd.DataFrame, awesome: pd.DataFrame) -> dict:
         "known_country_region_count": int(registry["country_code"].nunique()),
         "known_alternative_count": int(len(awesome)),
         "known_vendor_count": int(registry["vendor"].nunique()),
+        "transport_schema_version": TRANSPORT_SCHEMA_VERSION,
+        "label_dictionary_version": LABEL_DICTIONARY_VERSION,
         "existing_solution_names": sorted(registry["name"].dropna().astype(str).unique().tolist()),
         "existing_alternative_names": sorted(awesome["name"].dropna().astype(str).unique().tolist()),
         "crawler_instruction": "Use these existing solutions and alternatives as seed knowledge, then search without category boundaries for additional PBX/UCaaS/CPaaS/eSIM/IoT/non-PSTN options not already listed. Expand especially beyond RF into wired, optical, acoustic, mechanical, pneumatic, hydraulic, human workflow, document, visual-code, industrial, building, security, AV, and edge-control triggers.",
@@ -171,6 +174,11 @@ def _html_table(df: pd.DataFrame, columns: list[str], lang: str) -> str:
         "cons": ("Cons", "缺點"),
         "category": ("Category", "類別"),
         "medium": ("Medium", "媒介"),
+        "transport_label_en": ("Transport", "傳輸承載"),
+        "transport_label_zh": ("Transport", "傳輸承載"),
+        "link_mode": ("Link mode", "連線模式"),
+        "network_type": ("Network type", "網路類型"),
+        "control_interfaces": ("Control interfaces", "控制介面"),
         "latency": ("Latency", "延遲"),
         "security": ("Security", "安全性"),
     }
@@ -208,7 +216,7 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
         ["cutting_edge", "mature_active", "most_used_current", "most_used_eol"], fill_value=0
     )
     continent = registry.groupby("continent")["name"].count().sort_values(ascending=False)
-    tech_category = awesome["category"].value_counts()
+    tech_category = awesome["link_mode"].value_counts()
     summary = summarize_registry(registry)
 
     md = [
@@ -252,10 +260,9 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
     for name, count in continent.items():
         md.append(f"- {_continent_label(str(name), lang)}: {int(count)}")
     md.extend(["", "## Technology Alternatives" if not zh else "## 技術替代方案", ""])
+    link_labels = {"wired": ("Wired", "有線"), "wireless": ("Wireless", "無線"), "contactless": ("Contactless", "無接觸"), "physical": ("Physical", "實體"), "manual": ("Manual", "人工"), "virtual": ("Virtual/platform", "虛擬/平台"), "hybrid": ("Hybrid", "混合"), "unknown": ("Unspecified", "未指定")}
     for name, count in tech_category.items():
-        label = "Web/API/IP" if name == "web" else "Non-network/physical/industrial/RF"
-        if zh:
-            label = "網路/API/IP" if name == "web" else "非網路/實體媒介/工業/RF"
+        label = link_labels.get(str(name), (str(name), str(name)))[1 if zh else 0]
         md.append(f"- {label}: {int(count)}")
     md.extend(["", "## Sources" if not zh else "## 來源", ""])
     for source in SOURCES:
@@ -303,9 +310,9 @@ def _build_report(lang: str, registry: pd.DataFrame, awesome: pd.DataFrame) -> t
   <h2>{"Lifecycle Summary" if not zh else "生命週期摘要"}</h2>
   {_html_table(summary, ["continent", "lifecycle_assigned", "count", "vendors"], lang)}
   <h2>{"Solution Registry" if not zh else "方案清單"}</h2>
-  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "recommended_terminals", "cost_band", "industry_fit", "resource_url", "pros", "cons"], lang)}
+  {_html_table(top_registry, ["continent", "country_code", "name", "vendor", "lifecycle_assigned", "transport_label_zh" if zh else "transport_label_en", "link_mode", "network_type", "control_interfaces", "recommended_terminals", "cost_band", "industry_fit", "resource_url", "pros", "cons"], lang)}
   <h2>{"PSTN Alternatives Awesome List" if not zh else "PSTN 替代方案 Awesome List"}</h2>
-  {_html_table(top_awesome, ["name", "category", "medium", "recommended_devices", "cost_model", "industry_fit", "resource_url", "latency", "security", "pros", "cons"], lang)}
+  {_html_table(top_awesome, ["name", "transport_label_zh" if zh else "transport_label_en", "link_mode", "network_type", "control_interfaces", "medium", "recommended_devices", "cost_model", "industry_fit", "resource_url", "latency", "security", "pros", "cons"], lang)}
   <h2>{"Sources" if not zh else "來源"}</h2>
   <ul>
     {''.join(f'<li><a href="{escape(s["url"])}">{escape(s["name"])}</a> - {escape(s["note_zh"] if zh else s["note_en"])}</li>' for s in SOURCES)}
