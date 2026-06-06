@@ -58,7 +58,12 @@ test("ranks matching alternatives and solutions", async () => {
   }, { USE_WORKERS_AI: "false" });
 
   assert.equal(result.alternatives[0].name, "Dry Contact / Relay Closure");
+  assert.equal(result.alternatives[0].transport_label, "非網路 / 實體媒介");
+  assert.equal(result.alternatives[0].transport_type, "non_network_physical");
   assert.ok(result.solutions.some((item) => item.name === "Grandstream UCM Series"));
+  assert.ok(result.solutions.every((item) => item.transport_label));
+  assert.ok(result.rag_response_table.some((item) => item.type === "alternative" && item.name === "Dry Contact / Relay Closure"));
+  assert.ok(result.tables.alternatives.every((item) => item.label));
   assert.equal(result.evidence.crawler_seed_counts.known_solution_count, 156);
   assert.match(result.recommendation, /hotel door relay low cost/);
 });
@@ -74,6 +79,7 @@ test("excludes ethernet/IP transports when the scene forbids them", async () => 
   assert.equal(result.alternatives.some((item) => item.name === "MQTT (MQTT-SN)"), false);
   // The dry-contact (electrical) option is still allowed.
   assert.equal(result.alternatives.some((item) => item.name === "Dry Contact / Relay Closure"), true);
+  assert.equal(result.alternatives.find((item) => item.name === "Dry Contact / Relay Closure").transport_label, "非網路 / 實體媒介");
   // The constraint is reported back in the evidence.
   assert.ok(result.evidence.excluded_transport_tokens.includes("ethernet_ip"));
   assert.ok(result.evidence.excluded_constraints.length > 0);
