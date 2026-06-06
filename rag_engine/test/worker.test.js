@@ -79,6 +79,27 @@ test("excludes ethernet/IP transports when the scene forbids them", async () => 
   assert.ok(result.evidence.excluded_constraints.length > 0);
 });
 
+test("falls back to deterministic prose if the LLM names an excluded product", async () => {
+  // Mock Workers AI that hallucinates an excluded ethernet_ip option.
+  const env = {
+    USE_WORKERS_AI: "true",
+    AI: {
+      async run() {
+        return { response: "建議使用 MQTT (MQTT-SN) 透過乙太網路傳輸。" };
+      },
+    },
+  };
+  const result = await handleRagRequest({
+    scene: "不可以用乙太網路，對 edge device 下開關命令",
+    alternatives,
+    solutions,
+  }, env);
+  // The hallucinated excluded product must not appear in the recommendation.
+  assert.equal(/MQTT \(MQTT-SN\)/.test(result.recommendation), false);
+  // And no ethernet_ip alternative is returned.
+  assert.equal(result.alternatives.some((item) => item.name === "MQTT (MQTT-SN)"), false);
+});
+
 test("does not exclude transports that are merely mentioned positively", async () => {
   const result = await handleRagRequest({
     scene: "use ethernet IP for hotel door relay low cost",
