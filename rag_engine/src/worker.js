@@ -130,48 +130,104 @@ function expandedQuery(scene) {
   return [...new Set([...base, ...tokenize(extra.join(" "))])];
 }
 
+// Clause boundary: a negation's scope ends at the next sentence/clause break.
+const CLAUSE_BOUNDARY = /[，,。.!！?？;；:：\n]/;
+// How far forward a negation can reach when no boundary is hit first.
+const NEGATION_FORWARD_WINDOW = 60;
+
 // Parse negative transport constraints out of the scene text. Returns the set
 // of canonical transport tokens the user said NOT to use, plus the human-
 // readable constraint phrases for surfacing in the response evidence.
+//
+// A negation governs the whole following clause, so a *list* like
+// "不可以用 乙太網路/乙太網路線/傳統類比電話線" excludes ALL three items — not just
+// the one nearest the marker. We therefore scan forward from each negation
+// marker to the next clause boundary and match every transport keyword inside.
 function parseExclusions(scene) {
   const text = normalizeText(scene);
   const tokens = new Set();
   const phrases = new Set();
-  for (const group of TRANSPORT_EXCLUSIONS) {
-    for (const key of group.keys) {
-      const needle = normalizeText(key);
-      let from = 0;
-      let idx = text.indexOf(needle, from);
-      while (idx !== -1) {
-        // Look back a small window for a negation marker. CJK has no spaces,
-        // so a 12-char window covers "不可以用乙太網路" style phrasing.
-        const windowStart = Math.max(0, idx - 12);
-        const before = text.slice(windowStart, idx);
-        if (NEGATION_MARKERS.some((marker) => before.includes(normalizeText(marker)))) {
-          group.tokens.forEach((token) => tokens.add(token));
-          phrases.add(key);
-          break;
-        }
-        from = idx + needle.length;
-        idx = text.indexOf(needle, from);
+
+  for (const marker of NEGATION_MARKERS) {
+    const needle = normalizeText(marker);
+    let from = 0;
+    let idx = text.indexOf(needle, from);
+    while (idx !== -1) {
+      const start = idx + needle.length;
+      let end = start;
+      while (
+        end < text.length &&
+        end - start < NEGATION_FORWARD_WINDOW &&
+        !CLAUSE_BOUNDARY.test(text[end])
+      ) {
+        end += 1;
       }
+      const clause = text.slice(start, end);
+      for (const group of TRANSPORT_EXCLUSIONS) {
+        for (const key of group.keys) {
+          if (clause.includes(normalizeText(key))) {
+            group.tokens.forEach((token) => tokens.add(token));
+            phrases.add(key);
+          }
+        }
+      }
+      from = idx + needle.length;
+      idx = text.indexOf(needle, from);
     }
   }
   return { tokens: [...tokens], phrases: [...phrases] };
 }
 
-// True if a catalog row relies on an excluded transport. Checks the structured
-// transport fields first, then falls back to description text.
+// Solutions in solution_registry.json carry no explicit transport `medium`,
+// only category `tags`. We classify those tags into:
+//   - IP-platform tags: the solution fundamentally requires IP/ethernet to run
+//     (cloud/SIP/UCaaS/PBX). Forbidden when ethernet is excluded.
+//   - analog tags: the solution rides the legacy TDM/analog network. Forbidden
+//     when analog/PSTN is excluded.
+//   - bearer tags: device-side non-ethernet connectivity (eSIM/cellular/
+//     satellite) that legitimately satisfies a "no ethernet" constraint and so
+//     RESCUES an otherwise IP-leaning solution.
+// "api"/"sms"/"voice" are deliberately neutral: every modern platform exposes an
+// API, and an incidental SMS channel does not make a cloud platform ethernet-free.
+const IP_PLATFORM_TAGS = new Set([
+  "cloud", "ucaas", "cpaas", "hosted", "ip_pbx", "sip", "voip", "webrtc",
+  "telco", "h323", "sbc", "wholesale", "workspace", "messaging",
+]);
+const ANALOG_TAGS = new Set(["tdm", "digital", "fxs", "fxo", "analog", "pots", "pstn"]);
+const BEARER_TRANSPORT = { esim: "cellular", cellular: "cellular", satellite: "satellite" };
+
+function tagSet(tags) {
+  return new Set(normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean));
+}
+
+// True if a catalog row relies on an excluded transport.
+// - Alternatives: authoritative explicit `medium`, then a text fallback.
+// - Solutions: classified from tags. A solution is excluded when its only
+//   transport family (IP platform and/or analog) is forbidden AND it has no
+//   allowed device-side bearer (cellular/eSIM/satellite) to fall back on.
 function isExcludedRow(row, exclusionTokens) {
   if (!exclusionTokens.length) return false;
-  const transportText = normalizeText([
-    row.medium,
-    row.protocols,
-    row.standards,
-    row.category,
-    row.description,
-  ].join(" "));
-  return exclusionTokens.some((token) => transportText.includes(normalizeText(token)));
+  const hits = (text) => exclusionTokens.some((token) => normalizeText(text).includes(normalizeText(token)));
+
+  if (row.medium && hits(row.medium)) return true;
+
+  const tags = tagSet(row.tags);
+  if (tags.size) {
+    // A non-excluded device-side bearer rescues the solution.
+    const hasAllowedBearer = [...tags].some(
+      (tag) => BEARER_TRANSPORT[tag] && !hits(BEARER_TRANSPORT[tag]),
+    );
+    if (!hasAllowedBearer) {
+      const isIpPlatform = [...tags].some((tag) => IP_PLATFORM_TAGS.has(tag));
+      const isAnalog = [...tags].some((tag) => ANALOG_TAGS.has(tag));
+      if (isIpPlatform && (hits("ethernet") || hits("ethernet_ip"))) return true;
+      if (isAnalog && (hits("analog") || hits("pstn") || hits("tdm"))) return true;
+    }
+  }
+
+  // Fallback for rows without structured transport: scan remaining text fields.
+  const transportText = [row.protocols, row.standards, row.category, row.description].join(" ");
+  return hits(transportText);
 }
 
 function asRows(value, maxRows) {
