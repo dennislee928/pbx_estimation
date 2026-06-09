@@ -43,6 +43,10 @@ class TestWorldBankFallback:
         result = fetch_all(config, force_refetch=True)
         assert "world_bank" in result
         assert "berec_dates" in result
+        assert "itu" in result
+        assert "uk_parliament" in result
+        assert "cept" in result
+        assert "ncc" in result
         # Even if API fails, we get empty DataFrames
         assert isinstance(result["world_bank"], pd.DataFrame)
 

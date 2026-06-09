@@ -115,6 +115,7 @@ jobs:
           set -euo pipefail
           for nb in \
             01_fetch_data \
+            01b_fetch_supplementary_sources \
             02_eda_visualization \
             03_logistic_growth \
             04_survival_analysis \

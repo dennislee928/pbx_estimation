@@ -62,11 +62,11 @@ Implemented via `lifelines.CoxPHFitter`. Outputs: survival curves and hazard rat
 | Source | Data | Method |
 |--------|------|--------|
 | **World Bank API** | Fixed telephone subscriptions, broadband penetration | `wbgapi` |
-| **ITU ICT Indicators** | IP communication share, infrastructure scores | CSV / API |
+| **ITU ICT Indicators** | IP communication share, infrastructure scores | ITU DataHub API (`api.datahub.itu.int`) |
 | **BEREC** (European Regulators) | Copper switch-off dates per country | PDF scraping (Table 3) |
-| **UK House of Commons Library** | UK PSTN switch-off timeline | Structured web |
-| **CEPT** | European IP migration status | Reports |
-| **NCC (Taiwan)** | Local telecom statistics | Reports |
+| **UK House of Commons Library** | UK PSTN switch-off timeline | PDF/HTML scrape (`CBP-9471`) |
+| **CEPT** | European IP migration status | ECC Report 265 PDF scrape |
+| **NCC (Taiwan)** | Local telecom statistics | NCC API + MODA open data (`data.gov.tw`) |
 
 ### Project Structure
 
@@ -77,11 +77,13 @@ pbx_estimation/
 │   └── processed/    # Cleaned panel data
 ├── notebooks/
 │   ├── 01_fetch_data.ipynb           # Data collection
+│   ├── 01b_fetch_supplementary_sources.ipynb  # ITU / UK / CEPT / NCC crawlers
 │   ├── 02_eda_visualization.ipynb    # Exploratory analysis
 │   ├── 03_logistic_growth.ipynb      # S-Curve fitting
 │   └── 04_survival_analysis.ipynb    # CoxPH model
 ├── src/
 │   ├── data/fetcher.py
+│   ├── data/supplementary_fetcher.py
 │   ├── data/preprocessor.py
 │   ├── models/logistic_growth.py
 │   └── models/survival.py
@@ -232,10 +234,11 @@ $$h(t|X) = h_0(t) \exp(\sum_{i=1}^n \beta_i X_i)$$
 ### 資料來源
 
 - **World Bank API** — 各國固定電話訂閱數歷年資料
-- **ITU ICT 指標** — 通訊基礎建設轉型數據
-- **BEREC**（歐洲監管機構聯盟）— 各國銅纜退場時程表（最權威來源）
-- **UK Parliament** — 英國 PSTN 關閉時間軸 (2027.01)
-- **NCC（台灣）** — 國內電信統計
+- **ITU DataHub API** — ICT 指標（固網、寬頻、網際網路使用者）
+- **BEREC**（歐洲監管機構聯盟）— 各國銅纜退場時程表（PDF 解析）
+- **UK Parliament** — 英國 PSTN 關閉時間軸（Commons Library CBP-9471）
+- **CEPT** — 歐洲 PSTN/ISDN 轉 IP 遷移報告（ECC Report 265）
+- **NCC（台灣）** — 行動通信用戶統計、市話號碼核配（NCC API / 政府資料開放平臺）
 
 ### 使用方式
 

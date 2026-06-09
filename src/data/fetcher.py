@@ -2,8 +2,9 @@
 
 Automatically downloads data from:
 - World Bank API (fixed subscriptions, broadband, GDP, urbanization)
-- ITU ICT statistics
+- ITU DataHub API (ICT indicators)
 - BEREC copper switch-off reports
+- UK Parliament, CEPT, and NCC Taiwan (via supplementary_fetcher)
 """
 
 from pathlib import Path
@@ -117,13 +118,11 @@ def fetch_berec_switchoff_dates(
         return {}
 
 
-def fetch_itu_data() -> pd.DataFrame:
-    """Fetch ITU ICT indicators.
+def fetch_itu_data(config: dict, countries: Optional[list[str]] = None) -> pd.DataFrame:
+    """Fetch ITU ICT indicators from the public ITU DataHub API."""
+    from src.data.supplementary_fetcher import fetch_itu_data as _fetch_itu_data
 
-    Returns empty DataFrame as placeholder; ITU data requires manual download
-    or subscription access.
-    """
-    return pd.DataFrame()
+    return _fetch_itu_data(config, countries=countries)
 
 
 def fetch_all(
@@ -133,8 +132,11 @@ def fetch_all(
     """Convenience function: run all fetchers and return dict of DataFrames.
 
     Returns:
-        dict with keys: 'world_bank', 'itu', 'berec_dates'
+        dict with keys: 'world_bank', 'itu', 'berec_dates', and supplementary
+        regulatory payloads when fetched via fetch_all_supplementary().
     """
+    from src.data.supplementary_fetcher import fetch_all_supplementary
+
     cfg = config["data"]
     indicators = cfg["world_bank"]["indicators"]
     countries_list = []
@@ -143,14 +145,22 @@ def fetch_all(
             for code, name in item.items():
                 countries_list.append(code)
 
+    cache_dir = Path("data/raw") if not force_refetch else None
     wb = fetch_world_bank(
         indicators=indicators,
         countries=countries_list,
         start_year=cfg["world_bank"]["start_year"],
         end_year=cfg["world_bank"]["end_year"],
-        cache_dir=Path("data/raw") if not force_refetch else None,
+        cache_dir=cache_dir,
     )
-    itu = fetch_itu_data()
     berec = fetch_berec_switchoff_dates(cfg["berec"]["report_url"])
+    supplementary = fetch_all_supplementary(config, cache_dir=cache_dir)
 
-    return {"world_bank": wb, "itu": itu, "berec_dates": berec}
+    return {
+        "world_bank": wb,
+        "itu": supplementary["itu"],
+        "berec_dates": berec,
+        "uk_parliament": supplementary["uk_parliament"],
+        "cept": supplementary["cept"],
+        "ncc": supplementary["ncc"],
+    }

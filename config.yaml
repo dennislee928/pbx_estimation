@@ -43,6 +43,25 @@ data:
     end_year: 2025
   itu:
     url: "https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx"
+    api_base: "https://api.datahub.itu.int/v2"
+    indicators:
+      fixed_subs: 15              # Fixed-telephone subscriptions
+      fixed_broadband: 19303      # Fixed-broadband subscriptions
+      internet_users: 11624       # Individuals using the Internet
+    start_year: 2000
+    end_year: 2025
+  uk_parliament:
+    briefing_url: "https://commonslibrary.parliament.uk/research-briefings/cbp-9471/"
+    pdf_url: "https://researchbriefings.files.parliament.uk/documents/CBP-9471/CBP-9471.pdf"
+    country_code: gb
+  cept:
+    report_url: "https://docdb.cept.org/download/1301"
+    report_title: "ECC Report 265 - Migration from PSTN/ISDN to IP-based networks"
+  ncc:
+    mobile_stats_csv: "https://api.ncc.gov.tw/uploaddowndoc?file=datagov/%E8%A1%8C%E5%8B%95%E9%80%9A%E4%BF%A1%E6%A5%AD%E5%8B%99%E7%94%A8%E6%88%B6%E7%B5%B1%E8%A8%88%E6%95%B8.csv&filedisplay=%E8%A1%8C%E5%8B%95%E9%80%9A%E4%BF%A1%E6%A5%AD%E5%8B%99%E7%94%A8%E6%88%B6%E7%B5%B1%E8%A8%88%E6%95%B8.csv&flag=doc"
+    telecom_numbers_csv: "https://www-api.moda.gov.tw/OpenData/Files/15304"
+    dataset_api: "https://data.gov.tw/api/v2/rest/dataset/173231"
+    country_code: tw
   berec:
     report_url: "https://www.berec.europa.eu/system/files/2024-12/BoR%20(24)%20181_Draft%20BEREC%20Report%20on%20copper%20switch-off_0.pdf"
   pstn_switchoff:
