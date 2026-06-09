@@ -301,9 +301,9 @@ MIT
 <!-- CICD_SUMMARY_START -->
 ## CI/CD Crawler Summary
 
-_Last generated: 2026-06-04_
+_Last generated: 2026-06-08_
 
-- 156 解決方案
+- 155 解決方案
 - 42 國家/地區
 - 131 替代技術
 - 126 供應商

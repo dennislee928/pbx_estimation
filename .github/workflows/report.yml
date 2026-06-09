@@ -8,7 +8,7 @@ on:
       - deploy/pages-ui-crawler
       - deploy/pages-ui-crawler-clean
   schedule:
-    - cron: "0 * * * *"
+    - cron: "59 15 * * *"
   workflow_dispatch:
     inputs:
       refetch_data:
@@ -94,22 +94,6 @@ jobs:
       - name: Generate crawler seed context and shared research outputs
         run: docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/workspace" -e PBX_WORKSPACE=/workspace pbx-research-mcp:ci generate
 
-      - name: Commit crawler summary back to main
-        if: ${{ github.event_name == 'schedule' || github.ref_name == 'main' }}
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md frontend/data/*.json
-          git add -f data/processed/solution_registry.csv data/processed/awesome_list.csv
-          git add -f reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
-          if git diff --cached --quiet; then
-            echo "No crawler summary changes to commit."
-          else
-            git commit -m "chore: update crawler summary"
-            git push origin HEAD:main
-          fi
-
       - name: Run notebooks
         run: |
           set -euo pipefail
@@ -128,6 +112,25 @@ jobs:
 
       - name: Refresh shared research outputs after notebooks
         run: docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/workspace" -e PBX_WORKSPACE=/workspace pbx-research-mcp:ci generate
+
+      - name: Validate canonical transport catalog
+        run: python scripts/validate_transport_catalog.py
+
+      - name: Commit final validated crawler snapshot back to main
+        if: ${{ github.event_name == 'schedule' || github.ref_name == 'main' }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md frontend/data/*.json
+          git add -f data/processed/solution_registry.csv data/processed/awesome_list.csv
+          git add -f reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
+          if git diff --cached --quiet; then
+            echo "No validated crawler snapshot changes to commit."
+          else
+            git commit -m "chore: update validated crawler snapshot"
+            git push origin HEAD:main
+          fi
 
       - name: Convert notebooks to HTML and optional PDF
         run: |
@@ -150,7 +153,10 @@ jobs:
           done
 
       - name: Build RAG asset manifest
-        run: python scripts/sync_rag_assets.py --prefix "${RAG_ASSET_PREFIX}"
+        run: |
+          python scripts/sync_rag_assets.py --prefix "snapshots/${GITHUB_RUN_ID}"
+          python scripts/validate_transport_catalog.py
+          python scripts/verify_transport_snapshot.py
 
       - name: Package research MCP release assets
         run: |
@@ -249,10 +255,12 @@ jobs:
         run: |
           set -euo pipefail
           upload_with_wrangler_remote() {
-            npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
+            snapshot_prefix="snapshots/${GITHUB_RUN_ID}"
+            npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/${snapshot_prefix}/rag_engine/dist/rag_assets_manifest.json" --file rag_engine/dist/rag_assets_manifest.json
             while IFS=$'\t' read -r key path; do
               npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/${key}" --file "${path}"
             done < rag_engine/dist/rag_assets_r2.tsv
+            npx wrangler r2 object put --remote "${CLOUDFLARE_R2_BUCKET}/latest-pointer.json" --file rag_engine/dist/latest-pointer.json
           }
 
           can_use_s3_api() {
@@ -275,10 +283,12 @@ jobs:
             s3_endpoint="${CLOUDFLARE_R2_S3_ENDPOINT:-https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com}"
             s3_endpoint="${s3_endpoint%/}"
             s3_endpoint="${s3_endpoint%/${CLOUDFLARE_R2_BUCKET}}"
-            aws --endpoint-url "${s3_endpoint}" s3 cp rag_engine/dist/rag_assets_manifest.json "s3://${CLOUDFLARE_R2_BUCKET}/${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json"
+            snapshot_prefix="snapshots/${GITHUB_RUN_ID}"
+            aws --endpoint-url "${s3_endpoint}" s3 cp rag_engine/dist/rag_assets_manifest.json "s3://${CLOUDFLARE_R2_BUCKET}/${snapshot_prefix}/rag_engine/dist/rag_assets_manifest.json"
             while IFS=$'\t' read -r key path; do
               aws --endpoint-url "${s3_endpoint}" s3 cp "${path}" "s3://${CLOUDFLARE_R2_BUCKET}/${key}"
             done < rag_engine/dist/rag_assets_r2.tsv
+            aws --endpoint-url "${s3_endpoint}" s3 cp rag_engine/dist/latest-pointer.json "s3://${CLOUDFLARE_R2_BUCKET}/latest-pointer.json"
           }
 
           if can_use_s3_api; then
@@ -385,6 +395,9 @@ jobs:
             reports/
             data/processed/*.csv
             rag_engine/dist/rag_assets_manifest.json
+            rag_engine/dist/latest-pointer.json
+            rag_engine/dist/transport_snapshot_validation.json
+            rag_engine/dist/transport_snapshot_parity.json
             rag_engine/dist/notebooklm_sources/
           retention-days: 90
 

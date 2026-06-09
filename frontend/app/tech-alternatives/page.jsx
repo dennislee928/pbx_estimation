@@ -24,12 +24,81 @@ const textMatches = (query, row, fields) => {
   return tokens.some((token) => text.includes(token));
 };
 
+// --- Negative transport constraints (mirrors rag_engine/src/worker.js) ---
+// Lets the in-browser list respect phrases like "不可以用乙太網路" so the client
+// catalog matches what the cloud RAG returns.
+const TRANSPORT_EXCLUSIONS = [
+  { keys: ["乙太網路線", "網路線", "ethernet cable", "ethernet wire", "rj45", "rj-45"], tokens: ["ethernet_wire", "ethernet", "rj45", "lan"] },
+  { keys: ["乙太網路", "ethernet", "ip網路", "ip network", "區域網路"], tokens: ["ethernet", "ethernet_ip", "ethernet_wire", "serial_ethernet", "lan"] },
+  { keys: ["類比電話線", "傳統電話線", "傳統電話", "類比電話", "類比線路", "類比", "電話線", "市話", "analog phone", "analog line", "analog", "analogue", "pstn line", "pots", "landline"], tokens: ["analog", "pstn", "pots", "fxs", "fxo", "tdm", "copper", "phone_line"] },
+  { keys: ["pstn", "傳統電話網路"], tokens: ["pstn", "pots", "tdm", "analog"] },
+  { keys: ["wifi", "wi-fi", "無線網路", "wlan"], tokens: ["wifi", "wifi_direct", "wlan", "802.11"] },
+  { keys: ["蜂巢", "行動網路", "cellular", "lte", "5g", "nb-iot"], tokens: ["cellular", "cellular_ip", "cellular_lpwans", "cellular_esim", "private_cellular", "lte", "5g", "nb-iot"] },
+  { keys: ["衛星", "satellite"], tokens: ["satellite", "satellite_navigation"] },
+  { keys: ["序列", "serial", "rs-232", "rs-485"], tokens: ["serial_wire", "serial_ethernet", "modbus"] },
+  { keys: ["藍牙", "bluetooth", "ble"], tokens: ["bluetooth", "ble", "radio_802_15_4"] },
+  { keys: ["紅外線", "infrared"], tokens: ["infrared", "optical_signal"] },
+];
+const NEGATION_MARKERS = [
+  "不可以用", "不可以", "不能用", "不能", "不可", "不使用", "不要用", "不要", "不得", "禁用", "禁止", "避免", "排除", "無法使用", "沒有",
+  "cannot use", "can not use", "can't use", "cannot", "can't", "without", "no ", "not ", "avoid", "exclude", "excluding", "must not",
+];
+
+const parseExclusionTokens = (scene) => {
+  const text = searchable(scene);
+  const tokens = new Set();
+  for (const group of TRANSPORT_EXCLUSIONS) {
+    for (const key of group.keys) {
+      const needle = searchable(key);
+      let from = 0;
+      let idx = text.indexOf(needle, from);
+      while (idx !== -1) {
+        const before = text.slice(Math.max(0, idx - 12), idx);
+        if (NEGATION_MARKERS.some((marker) => before.includes(searchable(marker)))) {
+          group.tokens.forEach((token) => tokens.add(token));
+          break;
+        }
+        from = idx + needle.length;
+        idx = text.indexOf(needle, from);
+      }
+    }
+  }
+  return [...tokens];
+};
+
+const rowExcluded = (row, tokens) => {
+  if (!tokens.length) return false;
+  const text = searchable([row.medium, row.protocols, row.standards, row.category, row.tags, row.description].join(" "));
+  return tokens.some((token) => text.includes(searchable(token)));
+};
+
 const normalizeCloudItems = (items) => (Array.isArray(items) ? items : [])
   .map((item, index) => {
     if (typeof item === "string") return { name: item, rank: index + 1, reason: "" };
     return {
+      type: item.type || "",
       name: item.name || item.id || "",
       rank: Number(item.rank || index + 1),
+      label: item.label || item.transport_label || "",
+      transport_label: item.transport_label || item.label || "",
+      transport_schema_version: Number(item.transport_schema_version || 0),
+      primary_bearer: item.primary_bearer || "unknown",
+      bearer_family: item.bearer_family || "unknown",
+      link_mode: item.link_mode || "unknown",
+      network_type: item.network_type || "unknown",
+      bearers: Array.isArray(item.bearers) ? item.bearers : [],
+      control_interfaces: Array.isArray(item.control_interfaces) ? item.control_interfaces : [],
+      api_capable: item.api_capable === true,
+      hybrid: item.hybrid === true,
+      transport_label_en: item.transport_label_en || "",
+      transport_label_zh: item.transport_label_zh || "",
+      capability_labels_en: Array.isArray(item.capability_labels_en) ? item.capability_labels_en : [],
+      capability_labels_zh: Array.isArray(item.capability_labels_zh) ? item.capability_labels_zh : [],
+      suitability_percent: item.suitability_percent || "",
+      cost: item.cost || "",
+      risk_level: item.risk_level || "",
+      pros: Array.isArray(item.pros) ? item.pros : splitList(item.pros),
+      cons: Array.isArray(item.cons) ? item.cons : splitList(item.cons),
       reason: item.reason || item.rationale || item.summary || "",
       recommendation: item.recommendation || "",
       suitability_percent: item.suitability_percent || item.suitability || "",
@@ -160,9 +229,92 @@ const ALTS = alternatives.map((alt) => ({
 
 const CAT_FILTERS = [
   { id: "all", labelEn: "All", labelZh: "全部" },
-  { id: "web", labelEn: "Web / API (cable)", labelZh: "網路 / API（有線）" },
-  { id: "non_web", labelEn: "Non-network / physical", labelZh: "非網路 / 實體媒介" },
+  { id: "wired", labelEn: "Wired", labelZh: "有線" },
+  { id: "wireless", labelEn: "Wireless", labelZh: "無線" },
+  { id: "physical", labelEn: "Physical / contactless", labelZh: "實體 / 無接觸" },
+  { id: "unknown", labelEn: "Bearer unspecified", labelZh: "承載未指定" },
+  { id: "api", labelEn: "API capable", labelZh: "API 能力" },
 ];
+
+const transportLabel = (row) => {
+  if (L === "en" && row?.transport_label_en) return row.transport_label_en;
+  if (L !== "en" && row?.transport_label_zh) return row.transport_label_zh;
+  return row?.transport_label || row?.label || (L === "en" ? "Bearer unspecified" : "承載未指定");
+};
+
+const transportClass = (row) => {
+  if (row?.hybrid || row?.link_mode === "hybrid") return "hybrid";
+  if (row?.link_mode === "wireless") return "wireless";
+  if (row?.link_mode === "wired" && row?.network_type === "ip") return "wired-ip";
+  if (row?.link_mode === "wired") return "wired-non-ip";
+  if (["physical", "contactless"].includes(row?.link_mode)) return "physical";
+  if (row?.link_mode === "manual") return "manual";
+  return "unknown";
+};
+
+const capabilityLabels = (row) => {
+  const labels = L === "en" ? row?.capability_labels_en : row?.capability_labels_zh;
+  if (Array.isArray(labels) && labels.length) return labels;
+  return (row?.control_interfaces || []).map((item) => item === "api" ? (L === "en" ? "API management" : "API 管理") : item.toUpperCase());
+};
+
+const matchesTransportFilter = (row, selected) => {
+  if (selected === "all") return true;
+  if (selected === "api") return row?.api_capable === true || (row?.control_interfaces || []).includes("api");
+  if (selected === "physical") return ["physical", "contactless", "manual"].includes(row?.link_mode);
+  if (selected === "unknown") return !row?.link_mode || row.link_mode === "unknown";
+  return row?.link_mode === selected || (row?.link_mode === "hybrid" && selected === "wired");
+};
+
+const rowsForCloudTable = (cloudRag) => {
+  const explicit = cloudRag?.tables?.rag_response || cloudRag?.rag_response_table;
+  if (Array.isArray(explicit) && explicit.length) return normalizeCloudItems(explicit);
+  return [
+    ...normalizeCloudItems(cloudRag?.alternatives).map((row) => ({ ...row, type: row.type || "alternative" })),
+    ...normalizeCloudItems(cloudRag?.solutions).map((row) => ({ ...row, type: row.type || "solution" })),
+  ];
+};
+
+// --- Solution-catalog dropdown filters (vendor / region / category / scale /
+// cost / industry / source). Multi-value fields are split into discrete tokens.
+const domainOf = (url) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+};
+
+const SOL_FILTER_DEFS = [
+  { key: "vendor", labelEn: "Vendor", labelZh: "供應商", get: (r) => [r.vendor].filter(Boolean) },
+  { key: "continent", labelEn: "Region", labelZh: "區域", get: (r) => [r.continent].filter(Boolean) },
+  { key: "tags", labelEn: "Category", labelZh: "類別", get: (r) => splitTokens(r.tags, ",") },
+  { key: "recommended_terminals", labelEn: "Recommended terminals", labelZh: "建議終端數", get: (r) => [r.recommended_terminals].filter(Boolean) },
+  { key: "cost_band", labelEn: "Cost", labelZh: "成本", get: (r) => [r.cost_band].filter(Boolean) },
+  { key: "industry_fit", labelEn: "Industry", labelZh: "適用產業", get: (r) => splitTokens(r.industry_fit, ";") },
+  { key: "source", labelEn: "Source", labelZh: "來源", get: (r) => [domainOf(r.resource_url)].filter(Boolean) },
+];
+
+const splitTokensImpl = (value, sep) => String(value || "")
+  .split(sep)
+  .map((token) => token.trim())
+  .filter(Boolean);
+function splitTokens(value, sep) { return splitTokensImpl(value, sep); }
+
+const SOL_FILTER_OPTIONS = Object.fromEntries(
+  SOL_FILTER_DEFS.map((def) => [
+    def.key,
+    [...new Set(registry.flatMap((row) => def.get(row)))].sort((a, b) => String(a).localeCompare(String(b))),
+  ]),
+);
+
+const matchesSolutionFilters = (row, filters) => SOL_FILTER_DEFS.every((def) => {
+  const selected = filters[def.key];
+  if (!selected || selected === "all") return true;
+  return def.get(row).includes(selected);
+});
+
+const emptySolutionFilters = Object.fromEntries(SOL_FILTER_DEFS.map((def) => [def.key, "all"]));
 
 const mediumBadge = (alt) => {
   if (alt.cat === "web") return "IP";
@@ -203,6 +355,7 @@ const RecommendationCard = ({ item, type }) => (
 export default function TechAlternativesPage() {
   const [filter, setFilter] = useState("all");
   const [scene, setScene] = useState("");
+  const [solFilters, setSolFilters] = useState(emptySolutionFilters);
   const [expanded, setExpanded] = useState(null);
   const [cloudRag, setCloudRag] = useState(null);
   const [cloudRagStatus, setCloudRagStatus] = useState("idle");
@@ -211,22 +364,29 @@ export default function TechAlternativesPage() {
   const cloudAlternativeRanks = new Map(normalizeCloudItems(cloudRag?.alternatives).map((item) => [item.name, item]));
   const cloudSolutionRanks = new Map(normalizeCloudItems(cloudRag?.solutions).map((item) => [item.name, item]));
   const cloudDocuments = normalizeCloudItems(cloudRag?.documents);
+  const cloudTableRows = rowsForCloudTable(cloudRag);
+  const visibleCloudTableRows = cloudTableRows.filter((row) => matchesTransportFilter(row, filter));
+  const exclusionTokens = parseExclusionTokens(scene);
   const filtered = ALTS
-    .filter((a) => filter === "all" || a.cat === filter)
+    .filter((a) => matchesTransportFilter(a, filter))
+    .filter((a) => !rowExcluded(a, exclusionTokens))
     .filter((a) => textMatches(scene, a, ["name", "description", "protocols", "medium", "latency", "reliability", "security", "complexity", "cost_model", "recommended_devices", "industry_fit", "use_case", "pros", "cons", "standards"]))
     .sort((a, b) => {
       const aRank = cloudAlternativeRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
       const bRank = cloudAlternativeRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
       return aRank - bRank || a.name.localeCompare(b.name);
     });
+  const solFiltersActive = SOL_FILTER_DEFS.some((def) => solFilters[def.key] && solFilters[def.key] !== "all");
   const rankedSolutions = registry
+    .filter((row) => !rowExcluded(row, exclusionTokens))
+    .filter((row) => matchesSolutionFilters(row, solFilters))
     .filter((row) => !scene.trim() || textMatches(scene, row, ["name", "vendor", "continent", "country_code", "lifecycle_assigned", "tags", "description", "pros", "cons", "typical_customers", "recommended_terminals", "cost_band", "industry_fit"]) || cloudSolutionRanks.has(row.name))
     .sort((a, b) => {
       const aRank = cloudSolutionRanks.get(a.name)?.rank || Number.MAX_SAFE_INTEGER;
       const bRank = cloudSolutionRanks.get(b.name)?.rank || Number.MAX_SAFE_INTEGER;
       return aRank - bRank || a.name.localeCompare(b.name);
     })
-    .slice(0, 6);
+    .slice(0, solFiltersActive ? 60 : 12);
   const cloudRecommendation = cloudRag?.recommendation || cloudRag?.summary || "";
 
   async function askCloudRag() {
@@ -246,64 +406,43 @@ export default function TechAlternativesPage() {
           scene,
           language: L,
           crawler_seed_context: crawlerSeed,
-          alternatives: ALTS.map(({ name, category, medium, description, protocols, latency, reliability, security, complexity, cost_model, recommended_devices, industry_fit, use_case, pros, cons, resource_url }) => ({
-            name,
-            category,
-            medium,
-            description,
-            protocols,
-            latency,
-            reliability,
-            security,
-            complexity,
-            cost_model,
-            recommended_devices,
-            industry_fit,
-            use_case,
-            pros,
-            cons,
-            resource_url,
-          })),
-          solutions: registry.map(({ name, vendor, continent, country_code, lifecycle_assigned, tags, description, pros, cons, typical_customers, recommended_terminals, cost_band, industry_fit, resource_url }) => ({
-            name,
-            vendor,
-            continent,
-            country_code,
-            lifecycle_assigned,
-            tags,
-            description,
-            pros,
-            cons,
-            typical_customers,
-            recommended_terminals,
-            cost_band,
-            industry_fit,
-            resource_url,
-          })),
+          alternatives: ALTS,
+          solutions: registry,
           expected_response_schema: {
             recommendation: "short explanation",
             alternatives: [{
               name: "existing alternative name",
               rank: 1,
+              primary_bearer: "canonical bearer",
+              link_mode: "wired/wireless/physical/unknown",
+              control_interfaces: ["api"],
+              transport_label: "canonical generated label",
               suitability_percent: 85,
               cost: "cost model",
               risk_level: "Low/Medium/High",
               risk_reasons: ["risk reason"],
               pros: ["pro"],
               cons: ["con"],
+              reason: "why it fits",
               recommendation: "why this option fits",
             }],
             solutions: [{
               name: "existing solution name",
               rank: 1,
+              primary_bearer: "canonical bearer",
+              link_mode: "wired/wireless/hybrid/unknown",
+              control_interfaces: ["api"],
+              transport_label: "canonical generated label",
               suitability_percent: 85,
               cost: "cost band",
               risk_level: "Low/Medium/High",
               risk_reasons: ["risk reason"],
               pros: ["pro"],
               cons: ["con"],
+              reason: "why it fits",
               recommendation: "why this option fits",
             }],
+            rag_response_table: [{ type: "solution or alternative", rank: 1, name: "existing row name", transport_label_zh: "canonical generated label", capability_labels_zh: ["API 管理"], suitability_percent: 90, cost: "cost profile", risk_level: "Low/Medium/High", pros: [], cons: [], reason: "why it fits", resource_url: "source URL" }],
           },
         }),
       });
@@ -371,6 +510,71 @@ export default function TechAlternativesPage() {
             )}
           </div>
         )}
+        {visibleCloudTableRows.length > 0 && (
+          <div className="rag-table-panel">
+            <div className="rag-table-header">
+              <strong>{L === "en" ? "RAG response table" : "RAG 回應表格"}</strong>
+              <span>
+                {L === "en"
+                  ? `${visibleCloudTableRows.length} ranked rows`
+                  : `${visibleCloudTableRows.length} 筆排序結果`}
+              </span>
+            </div>
+            <div className="rag-table-scroll">
+              <table className="rag-response-table">
+                <thead>
+                  <tr>
+                    <th>{L === "en" ? "Rank" : "排序"}</th>
+                    <th>{L === "en" ? "Type" : "類型"}</th>
+                    <th>{L === "en" ? "Name" : "名稱"}</th>
+                    <th>{L === "en" ? "Label" : "標記"}</th>
+                    <th>{L === "en" ? "Fit" : "適配"}</th>
+                    <th>{L === "en" ? "Cost / risk" : "成本 / 風險"}</th>
+                    <th>{L === "en" ? "Pros / cons" : "優缺點"}</th>
+                    <th>{L === "en" ? "Reason" : "原因"}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleCloudTableRows.map((row, index) => (
+                    <tr key={`${row.type || "rag"}-${row.rank}-${row.name}-${index}`}>
+                      <td>#{row.rank || index + 1}</td>
+                      <td>{row.type === "solution" ? (L === "en" ? "Solution" : "方案") : (L === "en" ? "Alternative" : "替代技術")}</td>
+                      <td>
+                        <strong>{row.name}</strong>
+                        {row.resource_url && (
+                          <a href={row.resource_url} target="_blank" rel="noreferrer">
+                            {domainOf(row.resource_url) || row.resource_url}
+                          </a>
+                        )}
+                      </td>
+                      <td>
+                        <span className={`transport-pill ${transportClass(row)}`}>
+                          {transportLabel(row)}
+                        </span>
+                        <span className="capability-pills">
+                          {capabilityLabels(row).map((label) => <span className="capability-pill" key={label}>{label}</span>)}
+                        </span>
+                      </td>
+                      <td>
+                        {row.suitability_percent ? `${row.suitability_percent}%` : row.score ? `Score ${row.score}` : "-"}
+                      </td>
+                      <td>
+                        <span>{row.cost || "-"}</span>
+                        {row.risk_level && <small>{L === "en" ? "Risk" : "風險"}: {row.risk_level}</small>}
+                      </td>
+                      <td>
+                        {[...row.pros.slice(0, 2), ...row.cons.slice(0, 1).map((item) => `${L === "en" ? "Con" : "缺點"}: ${item}`)]
+                          .filter(Boolean)
+                          .join(" / ") || "-"}
+                      </td>
+                      <td>{row.reason || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="research-section">
@@ -396,20 +600,61 @@ export default function TechAlternativesPage() {
         </div>
       </div>
 
-      {scene.trim() && (
-        <div className="research-section">
-          <h3>{L === "en" ? "Prioritized PBX/UCaaS Solutions" : "優先解決方案"}</h3>
+      <div className="research-section">
+        <h3>
+          {L === "en"
+            ? `Solution Catalog with scale & sources (${rankedSolutions.length})`
+            : `含規模建議與來源網址的方案目錄（${rankedSolutions.length}）`}
+        </h3>
+        <div className="solution-filter-bar" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14, alignItems: "flex-end" }}>
+          {SOL_FILTER_DEFS.map((def) => (
+            <label key={def.key} style={{ display: "flex", flexDirection: "column", fontSize: "0.72rem", color: "#555", gap: 3 }}>
+              {L === "en" ? def.labelEn : def.labelZh}
+              <select
+                value={solFilters[def.key]}
+                onChange={(event) => setSolFilters({ ...solFilters, [def.key]: event.target.value })}
+                style={{ padding: "5px 8px", borderRadius: 6, border: "1px solid #d0d8e8", fontSize: "0.78rem", maxWidth: 200 }}
+              >
+                <option value="all">{L === "en" ? "All" : "全部"}</option>
+                {SOL_FILTER_OPTIONS[def.key].map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+          ))}
+          {solFiltersActive && (
+            <button
+              type="button"
+              onClick={() => setSolFilters(emptySolutionFilters)}
+              style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid #d0d8e8", background: "#fff", cursor: "pointer", fontSize: "0.75rem" }}
+            >
+              {L === "en" ? "Reset filters" : "清除篩選"}
+            </button>
+          )}
+        </div>
+        {rankedSolutions.length === 0 ? (
+          <p style={{ fontSize: "0.82rem", color: "#888" }}>
+            {L === "en" ? "No solutions match the current filters." : "沒有符合目前篩選條件的方案。"}
+          </p>
+        ) : (
           <div className="ranked-solution-grid">
             {rankedSolutions.map((row) => (
               <a href={row.resource_url || "#"} target="_blank" rel="noreferrer" className="ranked-solution" key={`${row.vendor}-${row.name}`}>
+                <span className={`transport-pill ${transportClass(cloudSolutionRanks.get(row.name) || row)}`}>
+                  {transportLabel(cloudSolutionRanks.get(row.name) || row)}
+                </span>
+                <span className="capability-pills">
+                  {capabilityLabels(cloudSolutionRanks.get(row.name) || row).map((label) => <span className="capability-pill" key={label}>{label}</span>)}
+                </span>
                 <strong>{row.name}</strong>
                 <span>{row.vendor} · {String(row.country_code).toUpperCase()} · {row.lifecycle_assigned}</span>
                 <small>{row.recommended_terminals} · {row.cost_band}</small>
+                <small style={{ color: "#2563eb" }}>{domainOf(row.resource_url) || "—"}</small>
               </a>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {cloudDocuments.length > 0 && (
         <div className="research-section">
@@ -445,6 +690,12 @@ export default function TechAlternativesPage() {
               <div>
                 <strong style={{ fontSize: "0.95rem" }}>{alt.name}</strong>
                 <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "#888" }}>{mediumBadge(alt)} {L === "en" ? alt.medium : zhMedium(alt.medium)}</span>
+                <span className={`transport-pill ${transportClass(cloudAlternativeRanks.get(alt.name) || alt)}`}>
+                  {transportLabel(cloudAlternativeRanks.get(alt.name) || alt)}
+                </span>
+                <span className="capability-pills">
+                  {capabilityLabels(cloudAlternativeRanks.get(alt.name) || alt).map((label) => <span className="capability-pill" key={label}>{label}</span>)}
+                </span>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
                 {cloudAlternativeRanks.has(alt.name) && <span style={{ fontSize: "0.7rem", color: "#155e75", background: "#cffafe", padding: "2px 8px", borderRadius: 10 }}>Cloud RAG #{cloudAlternativeRanks.get(alt.name).rank}</span>}

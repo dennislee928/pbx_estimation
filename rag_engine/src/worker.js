@@ -54,6 +54,29 @@ const SCENE_EXPANSIONS = [
   },
 ];
 
+// Maps a constraint phrase (zh/en) to the canonical transport tokens that must
+// be excluded. Tokens are matched against a row's medium/protocols/standards/
+// description so "不可以用乙太網路" drops every ethernet/IP option, etc.
+const TRANSPORT_EXCLUSIONS = [
+  { keys: ["乙太網路線", "網路線", "ethernet cable", "ethernet wire", "rj45", "rj-45", "lan cable"], tokens: ["ethernet_wire", "ethernet", "rj45", "lan"] },
+  { keys: ["乙太網路", "ethernet", "ip網路", "ip network", "區域網路"], tokens: ["ethernet", "ethernet_ip", "ethernet_wire", "serial_ethernet", "lan"] },
+  { keys: ["類比電話線", "傳統電話線", "傳統電話", "類比電話", "類比線路", "類比", "電話線", "市話", "analog phone", "analogue phone", "analog line", "analog", "analogue", "pstn line", "copper line", "pots", "landline"], tokens: ["analog", "analogue", "pstn", "pots", "fxs", "fxo", "tdm", "copper", "phone_line"] },
+  { keys: ["pstn", "傳統電話網路", "public switched"], tokens: ["pstn", "pots", "tdm", "analog"] },
+  { keys: ["wifi", "wi-fi", "無線網路", "無線區域網路", "wlan"], tokens: ["wifi", "wifi_direct", "wlan", "802.11"] },
+  { keys: ["蜂巢", "行動網路", "cellular", "lte", "5g", "4g", "nb-iot", "lte-m", "sim卡"], tokens: ["cellular", "cellular_ip", "cellular_lpwans", "cellular_esim", "private_cellular", "cellular_broadcast", "lte", "5g", "nb-iot"] },
+  { keys: ["衛星", "satellite"], tokens: ["satellite", "satellite_navigation"] },
+  { keys: ["序列", "serial", "rs-232", "rs232", "rs-485", "rs485"], tokens: ["serial_wire", "serial_ethernet", "rs-232", "rs-485", "modbus"] },
+  { keys: ["藍牙", "bluetooth", "ble"], tokens: ["bluetooth", "ble", "radio_802_15_4"] },
+  { keys: ["紅外線", "infrared"], tokens: ["infrared", "optical_signal"] },
+];
+
+// Phrase fragments that signal a *negation* in the scene text. If one appears
+// within a short window before a transport keyword, that transport is excluded.
+const NEGATION_MARKERS = [
+  "不可以用", "不可以", "不能用", "不能", "不可", "不使用", "不要用", "不要", "不得", "禁用", "禁止", "避免", "排除", "無法使用", "沒有",
+  "cannot use", "can not use", "can't use", "cannot", "can't", "without", "no ", "not ", "avoid", "exclude", "excluding", "ban", "prohibit", "must not", "don't use", "do not use",
+];
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -107,6 +130,167 @@ function expandedQuery(scene) {
   return [...new Set([...base, ...tokenize(extra.join(" "))])];
 }
 
+// Clause boundary: a negation's scope ends at the next sentence/clause break.
+const CLAUSE_BOUNDARY = /[，,。.!！?？;；:：\n]/;
+// How far forward a negation can reach when no boundary is hit first.
+const NEGATION_FORWARD_WINDOW = 60;
+
+// Parse negative transport constraints out of the scene text. Returns the set
+// of canonical transport tokens the user said NOT to use, plus the human-
+// readable constraint phrases for surfacing in the response evidence.
+//
+// A negation governs the whole following clause, so a *list* like
+// "不可以用 乙太網路/乙太網路線/傳統類比電話線" excludes ALL three items — not just
+// the one nearest the marker. We therefore scan forward from each negation
+// marker to the next clause boundary and match every transport keyword inside.
+function parseExclusions(scene) {
+  const text = normalizeText(scene);
+  const tokens = new Set();
+  const phrases = new Set();
+
+  for (const marker of NEGATION_MARKERS) {
+    const needle = normalizeText(marker);
+    let from = 0;
+    let idx = text.indexOf(needle, from);
+    while (idx !== -1) {
+      const start = idx + needle.length;
+      let end = start;
+      while (
+        end < text.length &&
+        end - start < NEGATION_FORWARD_WINDOW &&
+        !CLAUSE_BOUNDARY.test(text[end])
+      ) {
+        end += 1;
+      }
+      const clause = text.slice(start, end);
+      for (const group of TRANSPORT_EXCLUSIONS) {
+        for (const key of group.keys) {
+          if (clause.includes(normalizeText(key))) {
+            group.tokens.forEach((token) => tokens.add(token));
+            phrases.add(key);
+          }
+        }
+      }
+      from = idx + needle.length;
+      idx = text.indexOf(needle, from);
+    }
+  }
+  return { tokens: [...tokens], phrases: [...phrases] };
+}
+
+// Solutions in solution_registry.json carry no explicit transport `medium`,
+// only category `tags`. We classify those tags into:
+//   - IP-platform tags: the solution fundamentally requires IP/ethernet to run
+//     (cloud/SIP/UCaaS/PBX). Forbidden when ethernet is excluded.
+//   - analog tags: the solution rides the legacy TDM/analog network. Forbidden
+//     when analog/PSTN is excluded.
+//   - bearer tags: device-side non-ethernet connectivity (eSIM/cellular/
+//     satellite) that legitimately satisfies a "no ethernet" constraint and so
+//     RESCUES an otherwise IP-leaning solution.
+// "api"/"sms"/"voice" are deliberately neutral: every modern platform exposes an
+// API, and an incidental SMS channel does not make a cloud platform ethernet-free.
+const IP_PLATFORM_TAGS = new Set([
+  "cloud", "ucaas", "cpaas", "hosted", "ip_pbx", "sip", "voip", "webrtc",
+  "telco", "h323", "sbc", "wholesale", "workspace", "messaging",
+]);
+const ANALOG_TAGS = new Set(["tdm", "digital", "fxs", "fxo", "analog", "pots", "pstn"]);
+const BEARER_TRANSPORT = { esim: "cellular", cellular: "cellular", satellite: "satellite" };
+
+function tagSet(tags) {
+  return new Set(normalizeText(tags).split(/[^a-z0-9_]+/).filter(Boolean));
+}
+
+function arrayField(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string" && value.trim().startsWith("[")) {
+    try { return JSON.parse(value); } catch { return []; }
+  }
+  return value ? String(value).split(/\s*[;,]\s*/).filter(Boolean) : [];
+}
+
+function transportClassification(row) {
+  if (row.primary_bearer && row.link_mode) {
+    const capabilities = arrayField(row.control_interfaces);
+    return {
+      transport_schema_version: Number(row.transport_schema_version || 2),
+      label_dictionary_version: Number(row.label_dictionary_version || 2),
+      primary_bearer: row.primary_bearer,
+      bearer_family: row.bearer_family || "unknown",
+      link_mode: row.link_mode,
+      network_type: row.network_type || "unknown",
+      bearers: arrayField(row.bearers),
+      control_interfaces: capabilities,
+      api_capable: row.api_capable === true || row.api_capable === "true" || capabilities.includes("api"),
+      hybrid: row.hybrid === true || row.hybrid === "true",
+      transport_confidence: row.transport_confidence || "derived",
+      transport_classification_source: row.transport_classification_source || "catalog",
+      transport_label: row.transport_label_zh || row.transport_label_en || "承載未指定",
+      transport_label_en: row.transport_label_en || "Bearer unspecified",
+      transport_label_zh: row.transport_label_zh || "承載未指定",
+      capability_labels_en: arrayField(row.capability_labels_en),
+      capability_labels_zh: arrayField(row.capability_labels_zh),
+    };
+  }
+
+  const tags = tagSet(row.tags);
+  const medium = normalizeText(row.medium);
+  const protocols = normalizeText(row.protocols);
+  const interfaces = tags.has("api") || /api|http|graphql|webhook/.test(protocols) ? ["api"] : [];
+  if (tags.has("esim") || tags.has("cellular")) {
+    return { transport_schema_version: 1, primary_bearer: tags.has("esim") ? "cellular_esim" : "cellular", bearer_family: "cellular", link_mode: "wireless", network_type: "ip", bearers: [tags.has("esim") ? "cellular_esim" : "cellular"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: tags.has("esim") ? "蜂巢 / eSIM（無線）" : "蜂巢網路（無線）" };
+  }
+  if (/ethernet/.test(medium)) return { transport_schema_version: 1, primary_bearer: "ethernet", bearer_family: "ethernet", link_mode: "wired", network_type: "ip", bearers: ["ethernet"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "乙太網路 / IP（有線）" };
+  if (/electrical_contact|relay|gpio/.test(`${medium} ${protocols}`)) return { transport_schema_version: 1, primary_bearer: "electrical_contact", bearer_family: "electrical_contact", link_mode: "wired", network_type: "physical_signal", bearers: ["electrical_contact"], control_interfaces: /relay/.test(protocols) ? ["relay"] : [], api_capable: false, hybrid: false, transport_confidence: "derived", transport_label: "乾接點 / 繼電器（實體有線）" };
+  if ([...tags].some((tag) => ANALOG_TAGS.has(tag))) return { transport_schema_version: 1, primary_bearer: "analog_tdm", bearer_family: "analog_tdm", link_mode: "wired", network_type: "analog", bearers: ["analog_tdm"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "類比 / TDM（有線）" };
+  if ([...tags].some((tag) => IP_PLATFORM_TAGS.has(tag)) || tags.has("api")) return { transport_schema_version: 1, primary_bearer: "cloud_or_platform", bearer_family: "cloud_or_platform", link_mode: "unknown", network_type: "ip", bearers: ["cloud_or_platform"], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "derived", transport_label: "雲端平台（承載未指定）" };
+  return { transport_schema_version: 1, primary_bearer: "unknown", bearer_family: "unknown", link_mode: "unknown", network_type: "unknown", bearers: [], control_interfaces: interfaces, api_capable: interfaces.includes("api"), hybrid: false, transport_confidence: "unknown", transport_label: "承載未指定" };
+}
+
+// True if a catalog row relies on an excluded transport.
+// - Alternatives: authoritative explicit `medium`, then a text fallback.
+// - Solutions: classified from tags. A solution is excluded when its only
+//   transport family (IP platform and/or analog) is forbidden AND it has no
+//   allowed device-side bearer (cellular/eSIM/satellite) to fall back on.
+function isExcludedRow(row, exclusionTokens) {
+  if (!exclusionTokens.length) return false;
+  const hits = (text) => exclusionTokens.some((token) => normalizeText(text).includes(normalizeText(token)));
+
+  if (row.primary_bearer || row.bearer_family) {
+    const transport = transportClassification(row);
+    const blocked = (bearer) => {
+      if (bearer === "ethernet") return hits("ethernet") || hits("ethernet_ip");
+      if (bearer === "analog_tdm") return hits("analog") || hits("pstn") || hits("tdm");
+      if (["cellular", "cellular_esim"].includes(bearer)) return hits("cellular") || hits("cellular_ip");
+      if (bearer === "satellite") return hits("satellite");
+      if (bearer === "wifi") return hits("wifi") || hits("wlan");
+      if (bearer === "serial") return hits("serial_wire") || hits("rs-232") || hits("rs-485");
+      return hits(bearer);
+    };
+    const bearers = transport.bearers.length ? transport.bearers : [transport.primary_bearer];
+    return bearers.length > 0 && bearers.every(blocked);
+  }
+
+  if (row.medium && hits(row.medium)) return true;
+
+  const tags = tagSet(row.tags);
+  if (tags.size) {
+    // A non-excluded device-side bearer rescues the solution.
+    const hasAllowedBearer = [...tags].some(
+      (tag) => BEARER_TRANSPORT[tag] && !hits(BEARER_TRANSPORT[tag]),
+    );
+    if (!hasAllowedBearer) {
+      const isIpPlatform = [...tags].some((tag) => IP_PLATFORM_TAGS.has(tag));
+      const isAnalog = [...tags].some((tag) => ANALOG_TAGS.has(tag));
+      if (isIpPlatform && (hits("ethernet") || hits("ethernet_ip"))) return true;
+      if (isAnalog && (hits("analog") || hits("pstn") || hits("tdm"))) return true;
+    }
+  }
+
+  // Fallback for rows without structured transport: scan remaining text fields.
+  const transportText = [row.protocols, row.standards, row.category, row.description].join(" ");
+  return hits(transportText);
+}
+
 function asRows(value, maxRows) {
   return Array.isArray(value) ? value.filter((row) => row && typeof row === "object").slice(0, maxRows) : [];
 }
@@ -131,7 +315,12 @@ async function readTextAsset(env, key, maxChars = 8000) {
 }
 
 async function loadBucketContext(env) {
-  const prefix = assetPrefix(env);
+  let prefix = assetPrefix(env);
+  let pointer;
+  if (prefix === "latest") {
+    pointer = await readJsonAsset(env, "latest-pointer.json");
+    if (pointer?.asset_prefix) prefix = String(pointer.asset_prefix).replace(/^\/+|\/+$/g, "");
+  }
   const manifest = await readJsonAsset(env, `${prefix}/rag_engine/dist/rag_assets_manifest.json`);
   const alternatives = await readJsonAsset(env, `${prefix}/frontend/data/awesome_list.json`);
   const solutions = await readJsonAsset(env, `${prefix}/frontend/data/solution_registry.json`);
@@ -155,7 +344,7 @@ async function loadBucketContext(env) {
       });
     }
   }
-  return { manifest, alternatives, solutions, crawlerSeed, documents };
+  return { manifest, pointer, prefix, alternatives, solutions, crawlerSeed, documents };
 }
 
 function weightedText(row) {
@@ -185,12 +374,15 @@ function scoreRow(scene, row) {
 }
 
 function splitList(value) {
-  if (Array.isArray(value)) return value.map((item) => String(item)).filter(Boolean);
-  return String(value || "").split(";").map((item) => item.trim()).filter(Boolean);
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean);
+  return String(value || "")
+    .split(/\s*(?:;|\||\n)\s*/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
-function suitabilityPercent(score, rank) {
-  return Math.max(35, Math.min(98, Math.round(42 + score * 0.75 - (rank - 1) * 4)));
+function suitabilityPercent(score, rank = 1) {
+  return Math.max(55, Math.min(98, Math.round(58 + Math.sqrt(Math.max(0, score)) * 3.1 - (rank - 1) * 2)));
 }
 
 function riskProfile(row) {
@@ -234,6 +426,7 @@ function enrichRankedItem(scene, row, score, rank, kind) {
     name: row.name,
     rank,
     score: Math.round(score),
+    ...transportClassification(row),
     suitability_percent: suitability,
     cost: row.cost_model || row.cost_band || row.cost || "",
     risk_level: risk.level,
@@ -246,8 +439,9 @@ function enrichRankedItem(scene, row, score, rank, kind) {
   };
 }
 
-function rankRows(scene, rows, kind) {
+function rankRows(scene, rows, kind, exclusionTokens = []) {
   return rows
+    .filter((row) => !isExcludedRow(row, exclusionTokens))
     .map((row) => ({ row, score: scoreRow(scene, row) }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score || normalizeText(a.row.name).localeCompare(normalizeText(b.row.name)))
@@ -255,8 +449,40 @@ function rankRows(scene, rows, kind) {
     .map((item, index) => enrichRankedItem(scene, item.row, item.score, index + 1, kind));
 }
 
-function rankDocuments(scene, documents) {
+function tableRows(kind, rows) {
+  return rows.map((row) => ({
+    type: kind,
+    rank: row.rank,
+    name: row.name,
+    label: row.transport_label,
+    transport_label: row.transport_label,
+    transport_label_en: row.transport_label_en,
+    transport_label_zh: row.transport_label_zh,
+    transport_schema_version: row.transport_schema_version,
+    primary_bearer: row.primary_bearer,
+    bearer_family: row.bearer_family,
+    link_mode: row.link_mode,
+    network_type: row.network_type,
+    bearers: row.bearers,
+    control_interfaces: row.control_interfaces,
+    api_capable: row.api_capable,
+    hybrid: row.hybrid,
+    capability_labels_en: row.capability_labels_en,
+    capability_labels_zh: row.capability_labels_zh,
+    suitability_percent: row.suitability_percent,
+    score: row.score,
+    cost: row.cost,
+    risk_level: row.risk_level,
+    pros: row.pros,
+    cons: row.cons,
+    reason: row.reason,
+    resource_url: row.resource_url,
+  }));
+}
+
+function rankDocuments(scene, documents, exclusionTokens = []) {
   return documents
+    .filter((document) => !isExcludedRow({ description: document.content, name: document.name }, exclusionTokens))
     .map((document) => ({
       document,
       score: scoreRow(scene, {
@@ -301,33 +527,57 @@ function deterministicRecommendation(scene, alternatives, solutions) {
   return `For "${scene}", recommended path: ${altText}. Pair with: ${solText}. Review the ranked pros, cons, cost profile, suitability percentage, and risk reasons before deployment.`;
 }
 
-function buildAiPrompt(scene, alternatives, solutions) {
+function buildAiPrompt(scene, alternatives, solutions, exclusions = { phrases: [] }, excludedNames = []) {
+  const allowedNames = alternatives.map((item) => item.name);
   const context = {
     scene,
+    excluded_constraints: exclusions.phrases,
+    allowed_alternative_names: allowedNames,
+    forbidden_product_names: excludedNames.slice(0, 30),
     alternatives: alternatives.slice(0, 5),
     solutions: solutions.slice(0, 5),
   };
   return [
     "You are ranking PBX/UCaaS and PSTN replacement options for a deployment scene.",
-    "Use only the retrieved JSON context. Do not invent products.",
+    "Use ONLY the products in allowed_alternative_names and solutions; do not invent products.",
+    "The context already removed every option that uses an excluded transport.",
+    "HARD RULE: never name, recommend, or mention anything in forbidden_product_names or any transport in excluded_constraints (e.g. ethernet, IP-over-ethernet, analog/PSTN). Examples of forbidden items here include SIP, GraphQL, KPML and other IP/ethernet options when ethernet is excluded.",
+    "Do not invent match percentages or specs that are not in the context.",
     "Return one concise paragraph in Traditional Chinese if the scene contains Chinese, otherwise English.",
     JSON.stringify(context),
   ].join("\n");
 }
 
-async function aiRecommendation(env, scene, alternatives, solutions) {
+// True if generated prose names any excluded product (the LLM's main failure
+// mode: re-introducing forbidden options from its own training knowledge).
+function mentionsExcludedNames(text, excludedNames) {
+  const haystack = normalizeText(text);
+  return excludedNames.some((name) => {
+    const needle = normalizeText(name).trim();
+    return needle.length >= 3 && haystack.includes(needle);
+  });
+}
+
+async function aiRecommendation(env, scene, alternatives, solutions, exclusions = { phrases: [] }, excludedNames = []) {
   if (!env?.AI || String(env.USE_WORKERS_AI || "true") === "false") {
     return deterministicRecommendation(scene, alternatives, solutions);
   }
   try {
     const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
       messages: [
-        { role: "system", content: "You are a concise cloud RAG recommender." },
-        { role: "user", content: buildAiPrompt(scene, alternatives, solutions) },
+        { role: "system", content: "You are a concise cloud RAG recommender that strictly obeys exclusion constraints." },
+        { role: "user", content: buildAiPrompt(scene, alternatives, solutions, exclusions, excludedNames) },
       ],
       max_tokens: 180,
     });
-    return result?.response || result?.result?.response || deterministicRecommendation(scene, alternatives, solutions);
+    const text = result?.response || result?.result?.response || "";
+    // Guard: if the model hallucinated an excluded product, discard its prose
+    // and fall back to the deterministic recommendation (built only from the
+    // already-filtered allowed list).
+    if (!text || mentionsExcludedNames(text, excludedNames)) {
+      return deterministicRecommendation(scene, alternatives, solutions);
+    }
+    return text;
   } catch (error) {
     return `${deterministicRecommendation(scene, alternatives, solutions)} Workers AI fallback reason: ${error.message}`;
   }
@@ -353,17 +603,32 @@ export async function handleRagRequest(payload, env = {}) {
     ? asRows(payload.documents, MAX_DOCUMENTS)
     : asRows(bucketContext.documents, MAX_DOCUMENTS);
   const crawlerSeed = payload?.crawler_seed_context || bucketContext.crawlerSeed || {};
-  const alternatives = rankRows(scene, alternativesInput, "alternative");
-  const solutions = rankRows(scene, solutionsInput, "solution");
-  const documents = rankDocuments(scene, documentsInput);
-  const recommendation = await aiRecommendation(env, scene, alternatives, solutions);
+  const exclusions = parseExclusions(scene);
+  const excludedNames = [...alternativesInput, ...solutionsInput]
+    .filter((row) => isExcludedRow(row, exclusions.tokens))
+    .map((row) => row.name)
+    .filter(Boolean);
+  const alternatives = rankRows(scene, alternativesInput, "alternative", exclusions.tokens);
+  const solutions = rankRows(scene, solutionsInput, "solution", exclusions.tokens);
+  const documents = rankDocuments(scene, documentsInput, exclusions.tokens);
+  const recommendation = await aiRecommendation(env, scene, alternatives, solutions, exclusions, excludedNames);
+  const alternativesTable = tableRows("alternative", alternatives);
+  const solutionsTable = tableRows("solution", solutions);
   return {
     recommendation,
     alternatives,
     solutions,
+    rag_response_table: [...alternativesTable, ...solutionsTable],
+    tables: {
+      alternatives: alternativesTable,
+      solutions: solutionsTable,
+      rag_response: [...alternativesTable, ...solutionsTable],
+    },
     documents,
     evidence: {
       scene,
+      excluded_constraints: exclusions.phrases,
+      excluded_transport_tokens: exclusions.tokens,
       alternatives_considered: alternativesInput.length,
       solutions_considered: solutionsInput.length,
       documents_considered: documentsInput.length,
@@ -374,6 +639,10 @@ export async function handleRagRequest(payload, env = {}) {
         known_alternative_count: crawlerSeed.known_alternative_count,
         known_vendor_count: crawlerSeed.known_vendor_count,
       },
+      transport_schema_version: bucketContext.manifest?.transport_schema_version || alternatives[0]?.transport_schema_version || solutions[0]?.transport_schema_version,
+      catalog_snapshot_id: bucketContext.manifest?.catalog_snapshot_id || bucketContext.pointer?.catalog_snapshot_id,
+      catalog_manifest_sha256: bucketContext.pointer?.catalog_snapshot?.solution_registry_sha256,
+      label_dictionary_version: alternatives[0]?.label_dictionary_version || solutions[0]?.label_dictionary_version || 2,
     },
   };
 }
@@ -390,7 +659,12 @@ export default {
     }
 
     if (request.method === "GET" && url.pathname === "/assets/manifest") {
-      const manifest = await readJsonAsset(env, `${assetPrefix(env)}/rag_engine/dist/rag_assets_manifest.json`);
+      let prefix = assetPrefix(env);
+      if (prefix === "latest") {
+        const pointer = await readJsonAsset(env, "latest-pointer.json");
+        if (pointer?.asset_prefix) prefix = pointer.asset_prefix;
+      }
+      const manifest = await readJsonAsset(env, `${prefix}/rag_engine/dist/rag_assets_manifest.json`);
       return jsonResponse(manifest || { assets: [], asset_count: 0 }, 200, env, request);
     }
 

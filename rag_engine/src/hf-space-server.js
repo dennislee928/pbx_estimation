@@ -86,7 +86,12 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/assets/manifest") {
     const env = envForRequest();
-    const object = await env.RAG_ASSETS.get(`${RAG_ASSET_PREFIX}/rag_engine/dist/rag_assets_manifest.json`);
+    let prefix = RAG_ASSET_PREFIX;
+    if (prefix === "latest") {
+      const pointer = await env.RAG_ASSETS.get("latest-pointer.json");
+      if (pointer) prefix = (await pointer.json()).asset_prefix || prefix;
+    }
+    const object = await env.RAG_ASSETS.get(`${prefix}/rag_engine/dist/rag_assets_manifest.json`);
     sendJson(response, 200, object ? await object.json() : { assets: [], asset_count: 0 });
     return;
   }
