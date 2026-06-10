@@ -2,6 +2,7 @@
 
 import { t, getLang } from "../../i18n";
 import techs from "../../data/sim_technologies.json";
+import comparison from "../../data/sim_comparison.json";
 
 const L = getLang();
 
@@ -117,6 +118,46 @@ export default function SimTechnologiesPage() {
             );
           })}
         </div>
+      </div>
+
+      <div className="research-section">
+        <h3>{L === "en" ? "Traditional vs SIM-Evolution Comparison" : "傳統 vs SIM 演進比較"}</h3>
+        <p className="sim-note">{L === "en" ? comparison.baseline_note_en : comparison.baseline_note_zh}</p>
+        <p className="subtitle" style={{ marginTop: 0 }}>
+          {L === "en"
+            ? "Derived in notebook 09 (sim_connectivity_analysis) and exported to the frontend — incumbents trade physical wiring / manual card swaps for remote, software-defined provisioning."
+            : "由 notebook 09（sim_connectivity_analysis）推導並匯出至前端——既有方式以遠端、軟體定義配置取代實體佈線與手動換卡。"}
+        </p>
+        <table className="registry-table">
+          <thead>
+            <tr>
+              <th>{L === "en" ? "Option" : "方案"}</th>
+              <th>{L === "en" ? "Type" : "類型"}</th>
+              <th>{L === "en" ? "Footprint" : "佔板面積"}</th>
+              <th>{L === "en" ? "Power idx" : "功耗指數"}</th>
+              <th>{L === "en" ? "BOM idx" : "BOM 指數"}</th>
+              <th>{L === "en" ? "Provisioning" : "配置方式"}</th>
+              <th>{L === "en" ? "Remote switch" : "遠端切換"}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.rows.map((r) => (
+              <tr key={r.option}>
+                <td>{r.option}</td>
+                <td>
+                  <span className={`maturity-badge ${r.kind === "traditional" ? "standard" : "emerging"}`}>
+                    {r.kind === "traditional" ? (L === "en" ? "Traditional" : "傳統") : (L === "en" ? "New" : "新")}
+                  </span>
+                </td>
+                <td>{r.footprint_mm2 == null ? "—" : `~${r.footprint_mm2} mm²`}</td>
+                <td>{r.power_index == null ? "—" : r.power_index}</td>
+                <td>{r.bom_index == null ? "—" : r.bom_index}</td>
+                <td>{r.provisioning}</td>
+                <td>{r.remote_switchable ? "✓" : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div className="research-section">

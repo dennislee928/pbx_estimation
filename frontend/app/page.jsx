@@ -45,6 +45,7 @@ const NAV_ITEMS = [
       { id: "04_survival_analysis", label: t("report04"), file: `${BASE}/reports/04_survival_analysis.html` },
       { id: "06_product_research", label: t("report06"), file: `${BASE}/reports/06_product_research.html` },
       { id: "07_tech_alternatives", label: t("report07"), file: `${BASE}/reports/07_tech_alternatives.html` },
+      { id: "09_sim_connectivity", label: t("report09"), file: `${BASE}/reports/09_sim_connectivity_analysis.html` },
     ],
   },
   {

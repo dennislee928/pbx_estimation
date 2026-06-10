@@ -733,6 +733,11 @@ table.registry-table tr:nth-child(even) {
   padding-top: 10px;
   margin-top: 4px;
 }
+.sim-note {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-style: italic;
+}
 
 @media (max-width: 920px) {
   .app-body,
