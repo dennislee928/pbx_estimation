@@ -105,7 +105,8 @@ jobs:
             04_survival_analysis \
             05_verify_pipeline \
             06_product_research \
-            07_tech_alternatives
+            07_tech_alternatives \
+            09_sim_connectivity_analysis
           do
             papermill "notebooks/${nb}.ipynb" "notebooks/${nb}_output.ipynb" --log-output --progress-bar
           done
