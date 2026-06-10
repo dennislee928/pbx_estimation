@@ -1,0 +1,105 @@
+{
+  "baseline_note_en": "Power index is relative to a removable SIM (=100). BOM index is relative SIM-related bill-of-materials cost.",
+  "baseline_note_zh": "功耗指數以可插拔 SIM 為基準（=100）。BOM 指數為 SIM 相關物料成本的相對值。",
+  "rows": [
+    {
+      "option": "Analog PSTN line",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": 60.0,
+      "provisioning": "Physical wiring",
+      "remote_switchable": false,
+      "kind": "traditional"
+    },
+    {
+      "option": "Wired Ethernet/IP",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": 50.0,
+      "provisioning": "Physical wiring / DHCP",
+      "remote_switchable": false,
+      "kind": "traditional"
+    },
+    {
+      "option": "Removable SIM (2FF/3FF/4FF)",
+      "footprint_mm2": 120.0,
+      "power_index": 100.0,
+      "bom_index": 100.0,
+      "provisioning": "Manual card swap",
+      "remote_switchable": false,
+      "kind": "traditional"
+    },
+    {
+      "option": "eSIM (Embedded SIM)",
+      "footprint_mm2": 30.0,
+      "power_index": 100.0,
+      "bom_index": 70.0,
+      "provisioning": "OTA RSP (SGP.22)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "iSIM (Integrated SIM)",
+      "footprint_mm2": 1.0,
+      "power_index": 30.0,
+      "bom_index": 25.0,
+      "provisioning": "OTA RSP via eIM (SGP.42)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "SoftSIM / vSIM (Software / Virtual SIM)",
+      "footprint_mm2": 0.0,
+      "power_index": 5.0,
+      "bom_index": 0.0,
+      "provisioning": "Software / cloud download",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "GSMA SGP.32 (IoT eSIM / RSP)",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": null,
+      "provisioning": "eIM RSP (SMS-free)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "GSMA SGP.41 / SGP.42 (iSIM)",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": null,
+      "provisioning": "eIM RSP (SMS-free)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "NTN (Non-Terrestrial Networks / Direct-to-Cell)",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": null,
+      "provisioning": "Inherited (satellite handover)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "5G-Advanced (5.5G)",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": null,
+      "provisioning": "Slice-aware (SIM-bound)",
+      "remote_switchable": true,
+      "kind": "new"
+    },
+    {
+      "option": "6G Connectivity (Future)",
+      "footprint_mm2": null,
+      "power_index": null,
+      "bom_index": null,
+      "provisioning": "Research",
+      "remote_switchable": false,
+      "kind": "new"
+    }
+  ]
+}
