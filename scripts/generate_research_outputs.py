@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.research.product_researcher import analyze_registry, summarize_registry
 from src.research.solution_crawler import discover_solution_catalog
+from src.research.sim_technologies import build_sim_catalog
 from src.research.tech_researcher import generate_awesome_list
 from src.research.transport_taxonomy import TRANSPORT_SCHEMA_VERSION, LABEL_DICTIONARY_VERSION
 
@@ -338,6 +339,7 @@ def main() -> None:
     _write_json(FRONTEND_DATA / "crawler_discoveries.json", discover_solution_catalog())
     _write_json(FRONTEND_DATA / "crawler_taxonomy.json", CRAWLER_TAXONOMY)
     _write_json(FRONTEND_DATA / "research_sources.json", SOURCES)
+    _write_json(FRONTEND_DATA / "sim_technologies.json", build_sim_catalog())
     _update_readme_summary(registry, awesome)
 
     for lang in ("en", "zh"):
