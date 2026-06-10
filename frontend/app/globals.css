@@ -616,6 +616,124 @@ table.registry-table tr:nth-child(even) {
   color: #991b1b;
 }
 
+/* --- SIM technologies page --- */
+.maturity-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.maturity-badge.mainstream { background: #dbeafe; color: #1e40af; }
+.maturity-badge.emerging { background: #d1fae5; color: #065f46; }
+.maturity-badge.frontier { background: #ede9fe; color: #5b21b6; }
+.maturity-badge.standard { background: #fef3c7; color: #92400e; }
+
+.sim-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.sim-ladder-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f1f5f9;
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.sim-ladder-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e40af;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.sim-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+.sim-card {
+  border: 1px solid #dbe3ea;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+.sim-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sim-card-head h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+.sim-form {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 6px 0;
+}
+.sim-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+.sim-meta dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.sim-meta dd {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+}
+.sim-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.sim-tag {
+  font-size: 0.68rem;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.sim-block strong {
+  font-size: 0.78rem;
+}
+.sim-block ul {
+  margin: 4px 0 10px;
+  padding-left: 18px;
+}
+.sim-block li {
+  font-size: 0.8rem;
+}
+.sim-pbx {
+  font-size: 0.82rem;
+  border-top: 1px solid #eef2f6;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
 @media (max-width: 920px) {
   .app-body,
   .overview-hero,

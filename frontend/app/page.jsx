@@ -53,6 +53,7 @@ const NAV_ITEMS = [
       { id: "market_brief", label: t("marketBrief"), page: "market-brief" },
       { id: "product_research", label: t("productResearch"), page: "product-research" },
       { id: "tech_alternatives", label: t("techAlternatives"), page: "tech-alternatives" },
+      { id: "sim_technologies", label: t("simTechnologies"), page: "sim-technologies" },
     ],
   },
 ];
