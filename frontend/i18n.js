@@ -51,6 +51,7 @@ const translations = {
     report06: "Product Research Analysis",
     report07: "Tech Alternatives",
     report09: "SIM Connectivity Analysis",
+    report10: "Financial Hypothesis Test",
     languageToggle: "繁體中文",
     loading: "Loading...",
     overview: "Overview",
