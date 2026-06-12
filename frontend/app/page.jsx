@@ -46,6 +46,7 @@ const NAV_ITEMS = [
       { id: "06_product_research", label: t("report06"), file: `${BASE}/reports/06_product_research.html` },
       { id: "07_tech_alternatives", label: t("report07"), file: `${BASE}/reports/07_tech_alternatives.html` },
       { id: "09_sim_connectivity", label: t("report09"), file: `${BASE}/reports/09_sim_connectivity_analysis.html` },
+      { id: "10_financial_hypothesis", label: t("report10"), file: `${BASE}/reports/10_financial_hypothesis.html` },
     ],
   },
   {
@@ -55,6 +56,7 @@ const NAV_ITEMS = [
       { id: "product_research", label: t("productResearch"), page: "product-research" },
       { id: "tech_alternatives", label: t("techAlternatives"), page: "tech-alternatives" },
       { id: "sim_technologies", label: t("simTechnologies"), page: "sim-technologies" },
+      { id: "financial_hypothesis", label: t("financialHypothesis"), page: "financial-hypothesis" },
     ],
   },
 ];
