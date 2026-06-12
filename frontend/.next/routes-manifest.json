@@ -54,6 +54,12 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/financial-hypothesis",
+      "regex": "^/financial\\-hypothesis(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/financial\\-hypothesis(?:/)?$"
+    },
+    {
       "page": "/market-brief",
       "regex": "^/market\\-brief(?:/)?$",
       "routeKeys": {},

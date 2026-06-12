@@ -1,8 +1,9 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/financial-hypothesis/page": "app/financial-hypothesis/page.js",
   "/page": "app/page.js",
-  "/market-brief/page": "app/market-brief/page.js",
   "/product-research/page": "app/product-research/page.js",
+  "/market-brief/page": "app/market-brief/page.js",
   "/sim-technologies/page": "app/sim-technologies/page.js",
   "/tech-alternatives/page": "app/tech-alternatives/page.js"
 }
