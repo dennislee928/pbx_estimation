@@ -9,6 +9,7 @@ const translations = {
     productResearch: "產品研究",
     techAlternatives: "技術替代方案",
     simTechnologies: "SIM 與連接技術",
+    financialHypothesis: "財務假設檢定",
     globalRegistry: "全球解決方案目錄",
     report01: "資料擷取",
     report02: "探索式資料分析",
