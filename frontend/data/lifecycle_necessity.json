@@ -1,0 +1,33 @@
+{
+  "title_en": "Necessity Test — Technical / Lifecycle",
+  "title_zh": "必要性檢定—技術／生命週期",
+  "method_en": "One-sided exact binomial test on the end-of-life (EOL) share of the catalogued solution base.",
+  "method_zh": "對目錄方案基數的生命終止（EOL）比例進行單尾精確二項檢定。",
+  "alpha": 0.05,
+  "null_p": 0.5,
+  "n": 155,
+  "k_eol": 21,
+  "p_hat": 0.1355,
+  "p_value": 1.0,
+  "ci_low": 0.0965,
+  "ci_high": 1.0,
+  "reject_h0": false,
+  "verdict_en": "Replacement not established on lifecycle alone",
+  "verdict_zh": "僅生命週期不足以證明汰換必要",
+  "lifecycle_counts": {
+    "cutting_edge": 100,
+    "mature_active": 31,
+    "most_used_current": 3,
+    "most_used_eol": 21
+  },
+  "sources": [
+    {
+      "name": "Hypothesis-testing framework (yongxi-stat)",
+      "url": "https://www.yongxi-stat.com/hypothesis-stat/"
+    },
+    {
+      "name": "Solution registry (notebook 06)",
+      "url": "https://github.com/dennislee928/pbx_estimation/blob/main/notebooks/06_product_research.ipynb"
+    }
+  ]
+}

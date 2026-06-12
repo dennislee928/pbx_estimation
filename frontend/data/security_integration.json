@@ -1,0 +1,44 @@
+{
+  "title_en": "Necessity Test — Cybersecurity & Integration",
+  "title_zh": "必要性檢定—資安與整合",
+  "method_en": "Two coupled one-sided t-tests; the joint H0 is rejected only if BOTH the security and integration legs reject.",
+  "method_zh": "兩個耦合單尾 t 檢定；資安與整合兩面向皆拒絕時才拒絕聯合 H0。",
+  "alpha": 0.05,
+  "security": {
+    "n": 131,
+    "mean": 1.359,
+    "popmean": 5.0,
+    "direction": "greater",
+    "t_stat": -27.897,
+    "p_value": 1.0,
+    "cohens_d": -2.437,
+    "ci_low": 1.143,
+    "ci_high": 1.575,
+    "reject_h0": false
+  },
+  "integration": {
+    "n": 131,
+    "mean": 4.008,
+    "popmean": 5,
+    "direction": "less",
+    "t_stat": -15.37,
+    "p_value": 2.5022221793222277e-31,
+    "cohens_d": -1.343,
+    "ci_low": 3.901,
+    "ci_high": 4.115,
+    "reject_h0": true
+  },
+  "joint_reject_h0": false,
+  "verdict_en": "Security + integration case not established",
+  "verdict_zh": "資安＋整合面向尚不足以證明汰換",
+  "sources": [
+    {
+      "name": "Hypothesis-testing framework (yongxi-stat)",
+      "url": "https://www.yongxi-stat.com/hypothesis-stat/"
+    },
+    {
+      "name": "PSTN alternatives catalog (notebook 07)",
+      "url": "https://github.com/dennislee928/pbx_estimation/blob/main/notebooks/07_tech_alternatives.ipynb"
+    }
+  ]
+}

@@ -108,7 +108,9 @@ jobs:
             07_tech_alternatives \
             08_conclusion \
             09_sim_connectivity_analysis \
-            10_financial_hypothesis
+            10_financial_hypothesis \
+            11_lifecycle_necessity \
+            12_security_integration
           do
             papermill "notebooks/${nb}.ipynb" "notebooks/${nb}_output.ipynb" --log-output --progress-bar
           done

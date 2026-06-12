@@ -47,6 +47,8 @@ const NAV_ITEMS = [
       { id: "07_tech_alternatives", label: t("report07"), file: `${BASE}/reports/07_tech_alternatives.html` },
       { id: "09_sim_connectivity", label: t("report09"), file: `${BASE}/reports/09_sim_connectivity_analysis.html` },
       { id: "10_financial_hypothesis", label: t("report10"), file: `${BASE}/reports/10_financial_hypothesis.html` },
+      { id: "11_lifecycle_necessity", label: t("report11"), file: `${BASE}/reports/11_lifecycle_necessity.html` },
+      { id: "12_security_integration", label: t("report12"), file: `${BASE}/reports/12_security_integration.html` },
     ],
   },
   {
@@ -57,6 +59,8 @@ const NAV_ITEMS = [
       { id: "tech_alternatives", label: t("techAlternatives"), page: "tech-alternatives" },
       { id: "sim_technologies", label: t("simTechnologies"), page: "sim-technologies" },
       { id: "financial_hypothesis", label: t("financialHypothesis"), page: "financial-hypothesis" },
+      { id: "lifecycle_necessity", label: t("lifecycleNecessity"), page: "lifecycle-necessity" },
+      { id: "security_integration", label: t("securityIntegration"), page: "security-integration" },
     ],
   },
 ];

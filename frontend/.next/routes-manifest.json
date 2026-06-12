@@ -2,15 +2,15 @@
   "version": 3,
   "pages404": true,
   "caseSensitive": false,
-  "basePath": "/pbx_estimation/zh",
+  "basePath": "/pbx_estimation/en",
   "redirects": [
     {
-      "source": "/pbx_estimation/zh",
-      "destination": "/pbx_estimation/zh/",
+      "source": "/pbx_estimation/en",
+      "destination": "/pbx_estimation/en/",
       "basePath": false,
       "internal": true,
       "statusCode": 308,
-      "regex": "^/pbx_estimation/zh$"
+      "regex": "^/pbx_estimation/en$"
     },
     {
       "source": "/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/",
@@ -60,6 +60,12 @@
       "namedRegex": "^/financial\\-hypothesis(?:/)?$"
     },
     {
+      "page": "/lifecycle-necessity",
+      "regex": "^/lifecycle\\-necessity(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/lifecycle\\-necessity(?:/)?$"
+    },
+    {
       "page": "/market-brief",
       "regex": "^/market\\-brief(?:/)?$",
       "routeKeys": {},
@@ -70,6 +76,12 @@
       "regex": "^/product\\-research(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/product\\-research(?:/)?$"
+    },
+    {
+      "page": "/security-integration",
+      "regex": "^/security\\-integration(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/security\\-integration(?:/)?$"
     },
     {
       "page": "/sim-technologies",
