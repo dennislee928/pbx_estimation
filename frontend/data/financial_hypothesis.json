@@ -75,11 +75,11 @@
     {
       "scope": "Taiwan",
       "horizon_years": 5,
-      "mean_delta_usd": -529.0,
-      "ci_low_usd": -534.0,
-      "ci_high_usd": -524.0,
+      "mean_delta_usd": -440.5,
+      "ci_low_usd": -445.6,
+      "ci_high_usd": -435.4,
       "p_value": 1.0,
-      "cohens_d": -1.462,
+      "cohens_d": -1.191,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
@@ -87,11 +87,11 @@
     {
       "scope": "Worldwide",
       "horizon_years": 5,
-      "mean_delta_usd": -532.6,
-      "ci_low_usd": -534.3,
-      "ci_high_usd": -530.9,
+      "mean_delta_usd": -444.7,
+      "ci_low_usd": -446.4,
+      "ci_high_usd": -443.0,
       "p_value": 1.0,
-      "cohens_d": -1.475,
+      "cohens_d": -1.205,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
@@ -99,11 +99,11 @@
     {
       "scope": "Taiwan",
       "horizon_years": 10,
-      "mean_delta_usd": -1041.0,
-      "ci_low_usd": -1050.3,
-      "ci_high_usd": -1031.8,
+      "mean_delta_usd": -1006.7,
+      "ci_low_usd": -1016.0,
+      "ci_high_usd": -997.4,
       "p_value": 1.0,
-      "cohens_d": -1.558,
+      "cohens_d": -1.5,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
@@ -111,11 +111,11 @@
     {
       "scope": "Worldwide",
       "horizon_years": 10,
-      "mean_delta_usd": -1044.4,
-      "ci_low_usd": -1047.5,
-      "ci_high_usd": -1041.4,
+      "mean_delta_usd": -1009.7,
+      "ci_low_usd": -1012.8,
+      "ci_high_usd": -1006.6,
       "p_value": 1.0,
-      "cohens_d": -1.572,
+      "cohens_d": -1.513,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"

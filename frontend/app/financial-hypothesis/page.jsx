@@ -63,8 +63,13 @@ export default function FinancialHypothesisPage() {
         <h3>{en ? "Hypothesis test results" : "假設檢定結果"}</h3>
         <p>
           {en
-            ? "H₀: replacing is NOT financially reasonable (mean NPV(keep − replace) ≤ 0). Δ > 0 ⇒ replacement saves money. Reject H₀ at p < 0.05."
-            : "H₀：汰換不具財務合理性（NPV(續用 − 汰換) 平均值 ≤ 0）。Δ > 0 代表汰換可省錢。p < 0.05 時拒絕 H₀。"}
+            ? "One-sided test of H₀: replacing is NOT financially reasonable (mean NPV(keep − replace) ≤ 0) vs H₁: Δ > 0 (replacement is cheaper). Reject H₀ at p < 0.05."
+            : "單尾檢定 H₀：汰換不具財務合理性（NPV(續用 − 汰換) 平均值 ≤ 0），對立 H₁：Δ > 0（汰換較便宜）。p < 0.05 時拒絕 H₀。"}
+        </p>
+        <p className="subtitle">
+          {en
+            ? "Note: every Δ here is negative and p ≈ 1.000 — that is not a bug. A one-sided test for Δ > 0 returns p ≈ 1 precisely because the evidence points the other way: on pure recurring cost the cloud subscription stream outweighs physical maintenance, so H₀ is not rejected at any horizon. This excludes IT labour, hardware refresh, downtime and forced EOL migration, which is why vendor 'fully-loaded' TCO studies still favour cloud — see the reasoning in the report notebook."
+            : "註：此處每個 Δ 皆為負且 p ≈ 1.000——這並非錯誤。對 Δ > 0 的單尾檢定回傳 p ≈ 1，正是因為證據方向相反：僅就經常性現金成本，雲端訂閱費用流高於實體維護費，故各期間皆無法拒絕 H₀。此模型未計入 IT 人力、硬體汰換、停機與被迫的 EOL 遷移，這也是業界『全載』TCO 研究仍偏好雲端的原因——詳見報告筆記本的論述。"}
         </p>
         <table className="comparison-table">
           <thead>
