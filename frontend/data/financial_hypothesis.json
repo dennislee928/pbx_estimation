@@ -1,0 +1,124 @@
+{
+  "title_en": "Financial Hypothesis Test — Replacing Physical PBX",
+  "title_zh": "財務假設檢定 — 汰換實體 PBX",
+  "method_en": "One-sided one-sample t-tests on a Monte-Carlo TCO model built from real market prices; H0 = replacing is NOT financially reasonable (mean NPV(keep-replace) <= 0).",
+  "method_zh": "以真實市場價格建構之蒙地卡羅 TCO 模型進行單尾單樣本 t 檢定；H0 = 汰換不具財務合理性（NPV(續用-汰換) 平均值 <= 0）。",
+  "assumptions": {
+    "discount_rate": 0.03,
+    "physical_capex_usd": [
+      500.0,
+      1000.0
+    ],
+    "physical_maint_frac": [
+      0.15,
+      0.2
+    ],
+    "cloud_usd_per_seat_month": [
+      15.0,
+      35.0
+    ],
+    "monte_carlo_draws": 20000,
+    "note_en": "Delta is per-seat NPV(keep - replace): positive => replacement saves money. With pure operating cost and a 3% discount rate the cloud subscription stream exceeds physical maintenance, so H0 is not rejected at 3/5/10y.",
+    "note_zh": "Delta 為每席位 NPV(續用 - 汰換)：正值代表汰換可省錢。在純營運成本與 3% 折現率下，雲端訂閱費用流高於實體維護費，故 3/5/10 年皆無法拒絕 H0。"
+  },
+  "sources": [
+    {
+      "name": "PBX.IM 2026",
+      "url": "https://www.pbx.im/blog/pbx-phone-system-cost"
+    },
+    {
+      "name": "JustCall 2026",
+      "url": "https://justcall.io/blog/pbx-phone-system-cost.html"
+    },
+    {
+      "name": "CloudTalk 2026",
+      "url": "https://www.cloudtalk.io/top-cloud-pbx/"
+    },
+    {
+      "name": "Avoxi 2025",
+      "url": "https://www.avoxi.com/blog/hosted-pbx-pricing/"
+    },
+    {
+      "name": "VitalPBX 2025",
+      "url": "https://vitalpbx.com/blog/on-prem-pbx-in-2025-full-cost-breakdown-and-is-it-still-worth-it/"
+    },
+    {
+      "name": "bluIP 2026",
+      "url": "https://www.bluip.com/blog/artificial-intelligence/cloud-pbx-vs-on-premises-pbx-comparison"
+    }
+  ],
+  "rows": [
+    {
+      "scope": "Taiwan",
+      "horizon_years": 3,
+      "mean_delta_usd": -217.9,
+      "ci_low_usd": -221.2,
+      "ci_high_usd": -214.7,
+      "p_value": 1.0,
+      "cohens_d": -0.933,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    },
+    {
+      "scope": "Worldwide",
+      "horizon_years": 3,
+      "mean_delta_usd": -222.4,
+      "ci_low_usd": -223.5,
+      "ci_high_usd": -221.3,
+      "p_value": 1.0,
+      "cohens_d": -0.954,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    },
+    {
+      "scope": "Taiwan",
+      "horizon_years": 5,
+      "mean_delta_usd": -529.0,
+      "ci_low_usd": -534.0,
+      "ci_high_usd": -524.0,
+      "p_value": 1.0,
+      "cohens_d": -1.462,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    },
+    {
+      "scope": "Worldwide",
+      "horizon_years": 5,
+      "mean_delta_usd": -532.6,
+      "ci_low_usd": -534.3,
+      "ci_high_usd": -530.9,
+      "p_value": 1.0,
+      "cohens_d": -1.475,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    },
+    {
+      "scope": "Taiwan",
+      "horizon_years": 10,
+      "mean_delta_usd": -1041.0,
+      "ci_low_usd": -1050.3,
+      "ci_high_usd": -1031.8,
+      "p_value": 1.0,
+      "cohens_d": -1.558,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    },
+    {
+      "scope": "Worldwide",
+      "horizon_years": 10,
+      "mean_delta_usd": -1044.4,
+      "ci_low_usd": -1047.5,
+      "ci_high_usd": -1041.4,
+      "p_value": 1.0,
+      "cohens_d": -1.572,
+      "reject_h0": false,
+      "verdict_en": "Not financially justified on cost alone",
+      "verdict_zh": "僅就成本而言，財務上不成立"
+    }
+  ]
+}
