@@ -127,6 +127,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md frontend/data/*.json
           git add -f data/processed/solution_registry.csv data/processed/awesome_list.csv
+          git add -f data/processed/replacement_necessity_lifecycle.csv data/processed/replacement_necessity_security.csv
           git add -f reports/global_research_report_*.md reports/global_research_report_*.html reports/index.html
           if git diff --cached --quiet; then
             echo "No validated crawler snapshot changes to commit."
