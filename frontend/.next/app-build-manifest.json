@@ -20,7 +20,14 @@
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
       "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/financial-hypothesis/page-b4e72bb3b78590ab.js"
+      "static/chunks/app/financial-hypothesis/page-5604d77d07aaf6b4.js"
+    ],
+    "/sim-technologies/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/sim-technologies/page-61847da040cae871.js"
     ],
     "/page": [
       "static/chunks/webpack-49944f811947ec1e.js",
@@ -31,27 +38,12 @@
       "static/chunks/434-cbb735894643b3d7.js",
       "static/chunks/app/page-a5ccbd756e609c44.js"
     ],
-    "/product-research/page": [
-      "static/chunks/webpack-49944f811947ec1e.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-fa1710c2a7f6b618.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/711-a897da8701b627f0.js",
-      "static/chunks/app/product-research/page-8ee2ff0f97f84e6c.js"
-    ],
     "/market-brief/page": [
       "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
       "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
       "static/chunks/app/market-brief/page-7319a22db3d4feb2.js"
-    ],
-    "/sim-technologies/page": [
-      "static/chunks/webpack-49944f811947ec1e.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-fa1710c2a7f6b618.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/sim-technologies/page-61847da040cae871.js"
     ],
     "/tech-alternatives/page": [
       "static/chunks/webpack-49944f811947ec1e.js",
@@ -61,6 +53,14 @@
       "static/chunks/711-a897da8701b627f0.js",
       "static/chunks/434-cbb735894643b3d7.js",
       "static/chunks/app/tech-alternatives/page-c18dcea1d526ffea.js"
+    ],
+    "/product-research/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/711-a897da8701b627f0.js",
+      "static/chunks/app/product-research/page-8ee2ff0f97f84e6c.js"
     ]
   }
 }
