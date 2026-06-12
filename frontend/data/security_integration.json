@@ -1,36 +1,83 @@
 {
   "title_en": "Necessity Test — Cybersecurity & Integration",
   "title_zh": "必要性檢定—資安與整合",
-  "method_en": "Two coupled one-sided t-tests; the joint H0 is rejected only if BOTH the security and integration legs reject.",
-  "method_zh": "兩個耦合單尾 t 檢定；資安與整合兩面向皆拒絕時才拒絕聯合 H0。",
+  "method_en": "The kept physical PBX is the risk baseline (plaintext SIP/UDP 5060, no TLS 1.3). Two coupled one-sided t-tests on the like-for-like IP alternatives; the joint H0 is rejected only if BOTH the security and integration legs reject.",
+  "method_zh": "以保留的實體 PBX 為風險基準（SIP UDP 5060 明文、不支援 TLS 1.3）。對等可替換的 IP 替代方案上做兩個耦合單尾 t 檢定；資安與整合兩面向皆拒絕時才拒絕聯合 H0。",
   "alpha": 0.05,
+  "hypothesis_a_en": "(A) Security necessity — H0: mean security_score ≤ 3.0 (legacy plaintext PBX, no TLS 1.3); H1: > 3.0.",
+  "hypothesis_a_zh": "(A) 資安必要性—H0：平均 security_score ≤ 3.0（舊式明文 PBX，不支援 TLS 1.3）；H1：> 3.0。",
+  "hypothesis_b_en": "(B) Integration feasibility — H0: mean complexity ≥ 5 (Medium-High+); H1: < 5.",
+  "hypothesis_b_zh": "(B) 整合可行性—H0：平均複雜度 ≥ 5（偏高）；H1：< 5。",
+  "population_note_en": "Test population: 53 network-reachable (IP) alternatives — the like-for-like replacements for PBX signalling. The 78 physical/local-bus alternatives are controlled by isolation (mean score 3.72), not network crypto, and are reported separately.",
+  "population_note_zh": "檢定母體：53 個可連網（IP）替代方案，與 PBX 訊號等價可替換；另有 78 個實體／本地匯流排方案以隔離防護（平均分數 3.72），非網路加密，另行列示。",
   "security": {
-    "n": 131,
-    "mean": 1.359,
-    "popmean": 5.0,
+    "n": 53,
+    "mean": 3.981,
+    "popmean": 3.0,
     "direction": "greater",
-    "t_stat": -27.897,
-    "p_value": 1.0,
-    "cohens_d": -2.437,
-    "ci_low": 1.143,
-    "ci_high": 1.575,
-    "reject_h0": false
-  },
-  "integration": {
-    "n": 131,
-    "mean": 4.008,
-    "popmean": 5,
-    "direction": "less",
-    "t_stat": -15.37,
-    "p_value": 2.502222179322228e-31,
-    "cohens_d": -1.343,
-    "ci_low": 3.901,
-    "ci_high": 4.115,
+    "t_stat": 8.969,
+    "p_value": 1.939457191479976e-12,
+    "cohens_d": 1.232,
+    "ci_low": 3.798,
+    "ci_high": 4.164,
     "reject_h0": true
   },
-  "joint_reject_h0": false,
-  "verdict_en": "Security + integration case not established",
-  "verdict_zh": "資安＋整合面向尚不足以證明汰換",
+  "integration": {
+    "n": 53,
+    "mean": 3.925,
+    "popmean": 5,
+    "direction": "less",
+    "t_stat": -10.728,
+    "p_value": 4.342897550908152e-15,
+    "cohens_d": -1.474,
+    "ci_low": 3.757,
+    "ci_high": 4.092,
+    "reject_h0": true
+  },
+  "ip_friction_mean": 1.08,
+  "joint_reject_h0": true,
+  "verdict_en": "Replacing the kept plaintext PBX is a security upgrade and is integration-feasible",
+  "verdict_zh": "汰換保留的明文 PBX 屬資安升級且整合可行",
+  "baseline_risks": [
+    {
+      "text_en": "SIP signalling defaults to plaintext UDP 5060; INVITE/REGISTER and RTP media are readable on-path unless explicitly moved to TLS 5061 + SRTP.",
+      "text_zh": "SIP 預設以 UDP 5060 明文傳輸，除非改用 TLS 5061 + SRTP，否則 INVITE/REGISTER 與 RTP 媒體在路徑上可被讀取。",
+      "source_name": "TelcoBridges — SBC TLS/SRTP",
+      "source_url": "https://telcobridges.com/learning/voip-security/sbc-tls-srtp-configuration-guide/"
+    },
+    {
+      "text_en": "Legacy IP-PBXs, analog adapters and older SIP phones support only plain RTP and pre-1.3 TLS (1.0/1.1) — i.e. no TLS 1.3. EOS/SOL-class units pass signalling in plaintext.",
+      "text_zh": "舊型 IP-PBX、類比轉接器與舊 SIP 話機僅支援明文 RTP 與 1.3 以前的 TLS（1.0/1.1）—— 即不支援 TLS 1.3。EOS／SOL 等線路以明文傳訊。",
+      "source_name": "LiveKit — Understanding TLS in SIP",
+      "source_url": "https://livekit.com/blog/understanding-tls-in-sip"
+    },
+    {
+      "text_en": "Exposed SIP ports are fingerprinted and brute-forced within minutes by free tools (SIPVicious); SS7/SMS interception is a known side-channel.",
+      "text_zh": "暴露的 SIP 埠數分鐘內即被 SIPVicious 等免費工具指紋掃描與暴力破解；SS7／SMS 攔截為已知旁路。",
+      "source_name": "TelcoBridges — VoIP security",
+      "source_url": "https://telcobridges.com/learning/voip-security/"
+    }
+  ],
+  "integration_friction": [
+    {
+      "text_en": "Cross-vendor SIP breaks from OEM tweaks: proprietary header fields and non-RFC message sequences a carrier SBC won't handle by default.",
+      "text_zh": "跨廠商 SIP 因 OEM 各自微調而出問題：專有標頭欄位與非 RFC 訊息序列，運營商 SBC 預設無法處理。",
+      "source_name": "ClearlyIP — multi-PBX guide",
+      "source_url": "https://go.clearlyip.com/articles/multi-pbx-voip-carrier-management-guide"
+    },
+    {
+      "text_en": "Cisco CUCM requires documented per-PBX technotes for RFC-compliance issues in SIP call setup.",
+      "text_zh": "思科 CUCM 需逐型技術文件處理 SIP 呼叫建立的 RFC 相容性問題。",
+      "source_name": "Cisco — CUCM interop technote",
+      "source_url": "https://www.cisco.com/c/en/us/support/docs/unified-communications/unified-communications-manager-callmanager/118765-technote-cucm-00.html"
+    },
+    {
+      "text_en": "Panasonic cannot guarantee SIP-extension operation in all environments; legacy PBXs use proprietary closed architectures, making third-party integration costly — a bounded one-time bridging cost, not an end-state blocker.",
+      "text_zh": "松下無法保證所有環境下 SIP 分機運作；舊 PBX 採專有封閉架構，第三方整合成本高 —— 屬一次性橋接成本，非終態障礙。",
+      "source_name": "VitalPBX — PBX integration",
+      "source_url": "https://vitalpbx.com/blog/stop-communication-chaos-fix-pbx-integration-and-boost-efficiency/"
+    }
+  ],
   "sources": [
     {
       "name": "Hypothesis-testing framework (yongxi-stat)",
@@ -39,6 +86,10 @@
     {
       "name": "PSTN alternatives catalog (notebook 07)",
       "url": "https://github.com/dennislee928/pbx_estimation/blob/main/notebooks/07_tech_alternatives.ipynb"
+    },
+    {
+      "name": "SIP trunk encryption (didlogic)",
+      "url": "https://didlogic.com/blog/sip-trunks-encryption/"
     }
   ]
 }

@@ -37,26 +37,54 @@ export default function SecurityIntegrationPage() {
       <h2>{pick("title")}</h2>
       <p className="subtitle">{pick("method")}</p>
 
+      {/* Why the kept PBX is the risk */}
+      <div className="research-section">
+        <h3>{en ? "Why the kept PBX is the risk" : "為何「保留 PBX」才是風險"}</h3>
+        <ul>
+          {data.baseline_risks.map((r) => (
+            <li key={r.source_url}>
+              {en ? r.text_en : r.text_zh}{" "}
+              <a href={r.source_url} target="_blank" rel="noreferrer">
+                [{r.source_name}]
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Integration difficulty (heterogeneous vendors) */}
+      <div className="research-section">
+        <h3>{en ? "Integration difficulty (heterogeneous vendors)" : "整合難度（異質廠商）"}</h3>
+        <p className="subtitle">
+          {en
+            ? `The target IP protocols are individually low-friction (mean friction index ${data.ip_friction_mean}/10); the real cost is a bounded one-time bridge to legacy vendors.`
+            : `目標 IP 協定本身整合摩擦低（平均摩擦指數 ${data.ip_friction_mean}/10）；真正成本在於對舊廠商的一次性橋接。`}
+        </p>
+        <ul>
+          {data.integration_friction.map((r) => (
+            <li key={r.source_url}>
+              {en ? r.text_en : r.text_zh}{" "}
+              <a href={r.source_url} target="_blank" rel="noreferrer">
+                [{r.source_name}]
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Hypothesis */}
       <div className="research-section">
         <h3>{en ? "Hypothesis" : "假設"}</h3>
         <ul>
-          <li>
-            {en
-              ? "(A) Security necessity — H₀: mean security_score ≤ 5.0 (physical-PBX baseline); H₁: > 5.0."
-              : "(A) 資安必要性—H₀：平均 security_score ≤ 5.0（實體 PBX 基準）；H₁：> 5.0。"}
-          </li>
-          <li>
-            {en
-              ? "(B) Integration feasibility — H₀: mean complexity ≥ 5 (Medium-High+); H₁: < 5."
-              : "(B) 整合可行性—H₀：平均複雜度 ≥ 5（偏高）；H₁：< 5。"}
-          </li>
+          <li>{en ? data.hypothesis_a_en : data.hypothesis_a_zh}</li>
+          <li>{en ? data.hypothesis_b_en : data.hypothesis_b_zh}</li>
           <li>
             {en
               ? `Joint H₀ rejected only if BOTH legs reject, at α = ${data.alpha}.`
               : `兩面向皆拒絕方拒絕聯合 H₀，α = ${data.alpha}。`}
           </li>
         </ul>
+        <p className="subtitle">{en ? data.population_note_en : data.population_note_zh}</p>
       </div>
 
       {/* Results */}

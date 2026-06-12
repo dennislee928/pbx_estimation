@@ -1,11 +1,11 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
+  "/lifecycle-necessity/page": "app/lifecycle-necessity/page.js",
+  "/financial-hypothesis/page": "app/financial-hypothesis/page.js",
   "/market-brief/page": "app/market-brief/page.js",
   "/product-research/page": "app/product-research/page.js",
-  "/lifecycle-necessity/page": "app/lifecycle-necessity/page.js",
   "/security-integration/page": "app/security-integration/page.js",
-  "/tech-alternatives/page": "app/tech-alternatives/page.js",
   "/sim-technologies/page": "app/sim-technologies/page.js",
-  "/financial-hypothesis/page": "app/financial-hypothesis/page.js"
+  "/tech-alternatives/page": "app/tech-alternatives/page.js"
 }

@@ -1,80 +1,80 @@
 {
   "pages": {
     "/_not-found/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
       "static/chunks/app/_not-found/page-3d4d80e828381da1.js"
     ],
     "/layout": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
       "static/css/f34ef6034cf3e62a.css",
       "static/chunks/app/layout-fa2fde46aef04ad8.js"
     ],
     "/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/711-b53dcd2134f30bfa.js",
+      "static/chunks/711-dcb4b760978169f7.js",
       "static/chunks/434-cbb735894643b3d7.js",
-      "static/chunks/app/page-70eeae01dbe486a5.js"
-    ],
-    "/market-brief/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/market-brief/page-787443802152a6a6.js"
-    ],
-    "/product-research/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/711-b53dcd2134f30bfa.js",
-      "static/chunks/app/product-research/page-8ee2ff0f97f84e6c.js"
+      "static/chunks/app/page-99d99ea34e0d473d.js"
     ],
     "/lifecycle-necessity/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/lifecycle-necessity/page-f2d3ea14f6aebdfe.js"
-    ],
-    "/security-integration/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/security-integration/page-9a90cbc7b84add1c.js"
-    ],
-    "/tech-alternatives/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/711-b53dcd2134f30bfa.js",
-      "static/chunks/434-cbb735894643b3d7.js",
-      "static/chunks/app/tech-alternatives/page-c18dcea1d526ffea.js"
-    ],
-    "/sim-technologies/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
-      "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/sim-technologies/page-f14ec31a7449eb2a.js"
+      "static/chunks/app/lifecycle-necessity/page-c882efbaf54da574.js"
     ],
     "/financial-hypothesis/page": [
-      "static/chunks/webpack-f2a79b2a390c2954.js",
+      "static/chunks/webpack-49944f811947ec1e.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-9dd829579446eb68.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
       "static/chunks/main-app-2b06a0db1f101fb0.js",
-      "static/chunks/app/financial-hypothesis/page-c83c54d1ab11c951.js"
+      "static/chunks/app/financial-hypothesis/page-f2b8d82e0aa479d0.js"
+    ],
+    "/market-brief/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/market-brief/page-dce68df4ca5a83f2.js"
+    ],
+    "/product-research/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/711-dcb4b760978169f7.js",
+      "static/chunks/app/product-research/page-8ee2ff0f97f84e6c.js"
+    ],
+    "/security-integration/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/security-integration/page-214f325f43edf37f.js"
+    ],
+    "/sim-technologies/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/app/sim-technologies/page-8a90dd3a3606c994.js"
+    ],
+    "/tech-alternatives/page": [
+      "static/chunks/webpack-49944f811947ec1e.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-fa1710c2a7f6b618.js",
+      "static/chunks/main-app-2b06a0db1f101fb0.js",
+      "static/chunks/711-dcb4b760978169f7.js",
+      "static/chunks/434-cbb735894643b3d7.js",
+      "static/chunks/app/tech-alternatives/page-c18dcea1d526ffea.js"
     ]
   }
 }
