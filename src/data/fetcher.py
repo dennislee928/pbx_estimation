@@ -20,6 +20,33 @@ def load_config(path: str = "config.yaml") -> dict:
         return yaml.safe_load(f)
 
 
+# The config stores 2-letter codes, but the World Bank API requires ISO3 codes.
+# Taiwan (tw) has no World Bank entry; its indicators come from NCC Taiwan via
+# the supplementary fetcher, so it is intentionally excluded from WB requests.
+WB_ISO3 = {
+    "jp": "JPN",
+    "kr": "KOR",
+    "cn": "CHN",
+    "in": "IND",
+    "gb": "GBR",
+    "de": "DEU",
+    "fr": "FRA",
+    "se": "SWE",
+    "it": "ITA",
+    "us": "USA",
+    "ca": "CAN",
+    "br": "BRA",
+}
+
+
+def to_world_bank_codes(codes: list[str]) -> list[str]:
+    """Map config 2-letter country codes to World Bank ISO3 codes.
+
+    Codes without a World Bank equivalent (e.g. Taiwan) are dropped.
+    """
+    return [WB_ISO3[c] for c in codes if c in WB_ISO3]
+
+
 def fetch_world_bank_single(
     indicator: str,
     countries: list[str],
@@ -40,12 +67,19 @@ def fetch_world_bank_single(
             labels=True,
             time=range(start_year, end_year + 1),
         )
-    except Exception:
-        return pd.DataFrame(columns=["country", "year", "value"])
+    except Exception as exc:
+        raise RuntimeError(
+            f"World Bank API request failed for indicator {indicator!r} "
+            f"and countries {countries}: {exc}"
+        ) from exc
 
     series = series.reset_index()
+    # With labels=True, wbgapi adds a 'Country' name column; keep only the
+    # economy code and the per-year value columns (YRxxxx) for the reshape.
+    year_cols = [c for c in series.columns if c.startswith("YR")]
     series = series.melt(
         id_vars=["economy"],
+        value_vars=year_cols,
         var_name="year",
         value_name="value",
     )
@@ -148,7 +182,7 @@ def fetch_all(
     cache_dir = Path("data/raw") if not force_refetch else None
     wb = fetch_world_bank(
         indicators=indicators,
-        countries=countries_list,
+        countries=to_world_bank_codes(countries_list),
         start_year=cfg["world_bank"]["start_year"],
         end_year=cfg["world_bank"]["end_year"],
         cache_dir=cache_dir,

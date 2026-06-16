@@ -35,20 +35,32 @@ class TestLoadConfig:
         assert dates["tw"] is None  # Taiwan no date
 
 
-class TestWorldBankFallback:
-    def test_fetch_all_fallback(self):
-        """Test that fetch_all produces fallback data when API is unavailable."""
+class TestWorldBankFetch:
+    def test_fetch_all_returns_real_world_bank_data(self):
+        """fetch_all must return real World Bank data, never synthetic."""
         from src.data.fetcher import load_config, fetch_all
         config = load_config()
         result = fetch_all(config, force_refetch=True)
-        assert "world_bank" in result
-        assert "berec_dates" in result
-        assert "itu" in result
-        assert "uk_parliament" in result
-        assert "cept" in result
-        assert "ncc" in result
-        # Even if API fails, we get empty DataFrames
-        assert isinstance(result["world_bank"], pd.DataFrame)
+        for key in ("world_bank", "berec_dates", "itu",
+                    "uk_parliament", "cept", "ncc"):
+            assert key in result
+        wb = result["world_bank"]
+        assert isinstance(wb, pd.DataFrame)
+        # Real data was retrieved (not an empty fabricated fallback).
+        assert not wb.empty
+        assert "GBR" in set(wb["country"])
+
+    def test_world_bank_failure_raises_not_silently_empty(self):
+        """An API failure must raise, never silently return fake/empty data."""
+        from src.data.fetcher import fetch_world_bank_single
+        with pytest.raises(RuntimeError):
+            # Bogus indicator code triggers an API error.
+            fetch_world_bank_single("NOT.A.REAL.CODE", ["GBR"], 2019, 2020)
+
+    def test_to_world_bank_codes_maps_iso3_and_drops_taiwan(self):
+        from src.data.fetcher import to_world_bank_codes
+        assert to_world_bank_codes(["gb", "jp", "us"]) == ["GBR", "JPN", "USA"]
+        assert "tw" not in to_world_bank_codes(["tw", "gb"])
 
 
 class TestLoadConfigInvalidPath:
