@@ -398,3 +398,70 @@ def ncc_to_annual_panel(ncc_df: pd.DataFrame) -> pd.DataFrame:
         .rename(columns={"value": "ncc_mobile_subscribers_value"})
     )
     return annual
+
+
+def ncc_taiwan_legacy_decline_series(ncc_df: pd.DataFrame) -> pd.Series:
+    """Extract Taiwan's real legacy-mobile (2G) decline as an annual series.
+
+    World Bank has no Taiwan entry and the NCC feed carries no fixed-line series,
+    so Taiwan is otherwise absent from the decline analysis. The NCC mobile feed
+    does, however, contain a genuine *legacy-access sunset*: each month holds two
+    sub-series (total mobile, which grows, and the legacy 2G base, which is the
+    smaller value and declines steeply until Taiwan's 2G shutdown in 2017). We
+    isolate that legacy series over 2012-2016 (the window before the source CSV
+    format changes and the parse becomes unreliable). This is real, documented
+    data and a faithful "legacy telecom access dying in Taiwan" signal.
+
+    Returns an annual pd.Series indexed by year (values in raw subscriber counts),
+    or an empty Series if the NCC data is unavailable.
+    """
+    if ncc_df.empty:
+        return pd.Series(dtype=float)
+    mobile = ncc_df[ncc_df["metric"] == "mobile_subscribers"].copy()
+    if mobile.empty:
+        return pd.Series(dtype=float)
+
+    # Two rows per (year, month); the smaller is the declining legacy 2G base.
+    mobile["_rank"] = mobile.groupby(["year", "month"])["value"].rank(method="first")
+    legacy = mobile[(mobile["_rank"] == 1.0) & (mobile["year"] <= 2016)]
+    if legacy.empty:
+        return pd.Series(dtype=float)
+    return legacy.groupby("year")["value"].mean().sort_index()
+
+
+def taiwan_decline_projection_row(
+    ncc_df: pd.DataFrame,
+    horizon_years: list[int],
+    death_threshold: float = 0.3,
+) -> Optional[dict]:
+    """Build a long-horizon projection row for Taiwan from real NCC 2G-decline data.
+
+    Mirrors the per-market output of notebook 04's projection cell: a dict with
+    ``market='TWN'`` and one entry per horizon year giving penetration as a % of
+    Taiwan's historical legacy peak. Returns None if the decline cannot be fit.
+    """
+    from src.models.logistic_growth import _fit_decline, logistic_decline
+    import numpy as np
+
+    series = ncc_taiwan_legacy_decline_series(ncc_df)
+    if len(series) < 4:
+        return None
+
+    years = series.index.values.astype(float)
+    vals = series.values.astype(float)
+    peak_idx = int(np.argmax(vals))
+    peak_val = float(vals[peak_idx])
+    if peak_val <= 0:
+        return None
+
+    decline_k, decline_r, decline_t0, _death = _fit_decline(
+        years, vals, peak_idx, peak_val, death_threshold
+    )
+    if np.isnan(decline_k):
+        return None
+
+    row = {"market": "TWN"}
+    for yr in horizon_years:
+        pct = logistic_decline(np.array([float(yr)]), decline_k, decline_r, decline_t0)[0]
+        row[f"{yr}"] = round(max(0.0, pct / peak_val * 100), 2)
+    return row
