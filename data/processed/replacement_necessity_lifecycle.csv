@@ -1,2 +1,2 @@
 dimension,metric,n,k_eol,p_hat,null_p,alternative,p_value,ci_low,ci_high,alpha,reject_H0,verdict
-technical_lifecycle,eol_share,155,21,0.13548387096774195,0.5,greater,1.0,0.09647686340734034,1.0,0.05,False,replacement_not_established
+technical_lifecycle,eol_share,155,21,0.13548387096774195,0.5,greater,1.0,0.09647686340734032,1.0,0.05,False,replacement_not_established
