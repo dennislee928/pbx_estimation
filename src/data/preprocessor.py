@@ -72,6 +72,18 @@ def impute_missing(
     return result
 
 
+# ISO2 -> ISO3 for every country referenced by config's pstn_switchoff dates.
+# The panel carries World Bank ISO3 codes, but switch-off dates are keyed by
+# the config's 2-letter codes, so they must be translated before matching.
+_ISO2_TO_ISO3 = {
+    "nl": "NLD", "ee": "EST", "de": "DEU", "no": "NOR", "ch": "CHE",
+    "es": "ESP", "se": "SWE", "mt": "MLT", "gb": "GBR", "fr": "FRA",
+    "dk": "DNK", "lu": "LUX", "pt": "PRT", "it": "ITA", "be": "BEL",
+    "tw": "TWN", "jp": "JPN", "kr": "KOR", "cn": "CHN", "in": "IND",
+    "us": "USA", "ca": "CAN", "br": "BRA",
+}
+
+
 def add_pstn_phaseout_feature(
     panel: pd.DataFrame,
     switchoff_dates: dict[str, int | None],
@@ -81,6 +93,9 @@ def add_pstn_phaseout_feature(
 
     has_pstn_phaseout = 1 in years >= switchoff_year for that country.
     Countries with no announced date get 0 for all years.
+
+    Switch-off dates are keyed by the config's 2-letter codes; the panel may
+    use either those or World Bank ISO3 codes, so both spellings are matched.
     """
     result = panel.copy()
     result["has_pstn_phaseout"] = 0
@@ -88,7 +103,11 @@ def add_pstn_phaseout_feature(
     for country, year in switchoff_dates.items():
         if year is None or pd.isna(year):
             continue
-        mask = result[country_col] == country
+        # `no:` (Norway) is parsed by YAML as the boolean False — skip it.
+        if not isinstance(country, str):
+            continue
+        codes = {country, _ISO2_TO_ISO3.get(country, country)}
+        mask = result[country_col].isin(codes)
         result.loc[mask & (result["year"] >= year), "has_pstn_phaseout"] = 1
 
     return result

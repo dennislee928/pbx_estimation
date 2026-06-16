@@ -48,6 +48,28 @@ def fit_cox_model(
     if model_data.empty:
         raise ValueError("No valid data after dropping missing values.")
 
+    # Guard against an under-identified fit. A Cox model needs roughly 5-10
+    # events (observed deaths) per covariate; with real data the PBX/fixed-line
+    # market has "died" in very few countries, so fitting many covariates to a
+    # handful of events yields non-convergence (NaN delta in lifelines). Fail
+    # early with an actionable message instead of a cryptic ConvergenceError.
+    n_events = int(model_data[event_col].sum())
+    if n_events < 2:
+        raise ValueError(
+            f"Cox model is non-identifiable: only {n_events} observed event(s) "
+            f"(deaths) in the data. Increase the event count before fitting — "
+            f"e.g. raise the death_threshold in build_product_lifetime_table so "
+            f"more markets cross the 'death' boundary, or extend the panel. "
+            f"Refusing to fit a degenerate model on fabricated events."
+        )
+    if n_events < 2 * len(covariates):
+        warnings.warn(
+            f"Cox model fitted with {n_events} event(s) and {len(covariates)} "
+            f"covariate(s): fewer than ~2 events per covariate. Coefficients are "
+            f"unstable; reduce covariates or treat results as directional only.",
+            stacklevel=2,
+        )
+
     # Standardize covariates to z-scores before fitting. Raw covariates here
     # live on wildly different scales (gdp_per_capita ~3e4, urban_pop ~80,
     # has_pstn_phaseout in {0,1}). Without standardization the Cox linear
