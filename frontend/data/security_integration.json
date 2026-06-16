@@ -28,7 +28,7 @@
     "popmean": 5,
     "direction": "less",
     "t_stat": -10.728,
-    "p_value": 4.342897550908151e-15,
+    "p_value": 4.342897550908152e-15,
     "cohens_d": -1.474,
     "ci_low": 3.757,
     "ci_high": 4.092,
