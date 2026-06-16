@@ -20,7 +20,9 @@ from src.data.supplementary_fetcher import (
     fetch_ncc_taiwan_telecom,
     fetch_uk_pstn_switchoff,
     merge_pstn_switchoff_dates,
+    ncc_taiwan_legacy_decline_series,
     ncc_to_annual_panel,
+    taiwan_decline_projection_row,
 )
 
 
@@ -75,6 +77,38 @@ class TestNccParsing:
         annual = ncc_to_annual_panel(ncc)
         assert len(annual) == 1
         assert annual.iloc[0]["ncc_mobile_subscribers_value"] == 150.0
+
+    def _legacy_decline_ncc(self):
+        # Two rows per (year, month): a growing total and a declining legacy base.
+        rows = []
+        legacy = {2012: 6.5e6, 2013: 5.1e6, 2014: 3.2e6, 2015: 2.4e6, 2016: 1.9e6}
+        total = {2012: 21e6, 2013: 23e6, 2014: 25e6, 2015: 26e6, 2016: 27e6}
+        for yr in legacy:
+            for mo in (1, 2):
+                rows.append({"country": "tw", "year": yr, "month": mo,
+                             "metric": "mobile_subscribers", "value": legacy[yr], "source": "ncc"})
+                rows.append({"country": "tw", "year": yr, "month": mo,
+                             "metric": "mobile_subscribers", "value": total[yr], "source": "ncc"})
+        return pd.DataFrame(rows)
+
+    def test_legacy_decline_series_isolates_declining_base(self):
+        series = ncc_taiwan_legacy_decline_series(self._legacy_decline_ncc())
+        assert list(series.index) == [2012, 2013, 2014, 2015, 2016]
+        # Picks the smaller (legacy) sub-series, which declines.
+        assert series.iloc[0] > series.iloc[-1]
+        assert series.iloc[0] == pytest.approx(6.5e6)
+
+    def test_taiwan_projection_row_is_declining_and_keyed_twn(self):
+        row = taiwan_decline_projection_row(
+            self._legacy_decline_ncc(), [2027, 2030, 2045]
+        )
+        assert row is not None
+        assert row["market"] == "TWN"
+        # A real decline => penetration shrinks across the horizon, all >= 0.
+        assert row["2027"] >= row["2030"] >= row["2045"] >= 0.0
+
+    def test_taiwan_projection_row_none_on_empty(self):
+        assert taiwan_decline_projection_row(pd.DataFrame(), [2027]) is None
 
     @patch("src.data.supplementary_fetcher._get")
     def test_fetch_ncc_taiwan_telecom_parses_mobile_csv(self, mock_get):
