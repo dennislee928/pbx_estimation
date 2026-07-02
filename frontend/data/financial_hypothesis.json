@@ -63,11 +63,11 @@
     {
       "scope": "Worldwide",
       "horizon_years": 3,
-      "mean_delta_usd": -300.4,
-      "ci_low_usd": -301.7,
-      "ci_high_usd": -299.1,
+      "mean_delta_usd": -304.6,
+      "ci_low_usd": -305.8,
+      "ci_high_usd": -303.3,
       "p_value": 1.0,
-      "cohens_d": -1.095,
+      "cohens_d": -1.107,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
@@ -87,11 +87,11 @@
     {
       "scope": "Worldwide",
       "horizon_years": 5,
-      "mean_delta_usd": -547.7,
-      "ci_low_usd": -549.5,
-      "ci_high_usd": -545.9,
+      "mean_delta_usd": -553.7,
+      "ci_low_usd": -555.5,
+      "ci_high_usd": -551.9,
       "p_value": 1.0,
-      "cohens_d": -1.401,
+      "cohens_d": -1.411,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
@@ -111,11 +111,11 @@
     {
       "scope": "Worldwide",
       "horizon_years": 10,
-      "mean_delta_usd": -1138.9,
-      "ci_low_usd": -1142.0,
-      "ci_high_usd": -1135.8,
+      "mean_delta_usd": -1148.7,
+      "ci_low_usd": -1151.8,
+      "ci_high_usd": -1145.6,
       "p_value": 1.0,
-      "cohens_d": -1.699,
+      "cohens_d": -1.71,
       "reject_h0": false,
       "verdict_en": "Not financially justified on cost alone",
       "verdict_zh": "僅就成本而言，財務上不成立"
