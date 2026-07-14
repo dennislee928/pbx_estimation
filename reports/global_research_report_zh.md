@@ -1,6 +1,6 @@
 # PBX Estimation 全球研究報告
 
-_Generated: 2026-07-13_
+_Generated: 2026-07-14_
 
 全球 PBX/UCaaS 供應商格局、生命週期分類、PSTN 替代技術清單與部署輸出。
 
