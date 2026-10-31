@@ -1,6 +1,6 @@
 # PBX Estimation Global Research Report
 
-_Generated: 2026-10-30_
+_Generated: 2026-10-31_
 
 Global PBX/UCaaS vendor landscape, lifecycle classification, PSTN-alternative technology catalog, and deployment outputs.
 
